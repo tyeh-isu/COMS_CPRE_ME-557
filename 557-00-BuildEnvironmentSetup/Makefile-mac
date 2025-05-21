@@ -1,0 +1,22 @@
+########################################################################
+####################### Makefile Template ##############################
+########################################################################
+
+
+DEBUG = -g
+APPNAME = Vulkan00
+GLM_PATH = $(VULKAN_SDK)/include
+GLFW_PATH = $(VULKAN_SDK)/glfw-3.3.9.bin.MACOS/include
+GLFW_LIB_PATH = $(VULKAN_SDK)/glfw-3.3.9.bin.MACOS/lib-x86_64
+CFLAGS = -std=c++17 $(DEBUG) -I. -I$(VULKAN_SDK)/include -I$(GLM_PATH) -I$(GLFW_PATH)
+LDFLAGS = -L$(VULKAN_SDK)/lib -L$(GLFW_LIB_PATH) -lvulkan -lglfw
+include LOCAL_SRCS
+
+$(APPNAME): *.cpp
+	g++ $(CFLAGS) -o $(APPNAME) $(CPPSRCS) $(LDFLAGS)
+
+run: $(APPNAME)
+	.$(APPNAME)
+
+clean:
+	rm -f $(APPNAME)
