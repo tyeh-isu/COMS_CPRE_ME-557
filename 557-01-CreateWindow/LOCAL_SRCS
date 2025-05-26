@@ -1,0 +1,4 @@
+CPPSRCS = \
+	main.cpp \
+	my_application.cpp \
+	my_window.cpp
