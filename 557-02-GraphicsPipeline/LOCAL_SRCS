@@ -1,0 +1,5 @@
+CPPSRCS = \
+	main.cpp \
+	my_application.cpp \
+	my_pipeline.cpp \
+	my_window.cpp
