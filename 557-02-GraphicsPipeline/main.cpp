@@ -1,11 +1,9 @@
-
 #include "my_application.h"
 
 // std
 #include <cstdlib>
 #include <iostream>
 #include <stdexcept>
-
 
 int main()
 {
@@ -23,4 +21,3 @@ int main()
 
     return EXIT_SUCCESS;
 }
-
