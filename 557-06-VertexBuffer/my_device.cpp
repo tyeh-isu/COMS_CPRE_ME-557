@@ -335,7 +335,7 @@ std::vector<const char *> MyDevice::_getRequiredExtensions()
         extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
     }
     
-#ifdef __MAC_OS__
+#ifdef __DARWIN__
     // Note: Need to use the "Portability" Vulkan Layer Configuraion
     extensions.push_back("VK_KHR_portability_enumeration");
 #endif
