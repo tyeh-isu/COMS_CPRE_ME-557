@@ -6,6 +6,7 @@ APPNAME = Vulkan00
 DEBUG = -g
 VERBOSE = -v
 
+# For defining platform specific flags
 PLATFORM = $(shell uname -s)
 # Handle special case for Windows 10 and 11 uname difference
 ifeq ($(PLATFORM), Windows_NT)
@@ -14,7 +15,7 @@ else ifeq ($(shell echo $(PLATFORM) | cut -c1-7), MSYS_NT)
 PLATFORM = Windows
 endif
 
-# Windiows 10/11 definitions
+# Windiows definitions
 ifeq ($(PLATFORM), Windows)
 	APP_NAME = $(APPNAME).exe
 	GLM_PATH = $(VULKAN_SDK)/include
@@ -52,4 +53,4 @@ clean:
 	rm -f $(APP_NAME)
 
 test:
-	@echo $(PLATFORM)
+	@echo $(shell uname -s)
