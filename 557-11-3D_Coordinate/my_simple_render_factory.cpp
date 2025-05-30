@@ -1,4 +1,4 @@
-#include "my_simple_render_system.h"
+#include "my_simple_render_factory.h"
 
 // libs
 #define GLM_FORCE_RADIANS
@@ -17,19 +17,19 @@ struct MySimplePushConstantData
     alignas(16) glm::vec3 push_color;
 };
 
-MySimpleRenderSystem::MySimpleRenderSystem(MyDevice& device, VkRenderPass renderPass)
+MySimpleRenderFactory::MySimpleRenderFactory(MyDevice& device, VkRenderPass renderPass)
     : m_myDevice{ device } 
 {
     _createPipelineLayout();
     _createPipeline(renderPass);
 }
 
-MySimpleRenderSystem::~MySimpleRenderSystem()
+MySimpleRenderFactory::~MySimpleRenderFactory()
 {
     vkDestroyPipelineLayout(m_myDevice.device(), m_vkPipelineLayout, nullptr);
 }
 
-void MySimpleRenderSystem::_createPipelineLayout() 
+void MySimpleRenderFactory::_createPipelineLayout() 
 {
     VkPushConstantRange pushConstantRange{};
     pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
@@ -48,7 +48,7 @@ void MySimpleRenderSystem::_createPipelineLayout()
     }
 }
 
-void MySimpleRenderSystem::_createPipeline(VkRenderPass renderPass)
+void MySimpleRenderFactory::_createPipeline(VkRenderPass renderPass)
 {
     assert(m_vkPipelineLayout != nullptr && "Cannot create pipeline before pipeline layout");
 
@@ -64,7 +64,7 @@ void MySimpleRenderSystem::_createPipeline(VkRenderPass renderPass)
         pipelineConfig);
 }
 
-void MySimpleRenderSystem::renderGameObjects(
+void MySimpleRenderFactory::renderGameObjects(
     VkCommandBuffer commandBuffer, std::vector<MyGameObject>& gameObjects)
 {
     m_pMyPipeline->bind(commandBuffer);
