@@ -1,7 +1,7 @@
 #include "my_application.h"
 
 // Render system
-#include "my_simple_render_system.h"
+#include "my_simple_render_factory.h"
 #include "my_camera.h"
 #include "my_keyboard_controller.h"
 
@@ -22,15 +22,10 @@ MyApplication::MyApplication() :
     _loadGameObjects();
 }
 
-MyApplication::~MyApplication()
-{
-
-}
-
 void MyApplication::run() 
 {
     m_myWindow.bindMyApplication(this);
-    MySimpleRenderSystem simpleRenderSystem{ m_myDevice, m_myRenderer.swapChainRenderPass() };
+    MySimpleRenderFactory simpleRenderFactotry{ m_myDevice, m_myRenderer.swapChainRenderPass() };
     MyCamera camera{};
 
     // Empty object
@@ -41,7 +36,7 @@ void MyApplication::run()
 
     while (!m_myWindow.shouldClose()) 
     {
-        // Note: depending on the platforms (PC, Linux or Mac), this function
+        // Note: depending on the platform (Windows, Linux or Mac), this function
         // will cause the event proecssing to block during a Window move, resize or
         // menu operation. Users can use the "window refresh callback" to redraw the
         // contents of the window when necessary during such operation.
@@ -77,7 +72,7 @@ void MyApplication::run()
             // end offscreen shadow pass
 
             m_myRenderer.beginSwapChainRenderPass(commandBuffer);
-            simpleRenderSystem.renderGameObjects(commandBuffer, m_vMyGameObjects, camera);
+            simpleRenderFactotry.renderGameObjects(commandBuffer, m_vMyGameObjects, camera);
             m_myRenderer.endSwapChainRenderPass(commandBuffer);
 
             m_myRenderer.endFrame();
