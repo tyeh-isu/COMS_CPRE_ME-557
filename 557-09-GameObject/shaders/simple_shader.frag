@@ -1,5 +1,7 @@
 #version 450
 
+layout(location = 0) out vec4 outColor;
+
 layout(push_constant) uniform Pushdata
 {
     mat2 transform;
@@ -7,7 +9,6 @@ layout(push_constant) uniform Pushdata
     vec3 push_color;
 } pushdata;
 
-layout(location = 0) out vec4 outColor;
 
 void main()
 {

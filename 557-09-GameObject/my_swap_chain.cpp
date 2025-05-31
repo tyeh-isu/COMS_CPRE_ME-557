@@ -9,7 +9,6 @@
 #include <set>
 #include <stdexcept>
 
-
 MySwapChain::MySwapChain(MyDevice &deviceRef, VkExtent2D extent)
     : m_myDevice{deviceRef}, 
       m_vkWindowExtent{extent}

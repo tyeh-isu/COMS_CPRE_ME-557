@@ -17,6 +17,8 @@ public:
 	// because we have a GLGWwindow pointer
 	MyWindow(const MyWindow&) = delete;
 	MyWindow& operator=(const MyWindow&) = delete;
+	MyWindow(MyWindow&&) = delete;
+	MyWindow& operator=(const MyWindow&&) = delete;
 
 	bool       shouldClose()            { return glfwWindowShouldClose(m_pWindow); }
 	VkExtent2D extent()                 { return { static_cast<uint32_t>(m_iWidth), static_cast<uint32_t>(m_iHeight) }; };
@@ -25,7 +27,6 @@ public:
 
 	void       createWindowSurface(VkInstance instance, VkSurfaceKHR *surface);
 	void       pollEvents();
-
 
 private:
 	static void s_frameBufferResizeCallback(GLFWwindow* window, int width, int height);
