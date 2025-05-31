@@ -65,4 +65,4 @@ clean:
 	rm -f $(APP_NAME)
 
 test:
-	@echo $(UNAME)
+	@echo $(PLATFORM)
