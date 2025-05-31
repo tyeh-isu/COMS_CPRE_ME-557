@@ -23,7 +23,7 @@ MyApplication::MyApplication() :
 void MyApplication::run() 
 {
     static bool bPerspectiveCamera = true;
- 
+
     m_myWindow.bindMyApplication(this);
     MySimpleRenderFactory simpleRenderFactotry{ m_myDevice, m_myRenderer.swapChainRenderPass() };
     MyCamera camera{};
