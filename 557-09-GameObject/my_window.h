@@ -13,11 +13,12 @@ public:
 	MyWindow(int w, int h, std::string name);
 	~MyWindow();
 
-	// Cannot do copy contrucror or assignment
+	// Cannot do copy or move contrucror or assignment
 	// because we have a GLGWwindow pointer
+	// C++ rule of five
 	MyWindow(const MyWindow&) = delete;
 	MyWindow& operator=(const MyWindow&) = delete;
-	MyWindow(MyWindow&&) = delete;
+	MyWindow(MyWindow &&) = delete;
 	MyWindow& operator=(const MyWindow&&) = delete;
 
 	bool       shouldClose()            { return glfwWindowShouldClose(m_pWindow); }

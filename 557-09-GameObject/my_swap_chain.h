@@ -26,8 +26,8 @@ public:
     
     MySwapChain(const MySwapChain &) = delete;
     MySwapChain& operator=(const MySwapChain &) = delete;
-    MySwapChain(MySwapChain&&) = delete;
-    MySwapChain& operator=(const MySwapChain&&) = delete;
+	MySwapChain(MySwapChain&&) = delete;
+	MySwapChain& operator=(const MySwapChain&&) = delete;
 
     VkFramebuffer frameBuffer(int index) { return m_vVkSwapChainFramebuffers[index]; }
     VkRenderPass  renderPass()           { return m_vkRenderPass; }

@@ -81,7 +81,7 @@ std::vector<VkVertexInputAttributeDescription> MyModel::getAttributeDescriptions
     
     return attributeDescriptions;
     
-    // note : this function can be simplified as
+    // note : this function can be simplified as the following
     // return {
     //           {0, 0, VK_FORMAT_R32G32_SFLOAT,   offsetof(Vertex, position)},
     //           {0, 1, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, color)}

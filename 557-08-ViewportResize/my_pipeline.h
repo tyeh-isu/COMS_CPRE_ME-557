@@ -34,7 +34,7 @@ public:
 
 	MyPipeline(const MyPipeline&) = delete;
 	MyPipeline& operator=(const MyPipeline&) = delete;
-	MyPipeline(MyPipeline&&) = delete;
+	MyPipeline(MyPipeline &&) = delete;
 	MyPipeline& operator=(const MyPipeline&&) = delete;
 
     void bind(VkCommandBuffer commandBuffer);

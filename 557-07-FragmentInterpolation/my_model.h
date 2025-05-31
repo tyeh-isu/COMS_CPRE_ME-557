@@ -32,7 +32,7 @@ public:
 	MyModel& operator=(const MyModel&) = delete;
 	MyModel(MyModel&&) = delete;
 	MyModel& operator=(const MyModel&&) = delete;
-	
+
 	void bind(VkCommandBuffer commandBuffer);
 	void draw(VkCommandBuffer commandBuffer);
 

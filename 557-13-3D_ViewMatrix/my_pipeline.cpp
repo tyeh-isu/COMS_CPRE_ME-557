@@ -213,8 +213,8 @@ void MyPipeline::defaultPipelineConfigInfo(PipelineConfigInfo& configInfo)
     configInfo.depthStencilInfo.minDepthBounds = 0.0f;  // Optional
     configInfo.depthStencilInfo.maxDepthBounds = 1.0f;  // Optional
     configInfo.depthStencilInfo.stencilTestEnable = VK_FALSE;
-    configInfo.depthStencilInfo.front = {};  // Optional
-    configInfo.depthStencilInfo.back = {};   // Optional
+    configInfo.depthStencilInfo.front = {};             // Optional
+    configInfo.depthStencilInfo.back = {};              // Optional
 
     // Dynamic viewport and dynamic scissor
     configInfo.dynamicStateEnables = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };

@@ -116,7 +116,7 @@ void MyDevice::_createInstance()
     }
     
 #ifdef __DARWIN__
-    // Note: Need to use the "Portability" Vulkan Layer Configuraion
+    // Note: For Mac OS, need to use the "Portability" Vulkan Layer Configuraion
     createInfo.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
 #endif
 

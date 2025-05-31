@@ -34,7 +34,7 @@ private:
     void _createPipeline();
 	void _createCommandBuffers();
 	void _drawFrame();
-    void _recordCommandBuffer(int imageIndex);
+	void _recordCommandBuffer(int imageIndex);
 
 	MyWindow                     m_myWindow{ WIDTH, HEIGHT, "Hello Vulkan!" };
 	MyDevice                     m_myDevice{ m_myWindow };
