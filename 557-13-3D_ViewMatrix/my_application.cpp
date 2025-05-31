@@ -28,8 +28,8 @@ void MyApplication::run()
     MySimpleRenderFactory simpleRenderFactotry{ m_myDevice, m_myRenderer.swapChainRenderPass() };
     MyCamera camera{};
 
-    // Change camera position
-    camera.setViewTarget(glm::vec3(0.5f, 0.4, 2.5f), glm::vec3(0.0f, 0.0f, 0.0f));
+	// Change camera position
+	camera.setViewTarget(glm::vec3(0.5f, 0.4, 2.5f), glm::vec3(0.0f, 0.0f, 0.0f));
 
     while (!m_myWindow.shouldClose()) 
     {
