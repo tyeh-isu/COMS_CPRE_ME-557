@@ -201,7 +201,7 @@ void MyPipeline::defaultPipelineConfigInfo(PipelineConfigInfo& configInfo, uint3
 
     configInfo.colorBlendInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     configInfo.colorBlendInfo.logicOpEnable = VK_FALSE;
-    configInfo.colorBlendInfo.logicOp = VK_LOGIC_OP_COPY; // Optional
+    configInfo.colorBlendInfo.logicOp = VK_LOGIC_OP_COPY;  // Optional
     configInfo.colorBlendInfo.attachmentCount = 1;
     configInfo.colorBlendInfo.pAttachments = &configInfo.colorBlendAttachment;
     configInfo.colorBlendInfo.blendConstants[0] = 0.0f;  // Optional

@@ -28,8 +28,8 @@ public:
 private:
 	void _initWindow();
 
-	const int m_iWidth;
-	const int m_iHeight;
+	const int   m_iWidth;
+	const int   m_iHeight;
 
 	std::string m_sWindowName;
 	GLFWwindow* m_pWindow;

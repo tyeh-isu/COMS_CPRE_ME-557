@@ -7,7 +7,6 @@
 #include <string>
 #include <vector>
 
-
 struct SwapChainSupportDetails
 {
     VkSurfaceCapabilitiesKHR        capabilities;

@@ -141,14 +141,14 @@ void MyApplication::_recordCommandBuffer(int imageIndex)
 
     // VK_SUBPASS_CONTENTS_INLINE means only use Primary command buffer. No secondary command buffer
     vkCmdBeginRenderPass(m_vVkCommandBuffers[imageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    
+
     m_pMyPipeline->bind(m_vVkCommandBuffers[imageIndex]);
 
     static float step = 0.0f;
     static float sign = 1.0f;
 
     SimplePushConstantData pushdata{};
-    
+
     // Step value goes between -1.0f and 1.0f
     if (step >= 1.0f)
       { sign = -1.0f; }
@@ -181,7 +181,7 @@ void MyApplication::_drawFrame()
     uint32_t imageIndex = 0;
     auto result = m_mySwapChain.acquireNextImage(&imageIndex);
 
-    if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
+	if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
     {
         throw std::runtime_error("failed to acquire swap chain image!");
     }

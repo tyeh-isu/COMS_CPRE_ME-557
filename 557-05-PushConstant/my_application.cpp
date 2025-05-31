@@ -131,7 +131,7 @@ void MyApplication::_recordCommandBuffer(int imageIndex)
 
     // VK_SUBPASS_CONTENTS_INLINE means only use Primary command buffer. No secondary command buffer
     vkCmdBeginRenderPass(m_vVkCommandBuffers[imageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    
+
     m_pMyPipeline->bind(m_vVkCommandBuffers[imageIndex]);
 
     SimplePushConstantData pushdata{};
@@ -142,7 +142,7 @@ void MyApplication::_recordCommandBuffer(int imageIndex)
 					   VK_SHADER_STAGE_VERTEX_BIT,  // push to vertex shader only
                        //VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
                        0, sizeof(SimplePushConstantData), &pushdata);
-					   
+
     vkCmdDraw(m_vVkCommandBuffers[imageIndex], numVertex, 1, 0, 0); // draw numVertex vertices and only one instance
                                                                     // instance means multiple copies using the same vertices
                                                                     // for example rendering particle system
@@ -159,7 +159,7 @@ void MyApplication::_drawFrame()
     uint32_t imageIndex = 0;
     auto result = m_mySwapChain.acquireNextImage(&imageIndex);
 
-    if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
+	if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
     {
         throw std::runtime_error("failed to acquire swap chain image!");
     }

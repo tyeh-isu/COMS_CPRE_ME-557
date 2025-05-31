@@ -31,10 +31,10 @@ public:
 	~MyPipeline();
 
 	MyPipeline(const MyPipeline&) = delete;
-	void operator=(const MyPipeline&) = delete;
-    MyPipeline(MyPipeline &&) = delete;
+	MyPipeline& operator=(const MyPipeline&) = delete;
+	MyPipeline(MyPipeline &&) = delete;
 	MyPipeline& operator=(const MyPipeline&&) = delete;
-	
+
     static void defaultPipelineConfigInfo(PipelineConfigInfo &configInfo, uint32_t width, uint32_t height);
 
 private:

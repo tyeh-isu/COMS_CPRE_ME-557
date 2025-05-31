@@ -6,7 +6,6 @@
 #include <set>
 #include <unordered_set>
 
-
 // local callback functions
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
     VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
@@ -56,7 +55,7 @@ void DestroyDebugUtilsMessengerEXT(
 MyDevice::MyDevice(MyWindow &window) :
     m_myWindow{ window } 
 {
-    _createInstance();      // Create a Vulkan instance and connect our application window with Vulkan instance (in step 3)
+    _createInstance();      // Create a Vulkan instance and connect our application window with Vulkan instance
     _setupDebugMessenger(); // Set up validation layer to check for error during debug, and uncheck for release build
     _createSurface();       // Create a surface for GLFW to connect with Window
     _pickPhysicalDevice();  // Pick the graphics hardware device (GPU) that is capable of using VulKan API

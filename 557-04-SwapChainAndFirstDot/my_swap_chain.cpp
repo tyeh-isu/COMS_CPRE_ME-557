@@ -85,7 +85,7 @@ VkResult MySwapChain::acquireNextImage(uint32_t *imageIndex)
     return result;
 }
 
-VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint32_t *imageIndex) 
+VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint32_t *imageIndex)
 {
     if (m_vVkImagesInFlight[*imageIndex] != VK_NULL_HANDLE)
     {

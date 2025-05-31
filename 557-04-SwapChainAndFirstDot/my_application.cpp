@@ -51,7 +51,7 @@ void MyApplication::_createPipeline()
     // Note: the swap chain buffer size may not be the same as the Window size
     // Pipeline config can be considered as a blue print to create graphics pipeline
     PipelineConfigInfo pipelineConfig{};
-        
+
     MyPipeline::defaultPipelineConfigInfo(pipelineConfig, m_mySwapChain.width(), m_mySwapChain.height());
 
     // For now render pass contains the structure and the format
@@ -138,7 +138,7 @@ void MyApplication::_drawFrame()
     uint32_t imageIndex = 0;
     auto result = m_mySwapChain.acquireNextImage(&imageIndex);
 
-    if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
+	if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
     {
         throw std::runtime_error("failed to acquire swap chain image!");
     }
