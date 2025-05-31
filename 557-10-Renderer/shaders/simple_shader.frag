@@ -1,5 +1,10 @@
 #version 450
 
+// Only location and type (vec4) matter, the name doesn't need to match
+
+layout(location = 0) in vec4 inColor;
+layout(location = 0) out vec4 outColor;
+
 layout(push_constant) uniform Pushdata
 {
     mat2 transform;
@@ -7,8 +12,6 @@ layout(push_constant) uniform Pushdata
     vec3 push_color;
 } pushdata;
 
-layout(location = 0) in vec4 inColor;
-layout(location = 0) out vec4 outColor;
 
 void main()
 {

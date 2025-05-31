@@ -29,7 +29,7 @@ void MyApplication::run()
         // menu operation. Users can use the "window refresh callback" to redraw the
         // contents of the window when necessary during such operation.
         m_myWindow.pollEvents();
-		
+
         // Please note that commandBuffer could be null pointer
         // if the swapChain needs to be recreated
         if (auto commandBuffer = m_myRenderer.beginFrame())

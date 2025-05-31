@@ -17,6 +17,8 @@ public:
 
 	MySimpleRenderFactory(const MySimpleRenderFactory&) = delete;
 	MySimpleRenderFactory& operator=(const MySimpleRenderFactory&) = delete;
+	MySimpleRenderFactory(MySimpleRenderFactory&&) = delete;
+	MySimpleRenderFactory& operator=(const MySimpleRenderFactory&&) = delete;
 
 	void renderGameObjects(VkCommandBuffer commandBuffer, std::vector<MyGameObject>& gameObjects);
 
@@ -31,3 +33,4 @@ private:
 };
 
 #endif
+

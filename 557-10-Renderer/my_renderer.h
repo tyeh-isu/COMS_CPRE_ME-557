@@ -20,7 +20,7 @@ public:
     MyRenderer& operator=(const MyRenderer&) = delete;
 	MyRenderer(MyRenderer&&) = delete;
     MyRenderer& operator=(const MyRenderer&&) = delete;
-	
+
     VkRenderPass swapChainRenderPass() const { return m_mySwapChain->renderPass(); }
 
     VkCommandBuffer beginFrame();
