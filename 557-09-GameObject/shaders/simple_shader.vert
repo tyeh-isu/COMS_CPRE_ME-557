@@ -10,6 +10,7 @@ layout(push_constant) uniform Pushdata
     vec3 push_color;
 } pushdata;
 
+
 void main()
 {
     gl_Position = vec4(pushdata.transform * position + pushdata.offset, 0.0, 1.0);

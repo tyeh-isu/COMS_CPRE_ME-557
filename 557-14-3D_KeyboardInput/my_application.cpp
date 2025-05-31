@@ -1,6 +1,6 @@
 #include "my_application.h"
 
-// Render system
+// Render factory
 #include "my_simple_render_factory.h"
 #include "my_camera.h"
 #include "my_keyboard_controller.h"

@@ -40,7 +40,6 @@ private:
 
 	MyWindow                     m_myWindow{ WIDTH, HEIGHT, "Hello Vulkan!" };
 	MyDevice                     m_myDevice{ m_myWindow };
-	// MySwapChain                  m_mySwapChain{ m_myDevice, m_myWindow.extent() };
 
 	std::unique_ptr<MySwapChain> m_pMySwapChain; // change to unique pointer so we can recreate one after window resize
 	std::unique_ptr<MyPipeline>  m_pMyPipeline;

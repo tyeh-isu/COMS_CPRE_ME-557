@@ -1,6 +1,6 @@
 #include "my_application.h"
 
-// Render system
+// Render factory
 #include "my_simple_render_factory.h"
 
 // use radian rather degree for angle
