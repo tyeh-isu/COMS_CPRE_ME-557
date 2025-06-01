@@ -20,7 +20,7 @@ MyApplication::MyApplication()
 
 void MyApplication::run() 
 {
-    MySimpleRenderFactory simpleRenderFactotry{ m_myDevice, m_myRenderer.swapChainRenderPass() };
+    MySimpleRenderFactory simpleRenderFactory{ m_myDevice, m_myRenderer.swapChainRenderPass() };
 
     while (!m_myWindow.shouldClose()) 
     {
@@ -40,7 +40,7 @@ void MyApplication::run()
             // end offscreen shadow pass
 
             m_myRenderer.beginSwapChainRenderPass(commandBuffer);
-            simpleRenderFactotry.renderGameObjects(commandBuffer, m_vMyGameObjects);
+            simpleRenderFactory.renderGameObjects(commandBuffer, m_vMyGameObjects, camera);
             m_myRenderer.endSwapChainRenderPass(commandBuffer);
 
             m_myRenderer.endFrame();

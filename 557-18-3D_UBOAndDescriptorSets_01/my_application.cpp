@@ -63,7 +63,7 @@ void MyApplication::run()
     }
 
     m_myWindow.bindMyApplication(this);
-    MySimpleRenderFactory simpleRenderFactotry{ m_myDevice, m_myRenderer.swapChainRenderPass() };
+    MySimpleRenderFactory simpleRenderFactory{ m_myDevice, m_myRenderer.swapChainRenderPass() };
     MyCamera camera{};
 
     // Empty object to store camera transformation matrix
@@ -124,7 +124,7 @@ void MyApplication::run()
 
             // render
             m_myRenderer.beginSwapChainRenderPass(commandBuffer);
-            simpleRenderFactotry.renderGameObjects(frameInfo, m_vMyGameObjects);
+            simpleRenderFactory.renderGameObjects(frameInfo, m_vMyGameObjects);
             m_myRenderer.endSwapChainRenderPass(commandBuffer);
 
             m_myRenderer.endFrame();

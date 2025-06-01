@@ -25,7 +25,7 @@ void MyApplication::run()
     static bool bPerspectiveCamera = true;
 
     m_myWindow.bindMyApplication(this);
-    MySimpleRenderFactory simpleRenderFactotry{ m_myDevice, m_myRenderer.swapChainRenderPass() };
+    MySimpleRenderFactory simpleRenderFactory{ m_myDevice, m_myRenderer.swapChainRenderPass() };
     MyCamera camera{};
 
     while (!m_myWindow.shouldClose()) 
@@ -58,7 +58,7 @@ void MyApplication::run()
             // end offscreen shadow pass
 
             m_myRenderer.beginSwapChainRenderPass(commandBuffer);
-            simpleRenderFactotry.renderGameObjects(commandBuffer, m_vMyGameObjects, camera);
+            simpleRenderFactory.renderGameObjects(commandBuffer, m_vMyGameObjects, camera);
             m_myRenderer.endSwapChainRenderPass(commandBuffer);
 
             m_myRenderer.endFrame();
@@ -140,7 +140,7 @@ std::unique_ptr<MyModel> createCubeModel(MyDevice& device, glm::vec3 offset)
 void MyApplication::_loadGameObjects()
 {
     std::shared_ptr<MyModel> myModel = createCubeModel(m_myDevice, { .0f, .0f, .0f });
-    
+
     // Note: +X to the right, +Y down and +Z inside the screen
     auto cube = MyGameObject::createGameObject();
     cube.model = myModel;

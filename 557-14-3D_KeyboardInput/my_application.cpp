@@ -25,7 +25,7 @@ MyApplication::MyApplication() :
 void MyApplication::run() 
 {
     m_myWindow.bindMyApplication(this);
-    MySimpleRenderFactory simpleRenderFactotry{ m_myDevice, m_myRenderer.swapChainRenderPass() };
+    MySimpleRenderFactory simpleRenderFactory{ m_myDevice, m_myRenderer.swapChainRenderPass() };
     MyCamera camera{};
 
     // Empty object to store camera transformation matrix
@@ -61,7 +61,7 @@ void MyApplication::run()
             // such that Y is up. Because we move the part 2.5 units, the near and far value needs to cover the model
             // Also, near and far will automatically apply negative values
             camera.setOrthographicProjection(-apsectRatio * 2.0f, apsectRatio * 2.0f, -2.0f, 2.0f, -5.0f, 5.0f);
- 
+
         // Please note that commandBuffer could be null pointer
         // if the swapChain needs to be recreated
         if (auto commandBuffer = m_myRenderer.beginFrame())
@@ -72,7 +72,7 @@ void MyApplication::run()
             // end offscreen shadow pass
 
             m_myRenderer.beginSwapChainRenderPass(commandBuffer);
-            simpleRenderFactotry.renderGameObjects(commandBuffer, m_vMyGameObjects, camera);
+            simpleRenderFactory.renderGameObjects(commandBuffer, m_vMyGameObjects, camera);
             m_myRenderer.endSwapChainRenderPass(commandBuffer);
 
             m_myRenderer.endFrame();
@@ -154,7 +154,7 @@ std::unique_ptr<MyModel> createCubeModel(MyDevice& device, glm::vec3 offset)
 void MyApplication::_loadGameObjects()
 {
     std::shared_ptr<MyModel> myModel = createCubeModel(m_myDevice, { .0f, .0f, .0f });
-    
+
     // Note: +X to the right, +Y down and +Z inside the screen
     auto cube = MyGameObject::createGameObject();
     cube.model = myModel;
