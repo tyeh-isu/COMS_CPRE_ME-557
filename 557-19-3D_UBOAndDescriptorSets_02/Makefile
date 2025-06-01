@@ -19,8 +19,8 @@ endif
 ifeq ($(PLATFORM), Windows)
 	APP_NAME = $(APPNAME).exe
 	GLM_PATH = $(VULKAN_SDK)/include
-	GLFW_PATH = $(VULKAN_SDK)/glfw-3.3.9.bin.WIN64/include
-	GLFW_LIB_PATH = $(VULKAN_SDK)/glfw-3.3.9.bin.WIN64/lib-mingw-w64
+	GLFW_PATH = $(VULKAN_SDK)/glfw-3.4.bin.WIN64/include
+	GLFW_LIB_PATH = $(VULKAN_SDK)/glfw-3.4.bin.WIN64/lib-mingw-w64
 	LDFLAGS = -L$(VULKAN_SDK)/Lib -L$(GLFW_LIB_PATH) -lvulkan-1 -lglfw3 -lgdi32
 	RUNSCRIP = ./compile-win.bat
 	DEFINES = __WINDOWS__
@@ -29,9 +29,9 @@ ifeq ($(PLATFORM), Windows)
 else ifeq ($(PLATFORM), Darwin)
 	APP_NAME = $(APPNAME)
 	GLM_PATH = $(VULKAN_SDK)/include
-	GLFW_PATH = $(VULKAN_SDK)/glfw-3.3.9.bin.MACOS/include
-	GLFW_LIB_PATH = $(VULKAN_SDK)/glfw-3.3.9.bin.MACOS/lib-x86_64
-	LDFLAGS = -L$(VULKAN_SDK)/lib -L$(GLFW_LIB_PATH) -lvulkan -lglfw
+	GLFW_PATH = $(VULKAN_SDK)/glfw-3.4.bin.MACOS/include
+	GLFW_LIB_PATH = $(VULKAN_SDK)/glfw-3.4.bin.MACOS/lib-arm64
+	LDFLAGS = -L$(VULKAN_SDK)/lib -L$(GLFW_LIB_PATH) -lvulkan -lglfw3 -framework Cocoa -framework IOKit
 	RUNSCRIP = ./compile-unx.bat
 	DEFINES = __DARWIN__
 
@@ -58,7 +58,7 @@ ifneq ($(PLATFORM), Windows)
 endif
 	$(RUNSCRIP)
 
-run: $(APP_NAME)
+run:
 	./$(APP_NAME)
 
 clean:
