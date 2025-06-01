@@ -29,7 +29,7 @@ MySimpleRenderFactory::~MySimpleRenderFactory()
     vkDestroyPipelineLayout(m_myDevice.device(), m_vkPipelineLayout, nullptr);
 }
 
-void MySimpleRenderFactory::_createPipelineLayout() 
+void MySimpleRenderFactory::_createPipelineLayout(VkDescriptorSetLayout globalSetLayout)
 {
     VkPushConstantRange pushConstantRange{};
     pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
