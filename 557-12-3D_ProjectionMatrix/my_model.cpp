@@ -53,7 +53,7 @@ void MyModel::bind(VkCommandBuffer commandBuffer)
 
 void MyModel::draw(VkCommandBuffer commandBuffer)
 {
-    vkCmdDraw(commandBuffer, m_iVertexCount, 1, 0, 0);
+	vkCmdDraw(commandBuffer, m_iVertexCount, 1, 0, 0);
 }
 
 std::vector<VkVertexInputBindingDescription> MyModel::getBindingDescriptions()
@@ -69,17 +69,17 @@ std::vector<VkVertexInputBindingDescription> MyModel::getBindingDescriptions()
 std::vector<VkVertexInputAttributeDescription> MyModel::getAttributeDescriptions()
 {
     std::vector<VkVertexInputAttributeDescription> attributeDescriptions(2); // now we have vertex and color
-    attributeDescriptions[0].binding = 0;
-    attributeDescriptions[0].location = 0;
-    attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT; // vec3
-    attributeDescriptions[0].offset = offsetof(Vertex, position); // same as 0, but just more clear
+	attributeDescriptions[0].binding = 0;
+	attributeDescriptions[0].location = 0;
+	attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT; // vec3
+	attributeDescriptions[0].offset = offsetof(Vertex, position); // same as 0, but just more clear
     
-    attributeDescriptions[1].binding = 0;  // interleave both vertex and color into the same array
-    attributeDescriptions[1].location = 1; // location 1 is now color
-    attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT; // vec3
-    attributeDescriptions[1].offset = offsetof(Vertex, color);    // calcualte the byte offset in the Vertex struct
+	attributeDescriptions[1].binding = 0;  // interleave both vertex and color into the same array
+	attributeDescriptions[1].location = 1; // location 1 is now color
+	attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT; // vec3
+	attributeDescriptions[1].offset = offsetof(Vertex, color);    // calcualte the byte offset in the Vertex struct
     
-    return attributeDescriptions;
+	return attributeDescriptions;
     
     // note : this function can be simplified as the following
     // return {

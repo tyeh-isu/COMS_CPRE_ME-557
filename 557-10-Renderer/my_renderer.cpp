@@ -31,6 +31,7 @@ void MyRenderer::_recreateSwapChain()
         extent = m_myWindow.extent();
         glfwWaitEvents();
     }
+
     vkDeviceWaitIdle(m_myDevice.device());
 
     if (m_mySwapChain == nullptr)

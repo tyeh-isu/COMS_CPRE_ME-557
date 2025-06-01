@@ -39,7 +39,7 @@ void MyWindow::_initWindow()
 
 	// Register viewport resize callback
 	glfwSetFramebufferSizeCallback(m_pWindow, s_frameBufferResizeCallback);
-	
+
 	// Register keyboard callback	
 	glfwSetKeyCallback(m_pWindow, s_keyboardCallback);
 }

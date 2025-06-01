@@ -28,7 +28,7 @@ void MyApplication::run()
     MySimpleRenderFactory simpleRenderFactotry{ m_myDevice, m_myRenderer.swapChainRenderPass() };
     MyCamera camera{};
 
-    // Empty object
+    // Empty object to store camera transformation matrix
     auto viewerObject = MyGameObject::createGameObject();
     MyKeyboardController cameraController{};
 
@@ -97,7 +97,7 @@ void MyApplication::_loadGameObjects()
     // Note: +X to the right, +Y down and +Z inside the screen
     auto mygameobj = MyGameObject::createGameObject();
     mygameobj.model = mymodel;
-    
+
     //cube.transform.translation = { .0f, .0f, 0.5f }; // for orthographic
     mygameobj.transform.translation = { .0f, .0f, -2.5f }; // for perspective
 

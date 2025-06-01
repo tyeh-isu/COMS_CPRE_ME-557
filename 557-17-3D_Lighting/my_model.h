@@ -49,6 +49,8 @@ public:
 
 	MyModel(const MyModel&) = delete;
 	MyModel& operator=(const MyModel&) = delete;
+	MyModel(MyModel&&) = delete;
+	MyModel& operator=(const MyModel&&) = delete;
 
 	static std::unique_ptr<MyModel> createModelFromFile(
 		MyDevice& device, const std::string& filepath);

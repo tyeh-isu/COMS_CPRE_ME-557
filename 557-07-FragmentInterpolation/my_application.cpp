@@ -76,7 +76,7 @@ void MyApplication::_createPipeline()
     // Note: the swap chain buffer size may not be the same as the Window size
     // Pipeline config can be considered as a blue print to create graphics pipeline
     PipelineConfigInfo pipelineConfig{};
-        
+
     MyPipeline::defaultPipelineConfigInfo(pipelineConfig, m_mySwapChain.width(), m_mySwapChain.height());
 
     // For now render pass contains the structure and the format
@@ -149,7 +149,7 @@ void MyApplication::_recordCommandBuffer(int imageIndex)
     static float sign = 1.0f;
 
     SimplePushConstantData pushdata{};
-    
+
     // Step value goes between -1.0f and 1.0f
     if (step >= 1.0f)
       { sign = -1.0f; }

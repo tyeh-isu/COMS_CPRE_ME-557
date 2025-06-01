@@ -213,7 +213,7 @@ void MyApplication::_recordCommandBuffer(int imageIndex)
     static float sign = 1.0f;
 
     SimplePushConstantData pushdata{};
-    
+
     // Step value goes between -1.0f and 1.0f
     if (step >= 1.0f)
       { sign = -1.0f; }

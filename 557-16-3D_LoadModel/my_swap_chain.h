@@ -53,7 +53,7 @@ public:
         return (swapChain.m_vkSwapChainDepthFormat == m_vkSwapChainDepthFormat &&
             swapChain.m_vkSwapChainImageFormat == m_vkSwapChainImageFormat);
     }
-    
+
 private:
     void _init();
     void _createSwapChain();

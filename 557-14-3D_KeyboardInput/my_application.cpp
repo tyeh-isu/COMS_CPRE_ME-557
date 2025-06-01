@@ -28,7 +28,7 @@ void MyApplication::run()
     MySimpleRenderFactory simpleRenderFactotry{ m_myDevice, m_myRenderer.swapChainRenderPass() };
     MyCamera camera{};
 
-    // Empty object
+    // Empty object to store camera transformation matrix
     auto viewerObject = MyGameObject::createGameObject();
     MyKeyboardController cameraController{};
 

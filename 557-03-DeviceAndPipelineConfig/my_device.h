@@ -52,10 +52,10 @@ class MyDevice
     QueueFamilyIndices findPhysicalQueueFamilies() { return _findQueueFamilies(m_vkPhysicalDevice); }
     VkFormat findSupportedFormat(
         const std::vector<VkFormat> &candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
-    
+
     VkCommandBuffer beginSingleTimeCommands();
     void endSingleTimeCommands(VkCommandBuffer commandBuffer);
-    
+
   private:
     void _createInstance();
     void _setupDebugMessenger();

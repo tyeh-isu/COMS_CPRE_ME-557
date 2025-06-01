@@ -75,7 +75,7 @@ void MyApplication::_createPipeline()
     // Note: the swap chain buffer size may not be the same as the Window size
     // Pipeline config can be considered as a blue print to create graphics pipeline
     PipelineConfigInfo pipelineConfig{};
-        
+
     MyPipeline::defaultPipelineConfigInfo(pipelineConfig, m_mySwapChain.width(), m_mySwapChain.height());
 
     // For now render pass contains the structure and the format
