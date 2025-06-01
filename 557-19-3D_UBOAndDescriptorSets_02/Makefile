@@ -38,7 +38,7 @@ else ifeq ($(PLATFORM), Darwin)
 # Linux definitions
 else ifeq ($(PLATFORM), Linux)
 	APP_NAME = $(APPNAME)
-	GLM_PATH = /usr/include/glm-0.9.6.3/glm
+	GLM_PATH = /usr/include/glm-master
 	GLFW_PATH = /usr/include/GLFW
 	GLFW_LIB_PATH = /usr/lib/x86_64-linux-gnu
 	LDFLAGS = -L$(VULKAN_SDK)/lib -L$(GLFW_LIB_PATH) -lvulkan -lglfw
