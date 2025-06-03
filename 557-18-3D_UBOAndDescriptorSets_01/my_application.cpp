@@ -65,10 +65,10 @@ void MyApplication::run()
     m_myWindow.bindMyApplication(this);
     MySimpleRenderFactory simpleRenderFactory{ m_myDevice, m_myRenderer.swapChainRenderPass() };
     MyCamera camera{};
+    MyKeyboardController cameraController{};
 
     // Empty object to store camera transformation matrix
     auto viewerObject = MyGameObject::createGameObject();
-    MyKeyboardController cameraController{};
 
     auto currentTime = std::chrono::high_resolution_clock::now();
 
