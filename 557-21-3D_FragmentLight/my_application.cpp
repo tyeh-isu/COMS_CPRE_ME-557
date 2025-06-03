@@ -148,7 +148,7 @@ void MyApplication::run()
 
             // render
             m_myRenderer.beginSwapChainRenderPass(commandBuffer);
-            simpleRenderFactory.renderGameObjects(frameInfo, m_vMyGameObjects);
+            simpleRenderFactory.renderGameObjects(frameInfo);
             m_myRenderer.endSwapChainRenderPass(commandBuffer);
 
             m_myRenderer.endFrame();

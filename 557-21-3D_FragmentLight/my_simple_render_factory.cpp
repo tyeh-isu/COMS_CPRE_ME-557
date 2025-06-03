@@ -66,7 +66,7 @@ void MySimpleRenderFactory::_createPipeline(VkRenderPass renderPass)
         pipelineConfig);
 }
 
-void MySimpleRenderFactory::renderGameObjects(MyFrameInfo& frameInfo, std::vector<MyGameObject>& gameObjects)
+void MySimpleRenderFactory::renderGameObjects(MyFrameInfo& frameInfo)
 {
     // Bind the descriptor set to the render pipeline
     m_pMyPipeline->bind(frameInfo.commandBuffer);
