@@ -10,7 +10,7 @@
 struct MyPointLight 
 {
 	glm::vec4 position{ -1.0f, 1.0f, 1.0f, 1.0f};     // ignore w
-	glm::vec4 color{1.0f, 1.0f, 1.0f, 1.0f};          // w is intensity
+	glm::vec4 color{1.0f, 1.0f, 0.6f, 1.0f};          // w is intensity
 };
 
 struct MyGlobalUBO 
