@@ -12,16 +12,18 @@ const vec2 OFFSETS[6] = vec2[]
 
 layout (location = 0) out vec2 fragOffset;
 
-layout(set = 0, binding = 0) uniform GlobalUBO 
+layout(set = 0, binding = 0) uniform GlobalUBO
 {
     mat4 projection;
     mat4 view;
+    mat4 invView;
     vec4 ambientLightColor; // w is intensity
     vec3 lightPosition;
     vec4 lightColor;
 } ubo;
 
 const float LIGHT_RADIUS = 0.05;
+
 
 void main()
 {

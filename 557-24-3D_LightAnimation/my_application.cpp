@@ -1,8 +1,8 @@
 #include "my_application.h"
 
-// Render systems
-#include "my_simple_render_system.h"
-#include "my_pointlight_render_system.h"
+// Render factories
+#include "my_simple_render_factory.h"
+#include "my_pointlight_render_factory.h"
 #include "my_camera.h"
 #include "my_keyboard_controller.h"
 
@@ -146,7 +146,7 @@ void MyApplication::run()
             ubo.view = camera.viewMatrix();
             ubo.inverseView = camera.inverseViewMatrix();
 
-			pointLightSystem.update(ubo, m_v3LightOffset);
+			pointLightFactory.update(ubo, m_v3LightOffset);
 
             uboBuffers[frameIndex]->writeToBuffer(&ubo);
 

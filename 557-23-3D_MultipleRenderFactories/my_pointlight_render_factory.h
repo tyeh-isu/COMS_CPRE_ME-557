@@ -22,7 +22,7 @@ public:
 	MyPointLightRenderFactory& operator=(const MyPointLightRenderFactory&) = delete;
 	MyPointLightRenderFactory(MyPointLightRenderFactory&&) = delete;
     MyPointLightRenderFactory& operator=(const MyPointLightRenderFactory&&) = delete;
-	
+
 	void render(MyFrameInfo& frameInfo);
 
 private:

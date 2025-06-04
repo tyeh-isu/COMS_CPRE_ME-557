@@ -18,6 +18,7 @@ layout(set = 0, binding = 0) uniform GlobalUBO
 {
     mat4 projection;
     mat4 view;
+    mat4 invView;
     vec4 ambientLightColor; // w is intensity
     PointLight pointLight;
 } ubo;
@@ -31,12 +32,28 @@ layout(push_constant) uniform Pushdata
 
 void main()
 {
-    vec3 directionToLight = ubo.pointLight.position.xyz - fragPosWorld;
-    float attenuation = 1.0 / dot(directionToLight, directionToLight); // distance squared
+    vec3 diffuseLight = ubo.ambientLightColor.xyz * ubo.ambientLightColor.w;
+    vec3 specularLight = vec3(0.0);
+    vec3 surfaceNormal = normalize(fragNormalWorld);
 
-    vec3 lightColor = ubo.pointLight.color.xyz * ubo.pointLight.color.w * attenuation;
-    vec3 ambientLight = ubo.ambientLightColor.xyz * ubo.ambientLightColor.w;
-    vec3 diffuseLight = lightColor * max(dot(normalize(fragNormalWorld), normalize(directionToLight)), 0); // make sure to normalize again for fragNormalWorld
-    outColor = vec4((diffuseLight + ambientLight) * fragColor, 1.0);
+    vec3 cameraPosWorld = ubo.invView[3].xyz;
+    vec3 viewDirection = normalize(cameraPosWorld - fragPosWorld);
+
+    vec3 directionToLight = ubo.pointLight.position - fragPosWorld;
+    float attenuation = 1.0 / dot(directionToLight, directionToLight); // distance squared
+    directionToLight = normalize(directionToLight);
+    // diffuse color
+    float cosAngIncidence = max(dot(surfaceNormal, directionToLight), 0);
+    vec3 intensity = ubo.pointLight.color.xyz * ubo.pointLight.color.w * attenuation;
+    diffuseLight += intensity * cosAngIncidence;
+
+    // specular lighting
+    vec3 halfAngle = normalize(directionToLight + viewDirection);
+    float blinnTerm = dot(surfaceNormal, halfAngle);
+    blinnTerm = clamp(blinnTerm, 0, 1);
+    blinnTerm = pow(blinnTerm, 32.0); // higher values -> sharper highlight
+    specularLight += intensity * blinnTerm;
+
+    outColor = vec4(diffuseLight * fragColor + specularLight * fragColor, 1.0);
 }
 
