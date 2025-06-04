@@ -18,6 +18,7 @@ layout(set = 0, binding = 0) uniform GlobalUBO
     PointLight pointLight;
 } ubo;
 
+
 void main()
 {
     // calculate the radius of this fragment

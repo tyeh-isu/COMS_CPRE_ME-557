@@ -37,6 +37,7 @@ void main()
     vec3 directionToLight = ubo.lightPosition - fragPosWorld;
     float attenuation = 1.0 / dot(directionToLight, directionToLight); // distance squared
     directionToLight = normalize(directionToLight);
+
     // diffuse color
     float cosAngIncidence = max(dot(surfaceNormal, directionToLight), 0);
     vec3 intensity = ubo.lightColor.xyz * ubo.lightColor.w * attenuation;

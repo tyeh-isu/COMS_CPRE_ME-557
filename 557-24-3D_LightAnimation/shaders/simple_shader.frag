@@ -1,6 +1,6 @@
 #version 450
 
-/* only location and type (vec3) matter, the name doesn't need to match */
+// Only location and type (vec3) matter, the name doesn't need to match
 
 layout (location = 0) in vec3 fragColor;
 layout (location = 1) in vec3 fragPosWorld;
@@ -39,9 +39,10 @@ void main()
     vec3 cameraPosWorld = ubo.invView[3].xyz;
     vec3 viewDirection = normalize(cameraPosWorld - fragPosWorld);
 
-    vec3 directionToLight = ubo.pointLight.position - fragPosWorld;
+    vec3 directionToLight = ubo.pointLight.position.xyz - fragPosWorld;
     float attenuation = 1.0 / dot(directionToLight, directionToLight); // distance squared
     directionToLight = normalize(directionToLight);
+
     // diffuse color
     float cosAngIncidence = max(dot(surfaceNormal, directionToLight), 0);
     vec3 intensity = ubo.pointLight.color.xyz * ubo.pointLight.color.w * attenuation;
