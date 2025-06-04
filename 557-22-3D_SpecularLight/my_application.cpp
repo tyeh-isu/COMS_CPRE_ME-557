@@ -19,9 +19,9 @@
 
 struct MyGlobalUBO 
 {
-    alignas(16) glm::mat4 projection{ 1.f };
-    alignas(16) glm::mat4 view{ 1.f };
-    alignas(16) glm::mat4 inverseView{ 1.f };
+    alignas(16) glm::mat4 projection{ 1.0f };
+    alignas(16) glm::mat4 view{ 1.0f };
+    alignas(16) glm::mat4 inverseView{ 1.0f };
     alignas(16) glm::vec4 ambientLightColor{ 1.0f, 1.0f, 1.0f, 0.01f }; // w is intensity
     alignas(16) glm::vec3 lightPosition{ -1.0f, 1.0f, 1.0 };
     alignas(16) glm::vec4 lightColor{ 1.0f, 1.0f, 1.0f, 1.0f };         // w is light intensity
