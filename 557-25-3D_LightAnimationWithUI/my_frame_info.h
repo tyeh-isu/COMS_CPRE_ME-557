@@ -19,7 +19,6 @@ struct MyGlobalUBO
     alignas(16) glm::mat4 view{ 1.0f };
     alignas(16) glm::mat4 inverseView{ 1.0f };
     alignas(16) glm::vec4 ambientLightColor{ 1.0f, 1.0f, 1.0f, 0.01f }; // w is intensity
-
     MyPointLight pointLight;
 };
 

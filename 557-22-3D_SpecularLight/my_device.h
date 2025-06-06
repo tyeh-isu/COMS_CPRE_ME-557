@@ -52,16 +52,16 @@ class MyDevice
     QueueFamilyIndices findPhysicalQueueFamilies() { return _findQueueFamilies(m_vkPhysicalDevice); }
     VkFormat findSupportedFormat(
         const std::vector<VkFormat> &candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
-    
+
     VkCommandBuffer beginSingleTimeCommands();
     void endSingleTimeCommands(VkCommandBuffer commandBuffer);
-    
+
     void createImageWithInfo(
         const VkImageCreateInfo &imageInfo,
         VkMemoryPropertyFlags properties,
         VkImage &image,
         VkDeviceMemory &imageMemory);
-    
+
     // Buffer Helper Functions
     void createBuffer(
         VkDeviceSize size,
@@ -102,7 +102,7 @@ class MyDevice
     VkSurfaceKHR               m_vkSurface;
     VkQueue                    m_vkGraphicsQueue;
     VkQueue                    m_vkPresentQueue;
-
+    
     const std::vector<const char *> validationLayers = { "VK_LAYER_KHRONOS_validation" };
     const std::vector<const char *> deviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
 };

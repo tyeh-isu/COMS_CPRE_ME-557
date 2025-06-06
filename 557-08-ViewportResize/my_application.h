@@ -19,7 +19,7 @@ public:
 
 	MyApplication();
 	~MyApplication();
-	
+
 	// C++ rule of five
 	MyApplication(const MyApplication&) = delete;
 	MyApplication& operator=(const MyApplication&) = delete;

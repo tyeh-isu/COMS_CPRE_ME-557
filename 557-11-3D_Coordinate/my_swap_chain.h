@@ -18,12 +18,12 @@ public:
     // Don't worry about synchronizaiton yet, just remener at most
     // 2 frames can be submitted for rendering at once
     static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
-    
+
     MySwapChain(MyDevice &deviceRef, VkExtent2D windowExtent);
     MySwapChain(MyDevice& deviceRef, VkExtent2D windowExtent, std::shared_ptr<MySwapChain> previous);
-    
+
     ~MySwapChain();
-    
+
     MySwapChain(const MySwapChain &) = delete;
     MySwapChain& operator=(const MySwapChain &) = delete;
 	MySwapChain(MySwapChain&&) = delete;
@@ -37,17 +37,17 @@ public:
     VkExtent2D    swapChainExtent()      { return m_vkSwapChainExtent; }
     uint32_t      width()                { return m_vkSwapChainExtent.width; }
     uint32_t      height()               { return m_vkSwapChainExtent.height; }
-    
+
     float extentAspectRatio() 
     {
       return static_cast<float>(m_vkSwapChainExtent.width) / static_cast<float>(m_vkSwapChainExtent.height);
     }
-    
+
     VkFormat findDepthFormat();
-    
+
     VkResult acquireNextImage(uint32_t *imageIndex);
     VkResult submitCommandBuffers(const VkCommandBuffer *buffers, uint32_t *imageIndex);
-    
+
     bool compareSwapFormats(const MySwapChain& swapChain) const
     {
         return (swapChain.m_vkSwapChainDepthFormat == m_vkSwapChainDepthFormat &&
@@ -62,31 +62,31 @@ private:
     void _createRenderPass();
     void _createFramebuffers();
     void _createSyncObjects();
-    
+
     // Helper functions
     VkSurfaceFormatKHR _chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR> &availableFormats);
     VkPresentModeKHR   _chooseSwapPresentMode(const std::vector<VkPresentModeKHR> &availablePresentModes);
     VkExtent2D         _chooseSwapExtent(const VkSurfaceCapabilitiesKHR &capabilities);
-    
+
     VkFormat                     m_vkSwapChainImageFormat;
     VkFormat                     m_vkSwapChainDepthFormat;
     VkExtent2D                   m_vkSwapChainExtent;
-    
+
     std::vector<VkFramebuffer>   m_vVkSwapChainFramebuffers;
     VkRenderPass                 m_vkRenderPass;
-    
+
     std::vector<VkImage>         m_vVkDepthImages;
     std::vector<VkDeviceMemory>  m_vVkDepthImageMemorys;
     std::vector<VkImageView>     m_vVkDepthImageViews;
     std::vector<VkImage>         m_vVkSwapChainImages;
     std::vector<VkImageView>     m_vVkSwapChainImageViews;
-    
+
     MyDevice                    &m_myDevice;
     VkExtent2D                   m_vkWindowExtent;
-    
+
     VkSwapchainKHR               m_vkSwapChain;
     std::shared_ptr<MySwapChain> m_pMyOldSwapChain;
-    
+
     std::vector<VkSemaphore>     m_vVkImageAvailableSemaphores;
     std::vector<VkSemaphore>     m_vVkRenderFinishedSemaphores;
     std::vector<VkFence>         m_vVkInFlightFences;

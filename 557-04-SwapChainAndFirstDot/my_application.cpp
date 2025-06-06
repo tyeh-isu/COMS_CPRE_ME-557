@@ -118,7 +118,7 @@ void MyApplication::_createCommandBuffers()
 
         // VK_SUBPASS_CONTENTS_INLINE means only use Primary command buffer. No secondary command buffer
         vkCmdBeginRenderPass(m_vVkCommandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-        
+
         m_pMyPipeline->bind(m_vVkCommandBuffers[i]);
 
         vkCmdDraw(m_vVkCommandBuffers[i], numVertex, 1, 0, 0); // draw numVertex vertices and only one instance

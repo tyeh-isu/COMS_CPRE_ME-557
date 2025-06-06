@@ -62,7 +62,7 @@ void MyApplication::run()
     // Create descriptor set layout object
     auto globalSetLayout =
         MyDescriptorSetLayout::Builder(m_myDevice)
-        .addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_ALL_GRAPHICS)  // can be accessed all shader stages
+        .addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_ALL_GRAPHICS) // can be accessed all shader stages
         .build();
 
     // Create one descriptor set per frame

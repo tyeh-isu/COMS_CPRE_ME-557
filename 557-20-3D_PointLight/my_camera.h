@@ -18,8 +18,8 @@ public:
     void setViewTarget(glm::vec3 position, glm::vec3 target, glm::vec3 up = glm::vec3{ 0.0f, 1.0f, 0.0f });
     void setViewYXZ(glm::vec3 position, glm::vec3 rotation);
 
-    const glm::mat4& projectionMatrix() const { return m_m4ProjectionMatrix; }
-    const glm::mat4& viewMatrix()       const { return m_m4ViewMatrix; }
+    const glm::mat4& projectionMatrix()  const { return m_m4ProjectionMatrix; }
+    const glm::mat4& viewMatrix()        const { return m_m4ViewMatrix; }
 
 private:
     glm::mat4 m_m4ProjectionMatrix{ 1.f };

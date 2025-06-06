@@ -170,7 +170,6 @@ void MyApplication::_loadGameObjects()
     auto flatVase = MyGameObject::createGameObject();
     flatVase.model = mymodel;
 
-    //cube.transform.translation = { .0f, .0f, 0.5f }; // for orthographic
     flatVase.transform.translation = { -.5f, -.5f, -2.5f };
     flatVase.transform.scale = { 3.f, 1.5f, 3.f };
     flatVase.transform.rotation.x = glm::pi<float>(); // rotate 180 so Y is up

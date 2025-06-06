@@ -35,7 +35,7 @@ public:
     MyDescriptorSetLayout& operator=(const MyDescriptorSetLayout&) = delete;
     MyDescriptorSetLayout(MyDescriptorSetLayout&&) = delete;
     MyDescriptorSetLayout& operator=(const MyDescriptorSetLayout&&) = delete;
-	
+
     VkDescriptorSetLayout descriptorSetLayout() const { return m_vkDescriptorSetLayout; }
 
 private:

@@ -14,7 +14,7 @@ public:
 
     void setPerspectiveProjection(float fovy, float aspect, float near, float far);
 
-    const glm::mat4& projectionMatrix() const { return m_m4ProjectionMatrix; }
+    const glm::mat4& projectionMatrix()  const { return m_m4ProjectionMatrix; }
 
 private:
     glm::mat4 m_m4ProjectionMatrix{ 1.f };
