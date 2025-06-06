@@ -36,6 +36,8 @@ public:
 
 	MyGUI(const MyGUI&) = delete;
 	MyGUI& operator=(const MyGUI&) = delete;
+	MyGUI(MyGUI&&) = delete;
+	MyGUI& operator=(const MyGUI&&) = delete;
 
 private:
 	void _init();

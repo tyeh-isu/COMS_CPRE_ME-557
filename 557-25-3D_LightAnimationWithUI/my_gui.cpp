@@ -1,6 +1,7 @@
 #include "my_gui.h"
 #include "imgui/imgui_internal.h"
 #include <chrono>
+#include <stdexcept>
 
 static void check_vk_result(VkResult err)
 {
@@ -62,7 +63,7 @@ void MyGUI::_init()
 
 		if (vkCreateDescriptorPool(m_myDevice.device(), &pool_info, nullptr, &m_myDescriptorPool) != VK_SUCCESS)
 		{
-			throw std::exception("unable to create descriptor pool for imgui");
+			throw std::runtime_error("unable to create descriptor pool for imgui");
 		}
 	}
 
@@ -86,7 +87,7 @@ void MyGUI::_init()
 
 	if (!ImGui_ImplVulkan_Init(&init_info))
 	{
-		throw std::exception("Failed to initialize imgui for Vulkan");
+		throw std::runtime_error("Failed to initialize imgui for Vulkan");
 	}
 }
 
