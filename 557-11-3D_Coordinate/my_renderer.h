@@ -21,8 +21,7 @@ public:
 	MyRenderer(MyRenderer&&) = delete;
     MyRenderer& operator=(const MyRenderer&&) = delete;
 
-    VkRenderPass swapChainRenderPass() const { return m_mySwapChain->renderPass(); }
-
+    VkRenderPass    swapChainRenderPass() const { return m_mySwapChain->renderPass(); }
     VkCommandBuffer beginFrame();
     void            endFrame();
     void            beginSwapChainRenderPass(VkCommandBuffer commandBuffer);

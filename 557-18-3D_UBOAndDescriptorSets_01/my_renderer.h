@@ -21,8 +21,8 @@ public:
 	MyRenderer(MyRenderer&&) = delete;
     MyRenderer& operator=(const MyRenderer&&) = delete;
 
-    VkRenderPass swapChainRenderPass() const { return m_mySwapChain->renderPass(); }
-    float aspectRatio()                const { return m_mySwapChain->extentAspectRatio(); }
+    VkRenderPass    swapChainRenderPass() const { return m_mySwapChain->renderPass(); }
+    float           aspectRatio()         const { return m_mySwapChain->extentAspectRatio(); }
 
     VkCommandBuffer beginFrame();
     void            endFrame();
