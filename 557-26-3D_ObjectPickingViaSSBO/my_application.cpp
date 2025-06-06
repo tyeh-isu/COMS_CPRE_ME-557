@@ -35,7 +35,7 @@ MyApplication::MyApplication() :
 {
     m_pMyGlobalPool =
         MyDescriptorPool::Builder(m_myDevice)
-        .setMaxSets(MySwapChain::MAX_FRAMES_IN_FLIGHT + 1)
+        .setMaxSets(MySwapChain::MAX_FRAMES_IN_FLIGHT) // for descriptor set
         .addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, MySwapChain::MAX_FRAMES_IN_FLIGHT)
 		.addPoolSize(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1) // for picking
         .build();
@@ -86,7 +86,7 @@ void MyApplication::run()
 
     // Create one descriptor set per frame
     std::vector<VkDescriptorSet> globalDescriptorSets(MySwapChain::MAX_FRAMES_IN_FLIGHT);
-    for (int i = 0; i < MySwapChain::MAX_FRAMES_IN_FLIGHT; i++)
+    for (int i = 0; i < globalDescriptorSets.size(); i++)
 	{
         auto bufferInfo = uboBuffers[i]->descriptorInfo();
         auto ssbobufferInfo = ssboBuffer->descriptorInfo();
@@ -326,8 +326,6 @@ void MyApplication::togglePickMode()
 
 void MyApplication::mouseButtonEvent(bool bMouseDown, float posx, float posy)
 {
-    std::cout << "Pick x = " << posx << " y = " << posy << std::endl;
-
     if (bMouseDown)
     {
         m_fMousePos[0] = posx;
