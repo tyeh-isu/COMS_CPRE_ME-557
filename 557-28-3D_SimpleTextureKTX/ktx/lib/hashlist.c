@@ -254,21 +254,21 @@ ktxHashList_Serialize(ktxHashList* pHead,
         unsigned char* sd;
         char padding[4] = {0, 0, 0, 0};
 
-        for (kv = *pHead; kv != NULL; kv = kv->hh.next) {
+        for (kv = *pHead; kv != NULL; kv = (ktxKVListEntry*)(kv->hh.next)) {
             /* sizeof(sd) is to make space to write keyAndValueByteSize */
             keyValueLen = kv->keyLen + kv->valueLen + sizeof(ktx_uint32_t);
             /* Add valuePadding */
             keyValueLen = _KTX_PAD4(keyValueLen);
             bytesOfKeyValueData += keyValueLen;
         }
-        sd = malloc(bytesOfKeyValueData);
+        sd = (unsigned char*)malloc(bytesOfKeyValueData);
         if (!sd)
             return KTX_OUT_OF_MEMORY;
 
         *pKvdLen = bytesOfKeyValueData;
         *ppKvd = sd;
 
-        for (kv = *pHead; kv != NULL; kv = kv->hh.next) {
+        for (kv = *pHead; kv != NULL; kv = (ktxKVListEntry*)(kv->hh.next)) {
             int padLen;
 
             keyValueLen = kv->keyLen + kv->valueLen;
@@ -311,7 +311,7 @@ ktxHashList_Serialize(ktxHashList* pHead,
 KTX_error_code
 ktxHashList_Deserialize(ktxHashList* pHead, unsigned int kvdLen, void* pKvd)
 {
-    char* src = pKvd;
+    char* src = (char*)pKvd;
     KTX_error_code result;
 
     if (kvdLen == 0 || pKvd == NULL || pHead == NULL)

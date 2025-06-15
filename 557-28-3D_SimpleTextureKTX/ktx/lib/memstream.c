@@ -120,7 +120,7 @@ static void
 ktxMem_construct_ro(ktxMem* pMem, const void* bytes, ktx_size_t numBytes)
 {
     pMem->pos = 0;
-    pMem->robytes = bytes;
+    pMem->robytes = (const ktx_uint8_t*)bytes;
     pMem->bytes = 0;
     pMem->used_size = numBytes;
     pMem->alloc_size = numBytes;

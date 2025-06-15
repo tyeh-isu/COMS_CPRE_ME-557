@@ -14,3 +14,11 @@ CPPSRCS = \
 	my_texture.cpp \
 	my_texture_render_factory.cpp \
 	my_window.cpp
+
+CSRCS = \
+	ktx/lib/swap.c \
+	ktx/lib/checkheader.c \
+	ktx/lib/filestream.c \
+	ktx/lib/hashlist.c \
+	ktx/lib/memstream.c \
+	ktx/lib/texture.c
