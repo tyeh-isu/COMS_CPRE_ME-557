@@ -92,7 +92,7 @@ void MyApplication::run()
     auto viewerObject = MyGameObject::createGameObject();
     viewerObject.transform.translation.x = 0.0f;
     viewerObject.transform.translation.y = 0.5f;
-    viewerObject.transform.translation.z = 5.0f; // move the camera back so the light object can be seen
+    viewerObject.transform.translation.z = 4.0f; // move the camera back so the light object can be seen
 
     auto currentTime = std::chrono::high_resolution_clock::now();
 
@@ -122,7 +122,7 @@ void MyApplication::run()
             // because Y is down by default for Vulkan, when we set top to be minus value, we can flip the coordinate
             // such that Y is up. Because we move the part 2.5 units, the near and far value needs to cover the model
             // Also, near and far will automatically apply negative values
-            camera.setOrthographicProjection(-apsectRatio, apsectRatio, -1.0f, 1.0f, -10.0f, 10.0f); 
+            camera.setOrthographicProjection(-apsectRatio * 2.0f, apsectRatio * 2.0f, -2.0f, 2.0f, -5.0f, 5.0f);
 
         // Please note that commandBuffer could be null pointer
         // if the swapChain needs to be recreated

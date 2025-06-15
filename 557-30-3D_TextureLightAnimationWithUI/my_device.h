@@ -41,11 +41,11 @@ class MyDevice
     MyDevice(MyDevice &&) = delete;
     MyDevice &operator=(MyDevice &&) = delete;
 
-    VkCommandPool commandPool() { return m_vkCommandPool; }
-    VkDevice device()           { return m_vkDevice; }
-    VkSurfaceKHR surface()      { return m_vkSurface; }
-    VkQueue graphicsQueue()     { return m_vkGraphicsQueue; }
-    VkQueue presentQueue()      { return m_vkPresentQueue; }
+    VkCommandPool commandPool()       { return m_vkCommandPool; }
+    VkDevice device()                 { return m_vkDevice; }
+    VkSurfaceKHR surface()            { return m_vkSurface; }
+    VkQueue graphicsQueue()           { return m_vkGraphicsQueue; }
+    VkQueue presentQueue()            { return m_vkPresentQueue; }
 
     // For GUI
     VkInstance       instance()       { return m_vkInstance; }
