@@ -5,6 +5,7 @@
 APPNAME = Vulkan18
 DEBUG = -g
 VERBOSE = -v
+CXX = g++
 
 # For defining platform specific flags
 PLATFORM = $(shell uname -s)
@@ -49,8 +50,20 @@ endif
 CFLAGS = -std=c++17 $(DEBUG) -I. -I$(VULKAN_SDK)/include -I$(GLM_PATH) -I$(GLFW_PATH)
 include LOCAL_SRCS
 
-$(APP_NAME):
-	g++ -D$(DEFINES) $(CFLAGS) -o $(APP_NAME) $(CPPSRCS) $(LDFLAGS)
+# Object files
+OBJECTS = $(CPPSRCS:.cpp=.o)
+
+# Default target
+all: $(APPNAME)
+
+# Link object files to create the executable
+$(APPNAME): $(OBJECTS)
+	$(CXX) -o $@ $^ $(LDFLAGS)
+	@echo Done!
+
+# Compile C++ files
+%.o: %.cpp
+	$(CXX) -D$(DEFINES) $(CFLAGS) -c $< -o $@
 
 shader:
 ifneq ($(PLATFORM), Windows)
@@ -62,7 +75,7 @@ run:
 	./$(APP_NAME)
 
 clean:
-	rm -f $(APP_NAME)
+	rm -f $(OBJECTS) $(APP_NAME)
 
 test:
 	@echo $(PLATFORM)

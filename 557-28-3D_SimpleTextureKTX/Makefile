@@ -5,8 +5,8 @@
 APPNAME = Vulkan28
 DEBUG = -g
 VERBOSE = -v
-CC = gcc
 CXX = g++
+CC = gcc
 
 # For defining platform specific flags
 PLATFORM = $(shell uname -s)
@@ -62,14 +62,15 @@ all: $(APPNAME)
 # Link object files to create the executable
 $(APPNAME): $(OBJECTS)
 	$(CXX) -o $@ $^ $(LDFLAGS)
-
-# Compile C files
-%.o: %.c
-	$(CC) -D$(DEFINES) $(CFLAGS) -c $< -o $@
+	@echo Done!
 
 # Compile C++ files
 %.o: %.cpp
 	$(CXX) -D$(DEFINES) -std=c++17 $(CFLAGS) -c $< -o $@
+
+# Compile C files
+%.o: %.c
+	$(CC) -D$(DEFINES) $(CFLAGS) -c $< -o $@
 
 shader:
 ifneq ($(PLATFORM), Windows)
