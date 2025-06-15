@@ -41,11 +41,11 @@ class MyDevice
     MyDevice(MyDevice &&) = delete;
     MyDevice &operator=(MyDevice &&) = delete;
 
-    VkCommandPool commandPool()       { return m_vkCommandPool; }
-    VkDevice device()                 { return m_vkDevice; }
-    VkSurfaceKHR surface()            { return m_vkSurface; }
-    VkQueue graphicsQueue()           { return m_vkGraphicsQueue; }
-    VkQueue presentQueue()            { return m_vkPresentQueue; }
+    VkCommandPool commandPool() { return m_vkCommandPool; }
+    VkDevice device()           { return m_vkDevice; }
+    VkSurfaceKHR surface()      { return m_vkSurface; }
+    VkQueue graphicsQueue()     { return m_vkGraphicsQueue; }
+    VkQueue presentQueue()      { return m_vkPresentQueue; }
     VkPhysicalDevice physicalDevice() { return m_vkPhysicalDevice; }
 
     // Used by Swap Chain
@@ -53,16 +53,16 @@ class MyDevice
     QueueFamilyIndices findPhysicalQueueFamilies() { return _findQueueFamilies(m_vkPhysicalDevice); }
     VkFormat findSupportedFormat(
         const std::vector<VkFormat> &candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
-    
+
     VkCommandBuffer beginSingleTimeCommands();
     void endSingleTimeCommands(VkCommandBuffer commandBuffer);
-    
+
     void createImageWithInfo(
         const VkImageCreateInfo &imageInfo,
         VkMemoryPropertyFlags properties,
         VkImage &image,
         VkDeviceMemory &imageMemory);
-    
+
     // Buffer Helper Functions
     void createBuffer(
         VkDeviceSize size,

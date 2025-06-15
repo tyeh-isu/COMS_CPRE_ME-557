@@ -42,6 +42,7 @@ public:
 private:
 	static void s_keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	static void s_frameBufferResizeCallback(GLFWwindow* window, int width, int height);
+
 	void _initWindow();
 
 	int            m_iWidth;
