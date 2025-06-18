@@ -18,7 +18,7 @@ struct MyTexturePushConstantData
 };
 
 MyTextureRenderFactory::MyTextureRenderFactory(MyDevice& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout)
-    : m_pMyDevice{ device }
+    : m_myDevice{ device }
 {
     _createPipelineLayout(globalSetLayout);
     _createPipeline(renderPass);
@@ -26,7 +26,7 @@ MyTextureRenderFactory::MyTextureRenderFactory(MyDevice& device, VkRenderPass re
 
 MyTextureRenderFactory::~MyTextureRenderFactory()
 {
-    vkDestroyPipelineLayout(m_pMyDevice.device(), m_vkPipelineLayout, nullptr);
+    vkDestroyPipelineLayout(m_myDevice.device(), m_vkPipelineLayout, nullptr);
 }
 
 void MyTextureRenderFactory::_createPipelineLayout(VkDescriptorSetLayout globalSetLayout)
@@ -44,7 +44,7 @@ void MyTextureRenderFactory::_createPipelineLayout(VkDescriptorSetLayout globalS
     pipelineLayoutInfo.pSetLayouts = descriptorSetLayouts.data();
     pipelineLayoutInfo.pushConstantRangeCount = 1;
     pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
-    if (vkCreatePipelineLayout(m_pMyDevice.device(), &pipelineLayoutInfo, nullptr, &m_vkPipelineLayout) !=
+    if (vkCreatePipelineLayout(m_myDevice.device(), &pipelineLayoutInfo, nullptr, &m_vkPipelineLayout) !=
         VK_SUCCESS) {
         throw std::runtime_error("failed to create pipeline layout!");
     }
@@ -60,7 +60,7 @@ void MyTextureRenderFactory::_createPipeline(VkRenderPass renderPass)
     pipelineConfig.pipelineLayout = m_vkPipelineLayout;
 
     m_pMyPipeline = std::make_unique<MyPipeline>(
-        m_pMyDevice,
+        m_myDevice,
         "shaders/texture_shader.vert.spv",
         "shaders/texture_shader.frag.spv",
         pipelineConfig);

@@ -54,7 +54,7 @@ private:
     }
 
     MyWindow&                    m_myWindow;
-    MyDevice&                    m_pMyDevice;
+    MyDevice&                    m_myDevice;
     std::unique_ptr<MySwapChain> m_mySwapChain;
     std::vector<VkCommandBuffer> m_vVkCommandBuffers;
 

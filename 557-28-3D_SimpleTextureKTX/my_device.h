@@ -73,7 +73,7 @@ class MyDevice
     
 	void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
     void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, uint32_t layerCount);
-    void copyBufferRigonToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, uint32_t layerCount, std::vector<VkBufferImageCopy> &bufferCopyRegions);
+    void copyBufferRigonToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, std::vector<VkBufferImageCopy> &bufferCopyRegions);
 
   private:
     void _createInstance();

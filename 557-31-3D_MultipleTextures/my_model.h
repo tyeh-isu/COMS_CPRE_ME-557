@@ -61,7 +61,7 @@ private:
 	void _createIndexBuffers(const std::vector<uint32_t>& indices);
 
 	// Use the new MyBuffer for vertex and index buffers
-	MyDevice&                 m_pMyDevice;
+	MyDevice&                 m_myDevice;
 	std::unique_ptr<MyBuffer> m_pMyVertexBuffer;
 	uint32_t                  m_iVertexCount = 0;
 

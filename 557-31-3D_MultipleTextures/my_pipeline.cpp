@@ -9,16 +9,16 @@
 #include <cassert>
 
 MyPipeline::MyPipeline(MyDevice& device, const std::string& vertFilepath, const std::string& fragFilepath, const PipelineConfigInfo& configInfo) :
-    m_pMyDevice{ device }
+    m_myDevice{ device }
 {
     _createGraphicsPipeline(vertFilepath, fragFilepath, configInfo);
 }
 
 MyPipeline::~MyPipeline()
 {
-    vkDestroyShaderModule(m_pMyDevice.device(), m_vkVertShaderModule, nullptr);
-    vkDestroyShaderModule(m_pMyDevice.device(), m_vkFragShaderModule, nullptr);
-    vkDestroyPipeline(m_pMyDevice.device(), m_vkGraphicsPipeline, nullptr);
+    vkDestroyShaderModule(m_myDevice.device(), m_vkVertShaderModule, nullptr);
+    vkDestroyShaderModule(m_myDevice.device(), m_vkFragShaderModule, nullptr);
+    vkDestroyPipeline(m_myDevice.device(), m_vkGraphicsPipeline, nullptr);
 }
 
 std::vector<char> MyPipeline::_readFile(const std::string& filename)
@@ -111,7 +111,7 @@ void MyPipeline::_createGraphicsPipeline(
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
     
     if (vkCreateGraphicsPipelines(
-        m_pMyDevice.device(),
+        m_myDevice.device(),
         VK_NULL_HANDLE,
         1,
         &pipelineInfo,
@@ -129,7 +129,7 @@ void MyPipeline::_createShaderModule(const std::vector<char>& code, VkShaderModu
     createInfo.codeSize = code.size();
     createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
-    if (vkCreateShaderModule(m_pMyDevice.device(), &createInfo, nullptr, shaderModule) != VK_SUCCESS)
+    if (vkCreateShaderModule(m_myDevice.device(), &createInfo, nullptr, shaderModule) != VK_SUCCESS)
     {
         throw std::runtime_error("Failed to create Shader Module");
     }

@@ -594,7 +594,7 @@ void MyDevice::copyBufferToImage(
 }
 
 void MyDevice::copyBufferRigonToImage(
-    VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, uint32_t layerCount, std::vector<VkBufferImageCopy> &bufferCopyRegions)
+    VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, std::vector<VkBufferImageCopy> &bufferCopyRegions)
 {
     VkCommandBuffer commandBuffer = beginSingleTimeCommands();
 

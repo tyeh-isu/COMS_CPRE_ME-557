@@ -26,11 +26,11 @@ private:
 	void _loadGameObjects();
 
 	MyWindow                  m_myWindow{ WIDTH, HEIGHT, "Hello Vulkan!" };
-	MyDevice                  m_pMyDevice{ m_myWindow };
-	MyRenderer                m_myRenderer{ m_myWindow, m_pMyDevice };
+	MyDevice                  m_myDevice{ m_myWindow };
+	MyRenderer                m_myRenderer{ m_myWindow, m_myDevice };
 
 	// Note: the order matters, because the destructor is called in the reversed order
-	// globalPool needs to delete before m_pMyDevice
+	// globalPool needs to delete before m_myDevice
 	std::unique_ptr<MyDescriptorPool> m_pMyGlobalPool{};
 	MyGameObject::Map                 m_mapGameObjects;
 	bool                              m_bPerspectiveProjection;

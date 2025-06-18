@@ -10,14 +10,14 @@
 #include <stdexcept>
 
 MySwapChain::MySwapChain(MyDevice &deviceRef, VkExtent2D extent)
-    : m_pMyDevice{deviceRef}, 
+    : m_myDevice{deviceRef}, 
       m_vkWindowExtent{extent}
 {
     _init();
 }
 
 MySwapChain::MySwapChain(MyDevice& deviceRef, VkExtent2D extent, std::shared_ptr<MySwapChain> previous)
-    : m_pMyDevice{ deviceRef }, 
+    : m_myDevice{ deviceRef }, 
       m_vkWindowExtent{ extent },
       m_pMyOldSwapChain{ previous }
 {
@@ -44,47 +44,47 @@ MySwapChain::~MySwapChain()
 {
     for (auto imageView : m_vVkSwapChainImageViews)
     {
-        vkDestroyImageView(m_pMyDevice.device(), imageView, nullptr);
+        vkDestroyImageView(m_myDevice.device(), imageView, nullptr);
     }
     
     m_vVkSwapChainImageViews.clear();
     
     if (m_vkSwapChain != nullptr)
     {
-        vkDestroySwapchainKHR(m_pMyDevice.device(), m_vkSwapChain, nullptr);
+        vkDestroySwapchainKHR(m_myDevice.device(), m_vkSwapChain, nullptr);
         m_vkSwapChain = nullptr;
     }
     
     for (int i = 0; i < m_vVkDepthImages.size(); i++)
     {
-        vkDestroyImageView(m_pMyDevice.device(), m_vVkDepthImageViews[i], nullptr);
-        vkDestroyImage(m_pMyDevice.device(), m_vVkDepthImages[i], nullptr);
-        vkFreeMemory(m_pMyDevice.device(), m_vVkDepthImageMemorys[i], nullptr);
+        vkDestroyImageView(m_myDevice.device(), m_vVkDepthImageViews[i], nullptr);
+        vkDestroyImage(m_myDevice.device(), m_vVkDepthImages[i], nullptr);
+        vkFreeMemory(m_myDevice.device(), m_vVkDepthImageMemorys[i], nullptr);
     }
     
     for (auto framebuffer : m_vVkSwapChainFramebuffers)
     {
-        vkDestroyFramebuffer(m_pMyDevice.device(), framebuffer, nullptr);
+        vkDestroyFramebuffer(m_myDevice.device(), framebuffer, nullptr);
     }
     
-    vkDestroyRenderPass(m_pMyDevice.device(), m_vkRenderPass, nullptr);
+    vkDestroyRenderPass(m_myDevice.device(), m_vkRenderPass, nullptr);
     
     // Picking
-    vkDestroyImageView(m_pMyDevice.device(), m_vkPickColorImageView, nullptr);
-    vkDestroyImageView(m_pMyDevice.device(), m_vkPickDepthImageView, nullptr);
-    vkDestroyImage(m_pMyDevice.device(), m_vkPickColorImage, nullptr);
-    vkDestroyImage(m_pMyDevice.device(), m_vkPickDepthImage, nullptr);
-    vkFreeMemory(m_pMyDevice.device(), m_vkPickColorImageMemory, nullptr);
-    vkFreeMemory(m_pMyDevice.device(), m_vkPickDepthImageMemory, nullptr);
-    vkDestroyFramebuffer(m_pMyDevice.device(), m_vkPickFrameBuffer, nullptr);
-    vkDestroyRenderPass(m_pMyDevice.device(), m_vkPickRenderPass, nullptr);
+    vkDestroyImageView(m_myDevice.device(), m_vkPickColorImageView, nullptr);
+    vkDestroyImageView(m_myDevice.device(), m_vkPickDepthImageView, nullptr);
+    vkDestroyImage(m_myDevice.device(), m_vkPickColorImage, nullptr);
+    vkDestroyImage(m_myDevice.device(), m_vkPickDepthImage, nullptr);
+    vkFreeMemory(m_myDevice.device(), m_vkPickColorImageMemory, nullptr);
+    vkFreeMemory(m_myDevice.device(), m_vkPickDepthImageMemory, nullptr);
+    vkDestroyFramebuffer(m_myDevice.device(), m_vkPickFrameBuffer, nullptr);
+    vkDestroyRenderPass(m_myDevice.device(), m_vkPickRenderPass, nullptr);
 
     // cleanup synchronization objects
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
     {
-        vkDestroySemaphore(m_pMyDevice.device(), m_vVkRenderFinishedSemaphores[i], nullptr);
-        vkDestroySemaphore(m_pMyDevice.device(), m_vVkImageAvailableSemaphores[i], nullptr);
-        vkDestroyFence(m_pMyDevice.device(), m_vVkInFlightFences[i], nullptr);
+        vkDestroySemaphore(m_myDevice.device(), m_vVkRenderFinishedSemaphores[i], nullptr);
+        vkDestroySemaphore(m_myDevice.device(), m_vVkImageAvailableSemaphores[i], nullptr);
+        vkDestroyFence(m_myDevice.device(), m_vVkInFlightFences[i], nullptr);
     }
 }
 
@@ -92,14 +92,14 @@ VkResult MySwapChain::acquireNextImage(uint32_t *imageIndex)
 {
     // Note: CPU will wait here at fences
     vkWaitForFences(
-        m_pMyDevice.device(),
+        m_myDevice.device(),
         1,
         &m_vVkInFlightFences[m_iCurrentFrame],
         VK_TRUE,
         std::numeric_limits<uint64_t>::max());
     
     VkResult result = vkAcquireNextImageKHR(
-        m_pMyDevice.device(),
+        m_myDevice.device(),
         m_vkSwapChain,
         std::numeric_limits<uint64_t>::max(),
         m_vVkImageAvailableSemaphores[m_iCurrentFrame],  // must be a not signaled semaphore
@@ -113,7 +113,7 @@ VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint3
 {
     if (m_vVkImagesInFlight[*imageIndex] != VK_NULL_HANDLE)
     {
-        vkWaitForFences(m_pMyDevice.device(), 1, &m_vVkImagesInFlight[*imageIndex], VK_TRUE, UINT64_MAX);
+        vkWaitForFences(m_myDevice.device(), 1, &m_vVkImagesInFlight[*imageIndex], VK_TRUE, UINT64_MAX);
     }
     
     m_vVkImagesInFlight[*imageIndex] = m_vVkInFlightFences[m_iCurrentFrame];
@@ -134,8 +134,8 @@ VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint3
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores = signalSemaphores;
     
-    vkResetFences(m_pMyDevice.device(), 1, &m_vVkInFlightFences[m_iCurrentFrame]);
-    if (vkQueueSubmit(m_pMyDevice.graphicsQueue(), 1, &submitInfo, m_vVkInFlightFences[m_iCurrentFrame]) != VK_SUCCESS) 
+    vkResetFences(m_myDevice.device(), 1, &m_vVkInFlightFences[m_iCurrentFrame]);
+    if (vkQueueSubmit(m_myDevice.graphicsQueue(), 1, &submitInfo, m_vVkInFlightFences[m_iCurrentFrame]) != VK_SUCCESS) 
     {
         throw std::runtime_error("failed to submit draw command buffer!");
     }
@@ -152,7 +152,7 @@ VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint3
     
     presentInfo.pImageIndices = imageIndex;
     
-    auto result = vkQueuePresentKHR(m_pMyDevice.presentQueue(), &presentInfo);
+    auto result = vkQueuePresentKHR(m_myDevice.presentQueue(), &presentInfo);
     
     m_iCurrentFrame = (m_iCurrentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
     
@@ -161,7 +161,7 @@ VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint3
 
 void MySwapChain::_createSwapChain() 
 {
-    SwapChainSupportDetails swapChainSupport = m_pMyDevice.getSwapChainSupport();
+    SwapChainSupportDetails swapChainSupport = m_myDevice.getSwapChainSupport();
     
     VkSurfaceFormatKHR surfaceFormat = _chooseSwapSurfaceFormat(swapChainSupport.formats);
     VkPresentModeKHR presentMode = _chooseSwapPresentMode(swapChainSupport.presentModes);
@@ -176,7 +176,7 @@ void MySwapChain::_createSwapChain()
     
     VkSwapchainCreateInfoKHR createInfo = {};
     createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-    createInfo.surface = m_pMyDevice.surface();
+    createInfo.surface = m_myDevice.surface();
     
     createInfo.minImageCount = imageCount;
     createInfo.imageFormat = surfaceFormat.format;
@@ -185,7 +185,7 @@ void MySwapChain::_createSwapChain()
     createInfo.imageArrayLayers = 1;
     createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
     
-    QueueFamilyIndices indices = m_pMyDevice.findPhysicalQueueFamilies();
+    QueueFamilyIndices indices = m_myDevice.findPhysicalQueueFamilies();
     uint32_t queueFamilyIndices[] = {indices.graphicsFamily, indices.presentFamily};
     
     if (indices.graphicsFamily != indices.presentFamily)
@@ -209,7 +209,7 @@ void MySwapChain::_createSwapChain()
     
     createInfo.oldSwapchain = m_pMyOldSwapChain == nullptr ? VK_NULL_HANDLE : m_pMyOldSwapChain->m_vkSwapChain;
     
-    if (vkCreateSwapchainKHR(m_pMyDevice.device(), &createInfo, nullptr, &m_vkSwapChain) != VK_SUCCESS)
+    if (vkCreateSwapchainKHR(m_myDevice.device(), &createInfo, nullptr, &m_vkSwapChain) != VK_SUCCESS)
     {
         throw std::runtime_error("failed to create swap chain!");
     }
@@ -218,9 +218,9 @@ void MySwapChain::_createSwapChain()
     // allowed to create a swap chain with more. That's why we'll first query the final number of
     // images with vkGetSwapchainImagesKHR, then resize the container and finally call it again to
     // retrieve the handles.
-    vkGetSwapchainImagesKHR(m_pMyDevice.device(), m_vkSwapChain, &imageCount, nullptr);
+    vkGetSwapchainImagesKHR(m_myDevice.device(), m_vkSwapChain, &imageCount, nullptr);
     m_vVkSwapChainImages.resize(imageCount);
-    vkGetSwapchainImagesKHR(m_pMyDevice.device(), m_vkSwapChain, &imageCount, m_vVkSwapChainImages.data());
+    vkGetSwapchainImagesKHR(m_myDevice.device(), m_vkSwapChain, &imageCount, m_vVkSwapChainImages.data());
     
     m_vkSwapChainImageFormat = surfaceFormat.format;
     m_vkSwapChainExtent = extent;
@@ -242,7 +242,7 @@ void MySwapChain::_createImageViews()
         viewInfo.subresourceRange.baseArrayLayer = 0;
         viewInfo.subresourceRange.layerCount = 1;
 
-        if (vkCreateImageView(m_pMyDevice.device(), &viewInfo, nullptr, &m_vVkSwapChainImageViews[i]) != VK_SUCCESS)
+        if (vkCreateImageView(m_myDevice.device(), &viewInfo, nullptr, &m_vVkSwapChainImageViews[i]) != VK_SUCCESS)
 		{
             throw std::runtime_error("failed to create texture image view!");
         }
@@ -306,7 +306,7 @@ void MySwapChain::_createRenderPass()
     renderPassInfo.dependencyCount = 1;
     renderPassInfo.pDependencies = &dependency;
     
-    if (vkCreateRenderPass(m_pMyDevice.device(), &renderPassInfo, nullptr, &m_vkRenderPass) != VK_SUCCESS)
+    if (vkCreateRenderPass(m_myDevice.device(), &renderPassInfo, nullptr, &m_vkRenderPass) != VK_SUCCESS)
     {
         throw std::runtime_error("failed to create render pass!");
     }
@@ -330,7 +330,7 @@ void MySwapChain::_createFramebuffers()
         framebufferInfo.layers = 1;
         
         if (vkCreateFramebuffer(
-            m_pMyDevice.device(),
+            m_myDevice.device(),
             &framebufferInfo,
             nullptr,
             &m_vVkSwapChainFramebuffers[i]) != VK_SUCCESS) 
@@ -367,7 +367,7 @@ void MySwapChain::_createDepthResources()
         imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
         imageInfo.flags = 0;
         
-        m_pMyDevice.createImageWithInfo(
+        m_myDevice.createImageWithInfo(
             imageInfo,
             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
             m_vVkDepthImages[i],
@@ -384,7 +384,7 @@ void MySwapChain::_createDepthResources()
         viewInfo.subresourceRange.baseArrayLayer = 0;
         viewInfo.subresourceRange.layerCount = 1;
         
-        if (vkCreateImageView(m_pMyDevice.device(), &viewInfo, nullptr, &m_vVkDepthImageViews[i]) != VK_SUCCESS)
+        if (vkCreateImageView(m_myDevice.device(), &viewInfo, nullptr, &m_vVkDepthImageViews[i]) != VK_SUCCESS)
         {
             throw std::runtime_error("failed to create texture image view!");
         }
@@ -408,11 +408,11 @@ void MySwapChain::_createSyncObjects()
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
     {
             // Semaphore used to ensure that image presentation is complete before starting to submit again
-        if (vkCreateSemaphore(m_pMyDevice.device(), &semaphoreInfo, nullptr, &m_vVkImageAvailableSemaphores[i]) != VK_SUCCESS ||
+        if (vkCreateSemaphore(m_myDevice.device(), &semaphoreInfo, nullptr, &m_vVkImageAvailableSemaphores[i]) != VK_SUCCESS ||
             // Semaphore used to ensure that all commands submitted have been finished before submitting the image to the queue
-            vkCreateSemaphore(m_pMyDevice.device(), &semaphoreInfo, nullptr, &m_vVkRenderFinishedSemaphores[i]) != VK_SUCCESS ||
+            vkCreateSemaphore(m_myDevice.device(), &semaphoreInfo, nullptr, &m_vVkRenderFinishedSemaphores[i]) != VK_SUCCESS ||
             // Fence used to ensure that command buffer has completed exection before using it again
-            vkCreateFence(m_pMyDevice.device(), &fenceInfo, nullptr, &m_vVkInFlightFences[i]) != VK_SUCCESS) 
+            vkCreateFence(m_myDevice.device(), &fenceInfo, nullptr, &m_vVkInFlightFences[i]) != VK_SUCCESS) 
         {
             throw std::runtime_error("failed to create synchronization objects for a frame!");
         }
@@ -481,7 +481,7 @@ VkExtent2D MySwapChain::_chooseSwapExtent(const VkSurfaceCapabilitiesKHR &capabi
 
 VkFormat MySwapChain::findDepthFormat() 
 {
-    return m_pMyDevice.findSupportedFormat(
+    return m_myDevice.findSupportedFormat(
         {VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT},
         VK_IMAGE_TILING_OPTIMAL,
         VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);
@@ -518,7 +518,7 @@ void MySwapChain::_createPickingImageBuffers()
     imageInfoColor.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
     imageInfoColor.flags = 0;
 
-    m_pMyDevice.createImageWithInfo(
+    m_myDevice.createImageWithInfo(
         imageInfoColor,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         m_vkPickColorImage,
@@ -535,7 +535,7 @@ void MySwapChain::_createPickingImageBuffers()
     viewInfoColor.subresourceRange.baseArrayLayer = 0;
     viewInfoColor.subresourceRange.layerCount = 1;
 
-    if (vkCreateImageView(m_pMyDevice.device(), &viewInfoColor, nullptr, &m_vkPickColorImageView) != VK_SUCCESS)
+    if (vkCreateImageView(m_myDevice.device(), &viewInfoColor, nullptr, &m_vkPickColorImageView) != VK_SUCCESS)
     {
         throw std::runtime_error("failed to create pick color image view!");
     }
@@ -561,7 +561,7 @@ void MySwapChain::_createPickingImageBuffers()
     imageInfoDepth.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
     imageInfoDepth.flags = 0;
 
-    m_pMyDevice.createImageWithInfo(
+    m_myDevice.createImageWithInfo(
         imageInfoDepth,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         m_vkPickDepthImage,
@@ -578,7 +578,7 @@ void MySwapChain::_createPickingImageBuffers()
     viewInfoDepth.subresourceRange.baseArrayLayer = 0;
     viewInfoDepth.subresourceRange.layerCount = 1;
 
-    if (vkCreateImageView(m_pMyDevice.device(), &viewInfoDepth, nullptr, &m_vkPickDepthImageView) != VK_SUCCESS)
+    if (vkCreateImageView(m_myDevice.device(), &viewInfoDepth, nullptr, &m_vkPickDepthImageView) != VK_SUCCESS)
     {
         throw std::runtime_error("failed to create pick depth image view!");
     }
@@ -640,7 +640,7 @@ void MySwapChain::_createPickRenderPass()
     object_picking_renderPassInfo.dependencyCount = 1;
     object_picking_renderPassInfo.pDependencies = &object_picking_dependency;
 
-    if (vkCreateRenderPass(m_pMyDevice.device(), &object_picking_renderPassInfo, nullptr, &m_vkPickRenderPass) != VK_SUCCESS)
+    if (vkCreateRenderPass(m_myDevice.device(), &object_picking_renderPassInfo, nullptr, &m_vkPickRenderPass) != VK_SUCCESS)
     {
         throw std::runtime_error("failed to create pick render pass!");
     }
@@ -660,7 +660,7 @@ void MySwapChain::_createPickFramebuffers()
     framebufferInfo.layers = 1;
 
     if (vkCreateFramebuffer(
-        m_pMyDevice.device(),
+        m_myDevice.device(),
         &framebufferInfo,
         nullptr,
         &m_vkPickFrameBuffer) != VK_SUCCESS)

@@ -28,7 +28,7 @@ MyApplication::MyApplication() :
     m_iTextureID(0)
 {
     m_pMyGlobalPool =
-        MyDescriptorPool::Builder(m_pMyDevice)
+        MyDescriptorPool::Builder(m_myDevice)
         .setMaxSets(MySwapChain::MAX_FRAMES_IN_FLIGHT)
         .addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, MySwapChain::MAX_FRAMES_IN_FLIGHT)
         .addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MySwapChain::MAX_FRAMES_IN_FLIGHT)
@@ -48,7 +48,7 @@ void MyApplication::run()
     {
         char filename[32];
         sprintf_s(filename, 32, "./textures/%i.png", ii);
-        myTexture[ii].Build(&m_pMyDevice, filename);
+        myTexture[ii].Build(&m_myDevice, filename);
 
         textureDescriptorImageInfos[ii] = myTexture[ii].descriptorInfo();
     }
@@ -60,7 +60,7 @@ void MyApplication::run()
     for (int i = 0; i < uboBuffers.size(); i++) 
     {
         uboBuffers[i] = std::make_unique<MyBuffer>(
-            m_pMyDevice,
+            m_myDevice,
             sizeof(MyGlobalUBO),
             1,
             VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
@@ -71,7 +71,7 @@ void MyApplication::run()
 
     // Create descriptor set layout object
     auto globalSetLayout =
-        MyDescriptorSetLayout::Builder(m_pMyDevice)
+        MyDescriptorSetLayout::Builder(m_myDevice)
         .addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_ALL_GRAPHICS)  // Unfirom buffer can be accessed all shader stages
         .addBinding(1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT, TEXTURE_ARRAY_SIZE) // Texture image can only be accessed by fragment shader stage
         .build();
@@ -178,7 +178,7 @@ void MyApplication::run()
     }
 
     // GPU will block until all CPU is complete
-    vkDeviceWaitIdle(m_pMyDevice.device());
+    vkDeviceWaitIdle(m_myDevice.device());
 }
 
 void MyApplication::switchProjectionMatrix()
@@ -196,7 +196,7 @@ void MyApplication::applyNextTexture()
 void MyApplication::_loadGameObjects()
 {
     std::shared_ptr<MyModel> mymodel =
-        MyModel::createModelFromFile(m_pMyDevice, MODEL_PATH);
+        MyModel::createModelFromFile(m_myDevice, MODEL_PATH);
 
     // Note: +X to the right, +Y down and +Z inside the screen
     auto floor = MyGameObject::createGameObject();

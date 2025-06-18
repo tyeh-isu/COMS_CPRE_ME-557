@@ -36,7 +36,7 @@ MyBuffer::MyBuffer(
     VkBufferUsageFlags usageFlags,
     VkMemoryPropertyFlags memoryPropertyFlags,
     VkDeviceSize minOffsetAlignment)
-    : m_pMyDevice{ device },
+    : m_myDevice{ device },
     m_vkInstanceSize{ instanceSize },
     m_iInstanceCount{ instanceCount },
     m_vkUsageFlags{ usageFlags },
@@ -45,14 +45,14 @@ MyBuffer::MyBuffer(
     // Get the smallest size required for alignment/padding
     m_vkAlignmentSize = alignmentSize(instanceSize, minOffsetAlignment);
     m_vkBufferSize = m_vkAlignmentSize * instanceCount;
-    m_pMyDevice.createBuffer(m_vkBufferSize, usageFlags, memoryPropertyFlags, m_vkBuffer, m_vkMemory);
+    m_myDevice.createBuffer(m_vkBufferSize, usageFlags, memoryPropertyFlags, m_vkBuffer, m_vkMemory);
 }
 
 MyBuffer::~MyBuffer()
 {
     unmap();
-    vkDestroyBuffer(m_pMyDevice.device(), m_vkBuffer, nullptr);
-    vkFreeMemory(m_pMyDevice.device(), m_vkMemory, nullptr);
+    vkDestroyBuffer(m_myDevice.device(), m_vkBuffer, nullptr);
+    vkFreeMemory(m_myDevice.device(), m_vkMemory, nullptr);
 }
 
 //
@@ -67,7 +67,7 @@ MyBuffer::~MyBuffer()
 VkResult MyBuffer::map(VkDeviceSize size, VkDeviceSize offset)
 {
     assert(m_vkBuffer && m_vkMemory && "Called map on buffer before create");
-    return vkMapMemory(m_pMyDevice.device(), m_vkMemory, offset, size, 0, &m_pMappedMemeoy);
+    return vkMapMemory(m_myDevice.device(), m_vkMemory, offset, size, 0, &m_pMappedMemeoy);
 }
 
 //
@@ -79,7 +79,7 @@ void MyBuffer::unmap()
 {
     if (m_pMappedMemeoy)
     {
-        vkUnmapMemory(m_pMyDevice.device(), m_vkMemory);
+        vkUnmapMemory(m_myDevice.device(), m_vkMemory);
         m_pMappedMemeoy = nullptr;
     }
 }
@@ -144,7 +144,7 @@ VkResult MyBuffer::flush(VkDeviceSize size, VkDeviceSize offset)
     mappedRange.memory = m_vkMemory;
     mappedRange.offset = offset;
     mappedRange.size = size;
-    return vkFlushMappedMemoryRanges(m_pMyDevice.device(), 1, &mappedRange);
+    return vkFlushMappedMemoryRanges(m_myDevice.device(), 1, &mappedRange);
 }
 
 //

@@ -24,14 +24,14 @@ namespace std {
 }
 
 MyModel::MyModel(MyDevice& device, const std::vector<Vertex>& vertices) :
-	m_pMyDevice{ device },
+	m_myDevice{ device },
 	m_iVertexCount{ 0 }
 {
 	_createVertexBuffer(vertices, false);
 }
 
 MyModel::MyModel(MyDevice& device, const MyModel::Builder& builder) : 
-	m_pMyDevice{ device },
+	m_myDevice{ device },
 	m_iVertexCount{ 0 }
 {
 	_createVertexBuffer(builder.vertices, true);
@@ -67,7 +67,7 @@ void MyModel::_createVertexBuffer(const std::vector<Vertex>& vertices, bool bUse
 	// because VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT can be slower
 	MyBuffer stagingBuffer
 	{
-	  m_pMyDevice,
+	  m_myDevice,
 	  vertexSize,     // size of an instance
 	  m_iVertexCount, // number of instances
 	  VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
@@ -79,7 +79,7 @@ void MyModel::_createVertexBuffer(const std::vector<Vertex>& vertices, bool bUse
 	stagingBuffer.writeToBuffer((void*)vertices.data());
 
 	m_pMyVertexBuffer = std::make_unique<MyBuffer>(
-		m_pMyDevice,
+		m_myDevice,
 		vertexSize,
 		m_iVertexCount,
 		VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
@@ -89,7 +89,7 @@ void MyModel::_createVertexBuffer(const std::vector<Vertex>& vertices, bool bUse
 	// Note: because device local buffer can perform faster, but cannot access by CPU
 	// thus we need to copy to a stage buffer first then copy from the stage buffer
 	// to the device local buffer
-	m_pMyDevice.copyBuffer(stagingBuffer.buffer(), m_pMyVertexBuffer->buffer(), bufferSize);
+	m_myDevice.copyBuffer(stagingBuffer.buffer(), m_pMyVertexBuffer->buffer(), bufferSize);
 }
 
 void MyModel::_createIndexBuffers(const std::vector<uint32_t>& indices) 
@@ -106,7 +106,7 @@ void MyModel::_createIndexBuffers(const std::vector<uint32_t>& indices)
 	uint32_t indexSize = sizeof(indices[0]);
 
 	MyBuffer stagingBuffer{
-	  m_pMyDevice,
+	  m_myDevice,
 	  indexSize,
 	  m_iIndexCount,
 	  VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
@@ -117,13 +117,13 @@ void MyModel::_createIndexBuffers(const std::vector<uint32_t>& indices)
 	stagingBuffer.writeToBuffer((void*)indices.data());
 
 	m_pMyIndexBuffer = std::make_unique<MyBuffer>(
-		m_pMyDevice,
+		m_myDevice,
 		indexSize,
 		m_iIndexCount,
 		VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
 		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
-	m_pMyDevice.copyBuffer(stagingBuffer.buffer(), m_pMyIndexBuffer->buffer(), bufferSize);
+	m_myDevice.copyBuffer(stagingBuffer.buffer(), m_pMyIndexBuffer->buffer(), bufferSize);
 }
 
 void MyModel::bind(VkCommandBuffer commandBuffer)

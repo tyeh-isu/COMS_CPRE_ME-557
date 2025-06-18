@@ -38,7 +38,7 @@ private:
     // Need to follow certain memory padding guideline 
     static VkDeviceSize    alignmentSize(VkDeviceSize instanceSize, VkDeviceSize minOffsetAlignment);
 
-    MyDevice&              m_pMyDevice;
+    MyDevice&              m_myDevice;
     void*                  m_pMappedMemeoy = nullptr;
     VkBuffer               m_vkBuffer = VK_NULL_HANDLE;
     VkDeviceMemory         m_vkMemory = VK_NULL_HANDLE;

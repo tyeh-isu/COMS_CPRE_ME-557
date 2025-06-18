@@ -112,7 +112,7 @@ void MyTexture::_createTextureImage_ktx(std::string textureFileName)
     _transitionImageLayout(m_vkTextureImage, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, m_iMipLevels);
 
     // Copy the images from the staging buffer to the optimal tiled image
-    m_myDevice.copyBufferRigonToImage(stagingBuffer, m_vkTextureImage, static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight), 1, bufferCopyRegions);
+    m_myDevice.copyBufferRigonToImage(stagingBuffer, m_vkTextureImage, static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight), bufferCopyRegions);
 
     // Change texture image layout to shader read after all faces have been copied
     _transitionImageLayout(m_vkTextureImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, m_iMipLevels);

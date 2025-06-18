@@ -49,7 +49,7 @@ private:
 	void _createGraphicsPipeline(const std::string& vertFilepath, const std::string& fragFilepath, const PipelineConfigInfo& configInfo);
 	void _createShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule);
 
-	MyDevice&      m_pMyDevice;
+	MyDevice&      m_myDevice;
 	VkPipeline     m_vkGraphicsPipeline;
 	VkShaderModule m_vkVertShaderModule;
 	VkShaderModule m_vkFragShaderModule;

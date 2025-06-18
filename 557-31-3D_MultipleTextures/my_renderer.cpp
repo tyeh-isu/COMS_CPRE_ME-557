@@ -7,7 +7,7 @@
 
 MyRenderer::MyRenderer(MyWindow& window, MyDevice& device)
     : m_myWindow{ window },
-	  m_pMyDevice{ device }
+	  m_myDevice{ device }
 {
     m_iCurrentImageIndex = 0;
     m_iCurrentFrameIndex = 0;
@@ -32,16 +32,16 @@ void MyRenderer::_recreateSwapChain()
         m_myWindow.waitEvents();
     }
 
-    vkDeviceWaitIdle(m_pMyDevice.device());
+    vkDeviceWaitIdle(m_myDevice.device());
 
     if (m_mySwapChain == nullptr)
     {
-        m_mySwapChain = std::make_unique<MySwapChain>(m_pMyDevice, extent);
+        m_mySwapChain = std::make_unique<MySwapChain>(m_myDevice, extent);
     }
     else
     {
         std::shared_ptr<MySwapChain> oldSwapChain = std::move(m_mySwapChain);
-        m_mySwapChain = std::make_unique<MySwapChain>(m_pMyDevice, extent, oldSwapChain);
+        m_mySwapChain = std::make_unique<MySwapChain>(m_myDevice, extent, oldSwapChain);
 
         if (!oldSwapChain->compareSwapFormats(*m_mySwapChain.get()))
         {
@@ -57,10 +57,10 @@ void MyRenderer::_createCommandBuffers()
     VkCommandBufferAllocateInfo allocInfo{};
     allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
     allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    allocInfo.commandPool = m_pMyDevice.commandPool();
+    allocInfo.commandPool = m_myDevice.commandPool();
     allocInfo.commandBufferCount = static_cast<uint32_t>(m_vVkCommandBuffers.size());
 
-    if (vkAllocateCommandBuffers(m_pMyDevice.device(), &allocInfo, m_vVkCommandBuffers.data()) != VK_SUCCESS) 
+    if (vkAllocateCommandBuffers(m_myDevice.device(), &allocInfo, m_vVkCommandBuffers.data()) != VK_SUCCESS) 
     {
         throw std::runtime_error("failed to allocate command buffers!");
     }
@@ -69,8 +69,8 @@ void MyRenderer::_createCommandBuffers()
 void MyRenderer::_freeCommandBuffers()
 {
     vkFreeCommandBuffers(
-        m_pMyDevice.device(),
-        m_pMyDevice.commandPool(),
+        m_myDevice.device(),
+        m_myDevice.commandPool(),
         static_cast<uint32_t>(m_vVkCommandBuffers.size()),
         m_vVkCommandBuffers.data());
 

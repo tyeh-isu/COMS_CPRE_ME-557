@@ -93,7 +93,7 @@ private:
     std::vector<VkImage>         m_vVkSwapChainImages;
     std::vector<VkImageView>     m_vVkSwapChainImageViews;
 
-    MyDevice                    &m_pMyDevice;
+    MyDevice                    &m_myDevice;
     VkExtent2D                   m_vkWindowExtent;
 
     VkSwapchainKHR               m_vkSwapChain;
