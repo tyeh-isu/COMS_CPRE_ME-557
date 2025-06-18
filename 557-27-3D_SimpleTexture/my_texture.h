@@ -11,7 +11,8 @@ public:
 
 	MyTexture(const MyTexture&) = delete;
 	MyTexture& operator=(const MyTexture&) = delete;
-
+	MyTexture(MyTexture&&) = delete;
+	MyTexture& operator=(const MyTexture&&) = delete;
 	VkDescriptorImageInfo descriptorInfo();
 
 private:
