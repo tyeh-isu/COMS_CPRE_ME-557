@@ -1,0 +1,24 @@
+CPPSRCS = \
+	main.cpp \
+	my_application.cpp \
+	my_buffer.cpp \
+	my_camera.cpp \
+	my_descriptors.cpp \
+	my_device.cpp \
+	my_game_object.cpp \
+	my_keyboard_controller.cpp \
+	my_model.cpp \
+	my_pipeline.cpp \
+	my_renderer.cpp \
+	my_swap_chain.cpp \
+	my_texture.cpp \
+	my_texture_render_factory.cpp \
+	my_window.cpp
+
+CSRCS = \
+	ktx/lib/swap.c \
+	ktx/lib/checkheader.c \
+	ktx/lib/filestream.c \
+	ktx/lib/hashlist.c \
+	ktx/lib/memstream.c \
+	ktx/lib/texture.c
