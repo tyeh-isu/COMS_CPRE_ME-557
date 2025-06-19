@@ -90,7 +90,7 @@ void MyApplication::run()
 
     MyTextureRenderFactory textureFactory
     {
-        m_pMyDevice,
+        m_myDevice,
         m_myRenderer.swapChainRenderPass(),
         globalSetLayout->descriptorSetLayout() 
     };
