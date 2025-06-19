@@ -65,14 +65,12 @@ void MyTexture::_createTextureImage(std::string textureFileName)
 
     m_myDevice.createImageWithInfo(imageInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_vkTextureImage, m_vkTextureImageMemory);
 
-    _transitionImageLayout(m_vkTextureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+    _transitionImageLayout(m_vkTextureImage, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
     m_myDevice.copyBufferToImage(stagingBuffer, m_vkTextureImage, static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight), 1);
-    _transitionImageLayout(m_vkTextureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+    _transitionImageLayout(m_vkTextureImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
     vkDestroyBuffer(m_myDevice.device(), stagingBuffer, nullptr);
     vkFreeMemory(m_myDevice.device(), stagingBufferMemory, nullptr);
-
-    //_generateMipmaps(m_vkTextureImage, VK_FORMAT_R8G8B8A8_SRGB, texWidth, texHeight, m_iMipLevels);
 }
 
 // Note: there is a similar function in MySwapChain to create color and depth image views for each image target in the swap chain
@@ -123,7 +121,7 @@ void MyTexture::_createTextureSampler()
     }
 }
 
-void MyTexture::_transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout)
+void MyTexture::_transitionImageLayout(VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout)
 {
     VkCommandBuffer commandBuffer = m_myDevice.beginSingleTimeCommands();
 

@@ -170,8 +170,6 @@ void MyTexture::_createTextureImage(std::string textureFileName)
 
     vkDestroyBuffer(m_myDevice.device(), stagingBuffer, nullptr);
     vkFreeMemory(m_myDevice.device(), stagingBufferMemory, nullptr);
-
-    //_generateMipmaps(m_vkTextureImage, VK_FORMAT_R8G8B8A8_SRGB, texWidth, texHeight, m_iMipLevels);
 }
 
 // Note: there is a similar function in MySwapChain to create color and depth image views for each image target in the swap chain

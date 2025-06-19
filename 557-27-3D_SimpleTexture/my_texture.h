@@ -19,7 +19,7 @@ private:
 	void _createTextureImage(std::string textureFileName);
 	void _createTextureImageView();
 	void _createTextureSampler();
-	void _transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
+	void _transitionImageLayout(VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout);
 
 	std::string    m_sTextureFile;
 	MyDevice&      m_myDevice;
