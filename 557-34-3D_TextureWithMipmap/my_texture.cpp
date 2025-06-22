@@ -71,7 +71,7 @@ void MyTexture::_createTextureImage(std::string textureFileName)
     m_myDevice.copyBufferToImage(stagingBuffer, m_vkTextureImage, static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight), 1);
 
     // transitioned to VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL while generating mipmaps
-    //_transitionImageLayout(m_vkTextureImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+    //_transitionImageLayout(m_vkTextureImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, m_iMipLevels);
 
     vkDestroyBuffer(m_myDevice.device(), stagingBuffer, nullptr);
     vkFreeMemory(m_myDevice.device(), stagingBufferMemory, nullptr);

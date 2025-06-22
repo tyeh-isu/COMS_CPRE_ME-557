@@ -36,7 +36,7 @@ void main()
 {
     vec3 diffuseLight = ubo.ambientLightColor.xyz * ubo.ambientLightColor.w;
     vec3 specularLight = vec3(0.0);
-    vec3 surfaceNormal = normalize(fragNormalWorld); // flip the surface normal of the quad
+    vec3 surfaceNormal = normalize(fragNormalWorld);
 
     vec3 cameraPosWorld = ubo.invView[3].xyz;
     vec3 viewDirection = normalize(cameraPosWorld - fragPosWorld);
@@ -50,6 +50,7 @@ void main()
 
         directionToLight = normalize(directionToLight);
 
+        // diffuse lighting
         float cosAngIncidence = max(dot(surfaceNormal, directionToLight), 0);
         vec3 intensity = light.color.xyz * light.color.w * attenuation;
 

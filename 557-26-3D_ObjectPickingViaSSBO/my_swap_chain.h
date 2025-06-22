@@ -62,8 +62,7 @@ public:
 
 private:
     void _init();
-    void _createSwapChain();
-    void _createImageViews();
+    void _createSwapChainResources();
     void _createDepthResources();
     void _createRenderPass();
     void _createFramebuffers();

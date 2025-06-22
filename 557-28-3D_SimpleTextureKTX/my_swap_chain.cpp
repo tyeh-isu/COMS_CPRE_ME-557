@@ -29,8 +29,7 @@ MySwapChain::MySwapChain(MyDevice& deviceRef, VkExtent2D extent, std::shared_ptr
 
 void MySwapChain::_init()
 {
-    _createSwapChain();
-    _createImageViews();
+    _createSwapChainResources();
     _createRenderPass();
     _createDepthResources();
     _createFramebuffers();
@@ -159,7 +158,7 @@ VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint3
     return result;
 }
 
-void MySwapChain::_createSwapChain() 
+void MySwapChain::_createSwapChainResources()
 {
     SwapChainSupportDetails swapChainSupport = m_myDevice.getSwapChainSupport();
     
@@ -224,10 +223,8 @@ void MySwapChain::_createSwapChain()
     
     m_vkSwapChainImageFormat = surfaceFormat.format;
     m_vkSwapChainExtent = extent;
-}
 
-void MySwapChain::_createImageViews() 
-{
+    // Create swap chain image view
     m_vVkSwapChainImageViews.resize(m_vVkSwapChainImages.size());
     for (size_t i = 0; i < m_vVkSwapChainImages.size(); i++)
     {
@@ -514,7 +511,7 @@ void MySwapChain::_createPickingImageBuffers()
     //imageInfoColor.usage = VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
     imageInfoColor.usage = VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
     // note: VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT are used for picking debug purpose
-    imageInfoColor.samples = VK_SAMPLE_COUNT_1_BIT;
+    imageInfoColor.samples = VK_SAMPLE_COUNT_1_BIT; // Pick buffer doesn't need antialiasing
     imageInfoColor.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
     imageInfoColor.flags = 0;
 
@@ -557,7 +554,7 @@ void MySwapChain::_createPickingImageBuffers()
     imageInfoDepth.tiling = VK_IMAGE_TILING_OPTIMAL;
     imageInfoDepth.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     imageInfoDepth.usage = VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
-    imageInfoDepth.samples = VK_SAMPLE_COUNT_1_BIT;
+    imageInfoDepth.samples = VK_SAMPLE_COUNT_1_BIT;  // Pick buffer doesn't need antialiasing
     imageInfoDepth.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
     imageInfoDepth.flags = 0;
 
