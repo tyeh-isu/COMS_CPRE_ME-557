@@ -26,6 +26,7 @@ private:
 	MyDevice&      m_myDevice;
 	uint32_t       m_iMipLevels;
 
+	// TODO: need to move these into SwapChain class
 	VkImage        m_vkTextureImage = VK_NULL_HANDLE;
 	VkDeviceMemory m_vkTextureImageMemory;
 	VkImageView    m_vkTextureImageView;
