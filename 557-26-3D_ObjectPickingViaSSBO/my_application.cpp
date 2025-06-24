@@ -108,7 +108,7 @@ void MyApplication::run()
     {
         m_myDevice,
         m_myRenderer.swapChainRenderPass(),
-        globalSetLayout->descriptorSetLayout() 
+        globalSetLayout->descriptorSetLayout()
     };
 
     MyPickingFactory pickingFactory
@@ -208,7 +208,7 @@ void MyApplication::run()
 
             // becasue we don't use host coherence flag, we need to call flash
             uboBuffers[frameIndex]->flush();
-			
+
             // Picking
 			if (m_myGUIData.bPickMode && m_fMousePos[0] >= 0.0f && m_fMousePos[1] >= 0.0f)
 			{

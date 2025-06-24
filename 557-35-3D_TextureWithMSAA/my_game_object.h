@@ -25,13 +25,19 @@ struct TransformComponent
 class MyGameObject
 {
 public:
+	enum GameObjectType
+	{
+		SIMPLE,
+		TEXTURE
+	};
+
 	using id_t = unsigned int;
 	using Map = std::unordered_map<id_t, MyGameObject>;
 
-	static MyGameObject createGameObject()
+	static MyGameObject createGameObject(GameObjectType type = SIMPLE)
 	{
 		static id_t currentID = 0;
-		return MyGameObject{ currentID++ };
+		return MyGameObject{ currentID++, type };
 	}
 
 	MyGameObject(const MyGameObject&) = delete;
@@ -40,18 +46,15 @@ public:
 	MyGameObject& operator=(MyGameObject&&) = default;
 
 	id_t                     getID() const { return m_iID; }
+	std::shared_ptr<MyModel> model{};
 	glm::vec3                color{};
 	TransformComponent       transform{};
-
-	// Optional pointer components
-	// meaning the game object could be either empty object - for camera
-	// or a light object
-	std::shared_ptr<MyModel> simpleModel{};
-	std::shared_ptr<MyModel> textureModel{};
+	GameObjectType           type() { return m_type; }
 
 private:
-	MyGameObject(id_t objID) : m_iID{ objID } {}
+	MyGameObject(id_t objID, GameObjectType type) : m_iID{ objID }, m_type{ type } {}
 	id_t m_iID;
+	GameObjectType m_type;
 };
 
 #endif

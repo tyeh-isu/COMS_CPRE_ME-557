@@ -99,27 +99,28 @@ void MyTextureRenderFactory::render(MyFrameInfo& frameInfo)
     for (auto& kv : frameInfo.gameObjects)
     {
         auto& obj = kv.second;
-        if (obj.textureModel == nullptr) continue;
+        if (obj.type() == MyGameObject::TEXTURE)
+        {
+            MyTexturePushConstantData push{};
 
-        MyTexturePushConstantData push{};
+            // Note: do this for now to perform on CPU
+            // We will do it later to perform it on GPU
+            push.modelMatrix = obj.transform.mat4();
+            push.normalMatrix = obj.transform.normalMatrix();
 
-        // Note: do this for now to perform on CPU
-        // We will do it later to perform it on GPU
-        push.modelMatrix = obj.transform.mat4();
-        push.normalMatrix = obj.transform.normalMatrix();
+            push.textureID = obj.getID();
 
-        push.textureID = obj.getID();
+            vkCmdPushConstants(
+                frameInfo.commandBuffer,
+                m_vkPipelineLayout,
+                VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+                0,
+                sizeof(MyTexturePushConstantData),
+                &push);
 
-        vkCmdPushConstants(
-            frameInfo.commandBuffer,
-            m_vkPipelineLayout,
-            VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-            0,
-            sizeof(MyTexturePushConstantData),
-            &push);
-
-        obj.textureModel->bind(frameInfo.commandBuffer);
-        obj.textureModel->draw(frameInfo.commandBuffer);
+            obj.model->bind(frameInfo.commandBuffer);
+            obj.model->draw(frameInfo.commandBuffer);
+        }
     }
 }
 

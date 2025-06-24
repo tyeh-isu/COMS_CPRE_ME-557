@@ -42,7 +42,7 @@ public:
 	VkExtent2D      swapChainExtent();
     void            beginPickRenderPass(VkCommandBuffer commandBuffer, int x, int y, bool bDebug);
     void            endPickRenderPass(VkCommandBuffer commandBuffer);
-	
+
 private:
     void _createCommandBuffers();
     void _freeCommandBuffers();
