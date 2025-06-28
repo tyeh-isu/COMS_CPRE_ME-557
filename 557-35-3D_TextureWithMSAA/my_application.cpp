@@ -236,8 +236,8 @@ void MyApplication::_loadGameObjects()
         MyModel::createModelFromFile(m_myDevice, MODEL_PATH_1);
 
     // Note: +X to the right, +Y down and +Z inside the screen
-    auto viking_room = MyGameObject::createGameObject();
-    viking_room.textureModel = mymodel1;
+    auto viking_room = MyGameObject::createGameObject(MyGameObject::TEXTURE);
+    viking_room.model = mymodel1;
 
     viking_room.transform.translation = { 0.f, 0.0f, 0.f };
     viking_room.transform.scale = { 1.0f, 1.0f, 1.0f };
@@ -248,8 +248,8 @@ void MyApplication::_loadGameObjects()
 
     std::shared_ptr<MyModel> mymodel2 =
         MyModel::createModelFromFile(m_myDevice, MODEL_PATH_2);
-	auto floor = MyGameObject::createGameObject();
-    floor.textureModel = mymodel2;
+	auto floor = MyGameObject::createGameObject(MyGameObject::TEXTURE);
+    floor.model = mymodel2;
 
     floor.transform.translation = { 0.f, 0.0f, 0.f };
     floor.transform.scale = { 5.f, 1.f, 5.f };
