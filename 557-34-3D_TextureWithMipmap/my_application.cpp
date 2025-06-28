@@ -199,8 +199,8 @@ void MyApplication::_loadGameObjects()
         MyModel::createModelFromFile(m_myDevice, "models/flat_vase.obj");
 
     // Note: +X to the right, +Y down and +Z inside the screen
-    auto flatVase = MyGameObject::createGameObject();
-    flatVase.simpleModel = mymodel;
+    auto flatVase = MyGameObject::createGameObject(MyGameObject::SIMPLE);
+    flatVase.model = mymodel;
     
     flatVase.transform.translation = { -.5f, -.5f, 0.0f };
     flatVase.transform.rotation.x = glm::pi<float>(); // rotate 180 so Y is up
@@ -230,8 +230,8 @@ void MyApplication::_loadGameObjects()
 
     // Load a second model
     mymodel = MyModel::createModelFromFile(m_myDevice, "models/smooth_vase.obj");
-    auto smoothVase = MyGameObject::createGameObject();
-    smoothVase.simpleModel = mymodel;
+    auto smoothVase = MyGameObject::createGameObject(MyGameObject::SIMPLE);
+    smoothVase.model = mymodel;
     smoothVase.transform.translation = { .5f, -.5f, 0.0f };
     smoothVase.transform.rotation.x = glm::pi<float>(); // rotate 180 so Y is up
     smoothVase.transform.scale = { 3.f, 1.5f, 3.f };
@@ -239,8 +239,8 @@ void MyApplication::_loadGameObjects()
 
     // Load a quad model
     mymodel = MyModel::createModelFromFile(m_myDevice, "models/quad.obj");
-    auto floor = MyGameObject::createGameObject();
-    floor.textureModel = mymodel;
+    auto floor = MyGameObject::createGameObject(MyGameObject::TEXTURE);
+    floor.model = mymodel;
     floor.transform.translation = { 0.f, -.5f, 0.f };
     floor.transform.rotation.x = glm::pi<float>(); // rotate 180 so Y is up
     floor.transform.rotation.y = glm::pi<float>(); // rotate 180 so the image is facing the viewer

@@ -22,21 +22,24 @@ struct TransformComponent
 	glm::mat3 normalMatrix();
 };
 
-struct PointLightComponent 
-{
-	float lightIntensity = 1.0f;
-};
-
 class MyGameObject
 {
 public:
+	enum GameObjectType
+	{
+		UNKNOWN,
+		SIMPLE,
+		TEXTURE,
+		POINTLIGHT
+	};
+
 	using id_t = unsigned int;
 	using Map = std::unordered_map<id_t, MyGameObject>;
 
-	static MyGameObject createGameObject()
+	static MyGameObject createGameObject(GameObjectType type = UNKNOWN)
 	{
 		static id_t currentID = 0;
-		return MyGameObject{ currentID++ };
+		return MyGameObject{ currentID++, type };
 	}
 
 	static MyGameObject makePointLight(
@@ -48,19 +51,17 @@ public:
 	MyGameObject& operator=(MyGameObject&&) = default;
 
 	id_t                     getID() const { return m_iID; }
+	std::shared_ptr<MyModel> model{};
 	glm::vec3                color{};
 	TransformComponent       transform{};
+	GameObjectType           type() { return m_type; }
 
-	// Optional pointer components
-	// meaning the game object could be either empty object - for camera
-	// or a light object
-	std::shared_ptr<MyModel> simpleModel{};
-	std::shared_ptr<MyModel> textureModel{};
-	std::unique_ptr<PointLightComponent> pointLight = nullptr;
+	float lightIntensity = 1.0f;
 
 private:
-	MyGameObject(id_t objID) : m_iID{ objID } {}
+	MyGameObject(id_t objID, GameObjectType type) : m_iID{ objID }, m_type{ type } {}
 	id_t m_iID;
+	GameObjectType m_type;
 };
 
 #endif

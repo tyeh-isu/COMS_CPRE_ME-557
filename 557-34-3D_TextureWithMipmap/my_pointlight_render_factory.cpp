@@ -80,7 +80,7 @@ void MyPointLightRenderFactory::update(MyFrameInfo& frameInfo, MyGlobalUBO& ubo)
     int lightIndex = 0;
     for (auto& kv : frameInfo.gameObjects) {
         auto& obj = kv.second;
-        if (obj.pointLight == nullptr) continue;
+        if (obj.type() != MyGameObject::POINTLIGHT) continue;
 
         assert(lightIndex < MAX_LIGHTS && "Point lights exceed maximum specified");
 
@@ -89,7 +89,7 @@ void MyPointLightRenderFactory::update(MyFrameInfo& frameInfo, MyGlobalUBO& ubo)
 
         // copy light to ubo
         ubo.pointLights[lightIndex].position = glm::vec4(obj.transform.translation, 1.f);
-        ubo.pointLights[lightIndex].color = glm::vec4(obj.color, obj.pointLight->lightIntensity);
+        ubo.pointLights[lightIndex].color = glm::vec4(obj.color, obj.lightIntensity);
 
         lightIndex += 1;
     }
@@ -114,11 +114,11 @@ void MyPointLightRenderFactory::render(MyFrameInfo& frameInfo)
     for (auto& kv : frameInfo.gameObjects) 
     {
         auto& obj = kv.second;
-        if (obj.pointLight == nullptr) continue;
+        if (obj.type() != MyGameObject::POINTLIGHT) continue;
 
         PointLightPushConstants push{};
         push.position = glm::vec4(obj.transform.translation, 1.f);
-        push.color = glm::vec4(obj.color, obj.pointLight->lightIntensity);
+        push.color = glm::vec4(obj.color, obj.lightIntensity);
         push.radius = obj.transform.scale.x;
 
         vkCmdPushConstants(

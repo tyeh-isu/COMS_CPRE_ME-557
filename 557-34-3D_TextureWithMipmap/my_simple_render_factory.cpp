@@ -85,7 +85,7 @@ void MySimpleRenderFactory::render(MyFrameInfo& frameInfo)
     for (auto& kv : frameInfo.gameObjects) 
     {
 	    auto& obj = kv.second;
-        if (obj.simpleModel == nullptr) continue;
+        if (obj.type() != MyGameObject::SIMPLE) continue;
 
         // Note: X to the right, Y up and Z out of the screen
         // obj.transform.rotation.y = glm::mod(obj.transform.rotation.y + 0.0005f, glm::two_pi<float>());  // Y up
@@ -107,8 +107,8 @@ void MySimpleRenderFactory::render(MyFrameInfo& frameInfo)
             sizeof(MySimplePushConstantData),
             &push);
 
-        obj.simpleModel->bind(frameInfo.commandBuffer);
-        obj.simpleModel->draw(frameInfo.commandBuffer);
+        obj.model->bind(frameInfo.commandBuffer);
+        obj.model->draw(frameInfo.commandBuffer);
     }
 }
 

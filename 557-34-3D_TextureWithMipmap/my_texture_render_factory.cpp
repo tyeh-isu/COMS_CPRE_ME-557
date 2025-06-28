@@ -86,7 +86,7 @@ void MyTextureRenderFactory::render(MyFrameInfo& frameInfo)
     for (auto& kv : frameInfo.gameObjects)
     {
         auto& obj = kv.second;
-        if (obj.textureModel == nullptr) continue;
+        if (obj.type() != MyGameObject::TEXTURE) continue;
 
         MyTexturePushConstantData push{};
 
@@ -103,8 +103,8 @@ void MyTextureRenderFactory::render(MyFrameInfo& frameInfo)
             sizeof(MyTexturePushConstantData),
             &push);
 
-        obj.textureModel->bind(frameInfo.commandBuffer);
-        obj.textureModel->draw(frameInfo.commandBuffer);
+            obj.model->bind(frameInfo.commandBuffer);
+            obj.model->draw(frameInfo.commandBuffer);
     }
 }
 
