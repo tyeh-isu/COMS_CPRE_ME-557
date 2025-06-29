@@ -2,7 +2,7 @@
 
 // Only location and type (vec3) matter, the name doesn't need to match
 
-#define RENDER_SHADOW 0
+#define RENDER_SHADOW 1
 
 #if RENDER_SHADOW
 layout (set = 0, binding = 2) uniform sampler2D samplerColor[3];

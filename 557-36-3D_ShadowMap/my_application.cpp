@@ -76,10 +76,10 @@ void MyApplication::run()
 	textureDescriptorImageInfos[1] = myTexture2.descriptorInfo();
     textureDescriptorImageInfos[2] = m_myRenderer.shadowMapDescriptorInfo();
 #else
-    VkDescriptorImageInfo textureDescriptorImageInfos[3];
+    VkDescriptorImageInfo textureDescriptorImageInfos[2];
     textureDescriptorImageInfos[0] = myTexture1.descriptorInfo();
     textureDescriptorImageInfos[1] = myTexture2.descriptorInfo();
-    textureDescriptorImageInfos[2] = m_myRenderer.shadowMapDescriptorInfo();
+    //textureDescriptorImageInfos[2] = m_myRenderer.shadowMapDescriptorInfo();
 #endif
 
 	m_myGUIData.init();
@@ -224,7 +224,7 @@ void MyApplication::run()
     {
         if (resize)
         {
-            for (int i = 0; i < uboBuffers.size(); i++)
+            /*for (int i = 0; i < uboBuffers.size(); i++)
             {
                 uboBuffers[i]->unmap();
             }
@@ -257,7 +257,7 @@ void MyApplication::run()
                     .writeImages(2, updateTextureDescriptorImageInfos, 2) // only need to write the first two textures
 #endif
                     .build(globalDescriptorSets[i]);
-            }
+            }*/
 
             // Create one descriptor set per frame
             /*offscreenDescriptorSets.clear();
@@ -273,12 +273,12 @@ void MyApplication::run()
                     .build(offscreenDescriptorSets[i]);
             }*/
 
-            simpleRenderFactory.recratePipeline(m_myRenderer.swapChainRenderPass());
+           /* simpleRenderFactory.recratePipeline(m_myRenderer.swapChainRenderPass());
             pointLightFactory.recratePipeline(m_myRenderer.swapChainRenderPass());
             debugFactory.recratePipeline(m_myRenderer.swapChainRenderPass());
             pickingFactory.recratePipeline(m_myRenderer);
             offscreenRenderFactory.recratePipeline(m_myRenderer.offscreenRenderPass());
-            textureFactory.recratePipeline(m_myRenderer.swapChainRenderPass());
+            textureFactory.recratePipeline(m_myRenderer.swapChainRenderPass());*/
 
             /*for (int i = 0; i < uboBuffers.size(); i++)
             {
