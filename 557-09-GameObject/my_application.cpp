@@ -97,7 +97,7 @@ void MyApplication::_createPipeline()
     // Note: the swap chain buffer size may not be the same as the Window size
     // Pipeline config can be considered as a blue print to create graphics pipeline
     PipelineConfigInfo pipelineConfig{};
-        
+
     // Please note that the pipeline depends on the size of the swap chain
     // the swap chain depends on the window size
     // so when window resize, we need to create a new swap chain

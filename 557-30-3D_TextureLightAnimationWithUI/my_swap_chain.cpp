@@ -95,7 +95,7 @@ VkResult MySwapChain::acquireNextImage(uint32_t *imageIndex)
         1,
         &m_vVkInFlightFences[m_iCurrentFrame],
         VK_TRUE,
-        std::numeric_limits<uint64_t>::max());
+        std::numeric_limits<uint64_t>::max()); // wait forever??
     
     VkResult result = vkAcquireNextImageKHR(
         m_myDevice.device(),
