@@ -23,7 +23,6 @@ layout(push_constant) uniform Pushdata
     mat4 normalMatrix;
 } pushdata;
 
-
 void main()
 {
     vec4 positionWorld = pushdata.modelMatrix * vec4(position, 1.0);
@@ -39,7 +38,8 @@ void main()
 
     vec3 lightColor = ubo.lightColor.xyz * ubo.lightColor.w * attenuation;
     vec3 ambientLight = ubo.ambientLightColor.xyz * ubo.ambientLightColor.w;
-    vec3 diffuseLight = lightColor * max(dot(normalWorldSpace, normalize(directionToLight)), 0);
+
+    vec3 diffuseLight = lightColor * max(dot(normalWorldSpace, normalize(directionToLight)), 0);;
 
     fragColor = (diffuseLight + ambientLight) * color;
 }

@@ -87,12 +87,12 @@ VkResult MySwapChain::acquireNextImage(uint32_t *imageIndex)
 
 VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint32_t *imageIndex)
 {
-    if (m_vVkImagesInFlight[*imageIndex] != VK_NULL_HANDLE)
+    /*if (m_vVkImagesInFlight[*imageIndex] != VK_NULL_HANDLE)
     {
         vkWaitForFences(m_myDevice.device(), 1, &m_vVkImagesInFlight[*imageIndex], VK_TRUE, UINT64_MAX);
     }
     
-    m_vVkImagesInFlight[*imageIndex] = m_vVkInFlightFences[m_iCurrentFrame];
+    m_vVkImagesInFlight[*imageIndex] = m_vVkInFlightFences[m_iCurrentFrame];*/
     
     VkSubmitInfo submitInfo = {};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
