@@ -23,8 +23,8 @@ void MyWindow::_initWindow()
 {
 	glfwInit();
 
-	// Because glfw was designed initially to create OpenGL context by default,
-	// by setting GLFW_CLIENT_API to fale, it tells glfw NOT to create OpenGL context 
+	// GLFW was designed initially to create OpenGL context by default.
+	// By setting GLFW_CLIENT_API to GLFW_NO_API, it tells GLFW NOT to create OpenGL context 
 	// (because we are going to use Vulkan)
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
@@ -39,7 +39,7 @@ void MyWindow::_initWindow()
 
 	// Register viewport resize callback
 	glfwSetFramebufferSizeCallback(m_pWindow, s_frameBufferResizeCallback);
-	
+
 	// Register keyboard callback	
 	glfwSetKeyCallback(m_pWindow, s_keyboardCallback);
 
