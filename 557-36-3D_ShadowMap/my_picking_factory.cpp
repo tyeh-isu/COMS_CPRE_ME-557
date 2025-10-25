@@ -153,8 +153,10 @@ void MyPickingFactory::renderPickScene(MyFrameInfo& frameInfo)
 void MyPickingFactory::recratePipeline(MyRenderer &render)
 {
     // delete the original one if exists
-    m_pMyPipeline = nullptr;
+    std::shared_ptr<MyPipeline> oldPipeline = std::move(m_pMyPipeline);
 
     _createPipeline(render);
+
+    oldPipeline = nullptr;
 }
 

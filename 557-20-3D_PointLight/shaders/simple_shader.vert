@@ -16,12 +16,13 @@ layout(set = 0, binding = 0) uniform GlobalUBO
     vec4 lightColor;
 } ubo;
 
-// Note 128 bytes can only contain 2 4x4 matrices, so we have run into the limitation
+// Note 128 bytes can only contain 2 4x4 matrices, so we run into the limitation
 layout(push_constant) uniform Pushdata
 {
     mat4 modelMatrix;
     mat4 normalMatrix;
 } pushdata;
+
 
 void main()
 {

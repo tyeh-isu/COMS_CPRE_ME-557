@@ -78,6 +78,13 @@ MyDevice::~MyDevice()
     vkDestroyInstance(m_vkInstance, nullptr);
 }
 
+bool MyDevice::resetCommandPool()
+{
+    vkResetCommandPool(this->device(), m_vkCommandPool, 0);
+
+    return true;
+}
+
 void MyDevice::_createInstance()
 {
     if (m_bEnableValidationLayers && !_checkValidationLayerSupport())

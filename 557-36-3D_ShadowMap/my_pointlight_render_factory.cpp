@@ -104,8 +104,10 @@ void MyPointLightRenderFactory::render(MyFrameInfo& frameInfo)
 void MyPointLightRenderFactory::recratePipeline(VkRenderPass renderPass)
 {
 	// delete the original one if exists
-	m_pMyPipeline = nullptr;
+    std::shared_ptr<MyPipeline> oldPipeline = std::move(m_pMyPipeline);
 
     _createPipeline(renderPass);
+
+    oldPipeline = nullptr;
 }
 

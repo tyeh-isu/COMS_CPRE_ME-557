@@ -125,9 +125,11 @@ void MyTextureRenderFactory::render(MyFrameInfo& frameInfo)
 
 void MyTextureRenderFactory::recratePipeline(VkRenderPass renderPass)
 {
-	// delete the original one if exists
-	m_pMyPipeline = nullptr;
+    std::shared_ptr<MyPipeline> oldPipeline = std::move(m_pMyPipeline);
 
+	// delete the original one if exists
     _createPipeline(renderPass);
+
+    oldPipeline = nullptr;
 }
 

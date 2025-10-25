@@ -130,7 +130,9 @@ void MyDebugRenderFactory::renderGameObjects(MyFrameInfo& frameInfo)
 void MyDebugRenderFactory::recratePipeline(VkRenderPass renderPass)
 {
     // delete the original one if exists
-    m_pMyPipeline = nullptr;
+    std::shared_ptr<MyPipeline> oldPipeline = std::move(m_pMyPipeline);
 
     _createPipeline(renderPass);
+
+    oldPipeline = nullptr;
 }

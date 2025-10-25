@@ -43,12 +43,13 @@ MyApplication::MyApplication() :
     m_fPickID(0.0f)
 {
     // Pool for normal rendering
-    m_pMyGlobalPool =
+    m_pMyGlobalPool = // TODO: need to adjust the pool size to fix the crash when resizing window
         MyDescriptorPool::Builder(m_myDevice)
-        .setMaxSets(MySwapChain::MAX_FRAMES_IN_FLIGHT+3) // for descriptor set
+        .setMaxSets(MySwapChain::MAX_FRAMES_IN_FLIGHT+6) // for descriptor set
+        .setPoolFlags(VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT) // allow recreate
         .addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, MySwapChain::MAX_FRAMES_IN_FLIGHT) // for normal rendering
 		.addPoolSize(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1) // for picking
-        .addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MySwapChain::MAX_FRAMES_IN_FLIGHT) // for texure and shadow map
+        .addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MySwapChain::MAX_FRAMES_IN_FLIGHT+1) // for texure and shadow map
 		.build();
 
     // Pool for offscreen rendering
@@ -224,24 +225,37 @@ void MyApplication::run()
     {
         if (resize)
         {
-            /*for (int i = 0; i < uboBuffers.size(); i++)
+            vkDeviceWaitIdle(m_myDevice.device());
+
+            for (int i = 0; i < uboBuffers.size(); i++)
             {
                 uboBuffers[i]->unmap();
             }
 
+            m_pMyGlobalPool->freeDescriptors(globalDescriptorSets);
+
             globalDescriptorSets.clear();
-            globalDescriptorSets.shrink_to_fit();
+            //globalDescriptorSets.shrink_to_fit();
             globalDescriptorSets.resize(MySwapChain::MAX_FRAMES_IN_FLIGHT);
 
+#if RENDER_SHADOW
             VkDescriptorImageInfo updateTextureDescriptorImageInfos[3];
             updateTextureDescriptorImageInfos[0] = myTexture1.descriptorInfo();
             updateTextureDescriptorImageInfos[1] = myTexture2.descriptorInfo();
             updateTextureDescriptorImageInfos[2] = m_myRenderer.shadowMapDescriptorInfo();
+#else
+            VkDescriptorImageInfo updateTextureDescriptorImageInfos[2];
+            updateTextureDescriptorImageInfos[0] = myTexture1.descriptorInfo();
+            updateTextureDescriptorImageInfos[1] = myTexture2.descriptorInfo();
+            //updateTextureDescriptorImageInfos[2] = m_myRenderer.shadowMapDescriptorInfo();
+#endif
 
             for (int i = 0; i < uboBuffers.size(); i++)
             {
                 uboBuffers[i]->map();
             }
+
+            
 
             for (int i = 0; i < globalDescriptorSets.size(); i++)
             {
@@ -257,33 +271,42 @@ void MyApplication::run()
                     .writeImages(2, updateTextureDescriptorImageInfos, 2) // only need to write the first two textures
 #endif
                     .build(globalDescriptorSets[i]);
-            }*/
+            }
 
             // Create one descriptor set per frame
-            /*offscreenDescriptorSets.clear();
-            offscreenDescriptorSets.shrink_to_fit();
-            offscreenDescriptorSets.resize(MySwapChain::MAX_FRAMES_IN_FLIGHT);
+            //offscreenDescriptorSets.clear();
+            //offscreenDescriptorSets.shrink_to_fit();
+            //offscreenDescriptorSets.resize(MySwapChain::MAX_FRAMES_IN_FLIGHT);
 
-            for (int i = 0; i < offscreenDescriptorSets.size(); i++)
-            {
-                auto bufferInfo = uboBuffers[i]->descriptorInfo();
+            //for (int i = 0; i < offscreenDescriptorSets.size(); i++)
+            //{
+            //    auto bufferInfo = uboBuffers[i]->descriptorInfo();
 
-                MyDescriptorWriter(*offscreenSetLayout, *m_pMyOffscreenPool)
-                    .writeBuffer(0, &bufferInfo)      // ubo bind to 0
-                    .build(offscreenDescriptorSets[i]);
-            }*/
+            //    MyDescriptorWriter(*offscreenSetLayout, *m_pMyOffscreenPool)
+            //        .writeBuffer(0, &bufferInfo)      // ubo bind to 0
+            //        .build(offscreenDescriptorSets[i]);
+            //}
 
-           /* simpleRenderFactory.recratePipeline(m_myRenderer.swapChainRenderPass());
+            vkDeviceWaitIdle(m_myDevice.device());
+
+            // The main reason we need to do all these because we put the render pass in swap chain
+            // when resizing window, we destroy swap chain so we have to recreate render pass and therefore
+            // the new pipeline
+            simpleRenderFactory.recratePipeline(m_myRenderer.swapChainRenderPass());
             pointLightFactory.recratePipeline(m_myRenderer.swapChainRenderPass());
             debugFactory.recratePipeline(m_myRenderer.swapChainRenderPass());
             pickingFactory.recratePipeline(m_myRenderer);
             offscreenRenderFactory.recratePipeline(m_myRenderer.offscreenRenderPass());
-            textureFactory.recratePipeline(m_myRenderer.swapChainRenderPass());*/
+            textureFactory.recratePipeline(m_myRenderer.swapChainRenderPass());
 
-            /*for (int i = 0; i < uboBuffers.size(); i++)
-            {
-                uboBuffers[i]->map();
-            }*/
+            
+
+            //for (int i = 0; i < uboBuffers.size(); i++)
+            //{
+            //    uboBuffers[i]->map();
+            //}
+
+            vkDeviceWaitIdle(m_myDevice.device());
 
             resize = 0;
         }
@@ -402,10 +425,12 @@ void MyApplication::run()
 			}
             else // Normal rendering
             {
+//#if RENDER_SHADOW
                 // First render shadow map
                 m_myRenderer.beginOffscreenRenderPass(commandBuffer);
                 offscreenRenderFactory.renderGameObjects(frameInfo);
                 m_myRenderer.endOffscreenRenderPass(commandBuffer);
+//#endif
 
                 // render normal scene
                 m_myRenderer.beginSwapChainRenderPass(commandBuffer);
@@ -432,10 +457,15 @@ void MyApplication::run()
             }
 
             resize = m_myRenderer.endFrame();
-            if (resize == 1)
+            /*if (resize == 1)
             {
-                //vkResetCommandBuffer(commandBuffer, VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT);
+                vkQueueWaitIdle(m_myDevice.graphicsQueue());
+                vkResetCommandBuffer(commandBuffer, VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT);
+
+                m_myDevice.resetCommandPool();
             }
+
+            vkQueueWaitIdle(m_myDevice.graphicsQueue());*/
 
             // After the rendering, get the result from SSBO
             if (m_myGUIData.bPickMode)

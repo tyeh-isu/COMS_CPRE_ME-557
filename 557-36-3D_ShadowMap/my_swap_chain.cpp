@@ -54,15 +54,23 @@ MySwapChain::~MySwapChain()
     {
         vkDestroyImageView(m_myDevice.device(), imageView, nullptr);
     }
-    
     m_vVkSwapChainImageViews.clear();
+
+    /*for (auto image : m_vVkSwapChainImages)
+    {
+        vkDestroyImage(m_myDevice.device(), image, nullptr);
+    }
+    m_vVkSwapChainImages.clear();*/
     
     if (m_vkSwapChain != nullptr)
     {
         vkDestroySwapchainKHR(m_myDevice.device(), m_vkSwapChain, nullptr);
         m_vkSwapChain = nullptr;
+        m_vVkSwapChainImages.clear();
     }
     
+    m_pMyOldSwapChain = nullptr;
+
     for (int i = 0; i < m_vVkColorImages.size(); i++)
     {
         vkDestroyImageView(m_myDevice.device(), m_vVkColorImageViews[i], nullptr);
@@ -116,12 +124,12 @@ MySwapChain::~MySwapChain()
 VkResult MySwapChain::acquireNextImage(uint32_t *imageIndex)
 {
     // Note: CPU will wait here at fences
-    vkWaitForFences(
+    /*vkWaitForFences(
         m_myDevice.device(),
         1,
         &m_vVkInFlightFences[m_iCurrentFrame],
         VK_TRUE,
-        std::numeric_limits<uint64_t>::max());
+        std::numeric_limits<uint64_t>::max());*/
     
     VkResult result = vkAcquireNextImageKHR(
         m_myDevice.device(),
@@ -130,18 +138,18 @@ VkResult MySwapChain::acquireNextImage(uint32_t *imageIndex)
         m_vVkImageAvailableSemaphores[m_iCurrentFrame],  // must be a not signaled semaphore
         VK_NULL_HANDLE,
         imageIndex);
-    
+
     return result;
 }
 
 VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint32_t *imageIndex)
 {
-    if (m_vVkImagesInFlight[*imageIndex] != VK_NULL_HANDLE)
+    /*if (m_vVkImagesInFlight[*imageIndex] != VK_NULL_HANDLE)
     {
         vkWaitForFences(m_myDevice.device(), 1, &m_vVkImagesInFlight[*imageIndex], VK_TRUE, UINT64_MAX);
     }
     
-    m_vVkImagesInFlight[*imageIndex] = m_vVkInFlightFences[m_iCurrentFrame];
+    m_vVkImagesInFlight[*imageIndex] = m_vVkInFlightFences[m_iCurrentFrame];*/
     
     VkSubmitInfo submitInfo = {};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -159,12 +167,22 @@ VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint3
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores = signalSemaphores;
     
-    vkResetFences(m_myDevice.device(), 1, &m_vVkInFlightFences[m_iCurrentFrame]);
+    //vkResetFences(m_myDevice.device(), 1, &m_vVkInFlightFences[m_iCurrentFrame]);
+
     if (vkQueueSubmit(m_myDevice.graphicsQueue(), 1, &submitInfo, m_vVkInFlightFences[m_iCurrentFrame]) != VK_SUCCESS) 
     {
         throw std::runtime_error("failed to submit draw command buffer!");
     }
     
+    vkWaitForFences(
+        m_myDevice.device(),
+        1,
+        &m_vVkInFlightFences[m_iCurrentFrame],
+        VK_TRUE,
+        std::numeric_limits<uint64_t>::max());
+
+    vkResetFences(m_myDevice.device(), 1, &m_vVkInFlightFences[m_iCurrentFrame]);
+
     vkQueueWaitIdle(m_myDevice.graphicsQueue());
 
     VkPresentInfoKHR presentInfo = {};
@@ -587,7 +605,7 @@ void MySwapChain::_createSyncObjects()
     
     VkFenceCreateInfo fenceInfo = {};
     fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-    fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+    fenceInfo.flags = 0; // unsignaled initially, otherwise VK_FENCE_CREATE_SIGNALED_BIT;
     
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
     {
@@ -599,6 +617,9 @@ void MySwapChain::_createSyncObjects()
         {
             throw std::runtime_error("failed to create synchronization objects for a frame!");
         }
+
+        // if it is created with signaled flag, use vkResetFences to set it unsignaled
+        //vkResetFences(m_myDevice.device(), 1, &m_vVkInFlightFences[i]);
     }
 }
 

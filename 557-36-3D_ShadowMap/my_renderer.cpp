@@ -89,7 +89,18 @@ VkCommandBuffer MyRenderer::beginFrame()
     auto result = m_mySwapChain->acquireNextImage(&m_iCurrentImageIndex);
     if (result == VK_ERROR_OUT_OF_DATE_KHR)
     {
+        //m_myWindow.resetWindowResizedFlag();
         _recreateSwapChain();
+
+        // Wait until all operations on the device have been finished before destroying resources
+        /*vkDeviceWaitIdle(m_myDevice.device());
+
+        _recreateSwapChain();
+        _freeCommandBuffers();
+        _createCommandBuffers();
+
+        vkDeviceWaitIdle(m_myDevice.device());*/
+
         return nullptr;
     }
 
@@ -128,8 +139,15 @@ int MyRenderer::endFrame()
     auto result = m_mySwapChain->submitCommandBuffers(&commandBuffer, &m_iCurrentImageIndex);
     if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || m_myWindow.wasWindowResized())
     {
+        vkDeviceWaitIdle(m_myDevice.device());
         m_myWindow.resetWindowResizedFlag();
-        _recreateSwapChain();
+		_recreateSwapChain();
+        //_freeCommandBuffers();
+        //m_myDevice.resetCommandPool();
+        //_createCommandBuffers();
+        
+		vkDeviceWaitIdle(m_myDevice.device());
+
         retVal = 1;
     }
     else if (result != VK_SUCCESS)
