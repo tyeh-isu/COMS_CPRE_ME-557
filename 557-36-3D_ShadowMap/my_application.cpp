@@ -404,9 +404,6 @@ void MyApplication::run()
                 // render normal scene
                 m_myRenderer.beginSwapChainRenderPass(commandBuffer);
 
-                // render GUI
-                m_myGUI.draw(commandBuffer, m_myGUIData);
-
                 // render game objects
                 if (m_myGUIData.bShowDebug)
                 {
@@ -421,6 +418,9 @@ void MyApplication::run()
                 // render light
                 if (m_myGUIData.bShowLight)
                     pointLightFactory.render(frameInfo);
+
+                // render GUI last so it shows on top
+                m_myGUI.draw(commandBuffer, m_myGUIData);
 
                 m_myRenderer.endSwapChainRenderPass(commandBuffer);
             }
