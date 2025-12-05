@@ -1,4 +1,4 @@
-# ComS/CprE/ME 557 Computer Graphics and Geometric Modeling
+# ISU ComS/CprE/ME 557 Computer Graphics and Geometric Modeling
 
 The course covers the basic principles of computer graphics, including an introduction to graphics programming using Vulkan. Students will learn how to display and interact with graphics objects through a keyboard and mouse. The course also focuses on enhancing the realism of graphical scenes by incorporating lighting and textures, as well as constructing geometry through parametric curves and surfaces.
 
