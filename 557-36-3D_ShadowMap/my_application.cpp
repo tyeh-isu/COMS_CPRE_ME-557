@@ -255,8 +255,6 @@ void MyApplication::run()
                 uboBuffers[i]->map();
             }
 
-            
-
             for (int i = 0; i < globalDescriptorSets.size(); i++)
             {
                 auto bufferInfo = uboBuffers[i]->descriptorInfo();
@@ -273,20 +271,6 @@ void MyApplication::run()
                     .build(globalDescriptorSets[i]);
             }
 
-            // Create one descriptor set per frame
-            //offscreenDescriptorSets.clear();
-            //offscreenDescriptorSets.shrink_to_fit();
-            //offscreenDescriptorSets.resize(MySwapChain::MAX_FRAMES_IN_FLIGHT);
-
-            //for (int i = 0; i < offscreenDescriptorSets.size(); i++)
-            //{
-            //    auto bufferInfo = uboBuffers[i]->descriptorInfo();
-
-            //    MyDescriptorWriter(*offscreenSetLayout, *m_pMyOffscreenPool)
-            //        .writeBuffer(0, &bufferInfo)      // ubo bind to 0
-            //        .build(offscreenDescriptorSets[i]);
-            //}
-
             vkDeviceWaitIdle(m_myDevice.device());
 
             // The main reason we need to do all these because we put the render pass in swap chain
@@ -298,13 +282,6 @@ void MyApplication::run()
             pickingFactory.recratePipeline(m_myRenderer);
             offscreenRenderFactory.recratePipeline(m_myRenderer.offscreenRenderPass());
             textureFactory.recratePipeline(m_myRenderer.swapChainRenderPass());
-
-            
-
-            //for (int i = 0; i < uboBuffers.size(); i++)
-            //{
-            //    uboBuffers[i]->map();
-            //}
 
             vkDeviceWaitIdle(m_myDevice.device());
 
@@ -383,15 +360,7 @@ void MyApplication::run()
             lightPos.y = (ubo.pointLight.position.y + m_v3LightOffset.y);
             lightPos.z = (ubo.pointLight.position.z + m_v3LightOffset.z);
 
-            //= glm::vec3(ubo.pointLight.position) + m_v3LightOffset;
-            //lightCamera.setViewTarget(lightPos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-
-            //lightCamera.setViewYXZ(lightPos, glm::vec3(0.0f, 0.0f, 0.0f));
-
             glm::mat4 viewm = lightCamera.viewMatrix();
-
-            //viewm = glm::lookAt(lightPos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0, 1, 0));
-            //viewm = glm::inverse(viewm);
 
             glm::mat4 lightProjectionMatrix = lightCamera.projectionMatrix(); //glm::perspective((float)glm::radians(45.0f), 1.0f, 0.1f, 10.f);
             glm::mat4 lightViewMatrix = glm::lookAt(lightPos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
@@ -425,12 +394,12 @@ void MyApplication::run()
 			}
             else // Normal rendering
             {
-//#if RENDER_SHADOW
+#if RENDER_SHADOW
                 // First render shadow map
                 m_myRenderer.beginOffscreenRenderPass(commandBuffer);
                 offscreenRenderFactory.renderGameObjects(frameInfo);
                 m_myRenderer.endOffscreenRenderPass(commandBuffer);
-//#endif
+#endif
 
                 // render normal scene
                 m_myRenderer.beginSwapChainRenderPass(commandBuffer);
@@ -457,15 +426,6 @@ void MyApplication::run()
             }
 
             resize = m_myRenderer.endFrame();
-            /*if (resize == 1)
-            {
-                vkQueueWaitIdle(m_myDevice.graphicsQueue());
-                vkResetCommandBuffer(commandBuffer, VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT);
-
-                m_myDevice.resetCommandPool();
-            }
-
-            vkQueueWaitIdle(m_myDevice.graphicsQueue());*/
 
             // After the rendering, get the result from SSBO
             if (m_myGUIData.bPickMode)
