@@ -46,7 +46,6 @@ MySwapChain::~MySwapChain()
     {
         vkDestroyImageView(m_myDevice.device(), imageView, nullptr);
     }
-    
     m_vVkSwapChainImageViews.clear();
     
     if (m_vkSwapChain != nullptr)
@@ -93,6 +92,7 @@ MySwapChain::~MySwapChain()
         vkDestroySemaphore(m_myDevice.device(), m_vVkImageAvailableSemaphores[i], nullptr);
         vkDestroyFence(m_myDevice.device(), m_vVkInFlightFences[i], nullptr);
     }
+    //vkDestroyFence(m_myDevice.device(), m_vVkPresentFence, nullptr);
 }
 
 VkResult MySwapChain::acquireNextImage(uint32_t *imageIndex)
@@ -112,7 +112,7 @@ VkResult MySwapChain::acquireNextImage(uint32_t *imageIndex)
         m_vVkImageAvailableSemaphores[m_iCurrentFrame],  // must be a not signaled semaphore
         VK_NULL_HANDLE,
         imageIndex);
-    
+
     return result;
 }
 
@@ -122,7 +122,7 @@ VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint3
     {
         vkWaitForFences(m_myDevice.device(), 1, &m_vVkImagesInFlight[*imageIndex], VK_TRUE, UINT64_MAX);
     }
-    
+
     m_vVkImagesInFlight[*imageIndex] = m_vVkInFlightFences[m_iCurrentFrame];
     
     VkSubmitInfo submitInfo = {};
@@ -142,14 +142,22 @@ VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint3
     submitInfo.pSignalSemaphores = signalSemaphores;
     
     vkResetFences(m_myDevice.device(), 1, &m_vVkInFlightFences[m_iCurrentFrame]);
+    //vkResetFences(m_myDevice.device(), 1, &m_vVkPresentFence);
+
     if (vkQueueSubmit(m_myDevice.graphicsQueue(), 1, &submitInfo, m_vVkInFlightFences[m_iCurrentFrame]) != VK_SUCCESS) 
     {
         throw std::runtime_error("failed to submit draw command buffer!");
     }
     
+    //VkSwapchainPresentFenceInfoKHR fenceInfo = {};
+    //fenceInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_PRESENT_FENCE_INFO_KHR;
+    //fenceInfo.swapchainCount = 1;
+    //fenceInfo.pFences = &m_vVkPresentFence;
+
     VkPresentInfoKHR presentInfo = {};
     presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
     
+    //presentInfo.pNext = &fenceInfo;
     presentInfo.waitSemaphoreCount = 1;
     presentInfo.pWaitSemaphores = signalSemaphores;
     
@@ -157,12 +165,16 @@ VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint3
     presentInfo.swapchainCount = 1;
     presentInfo.pSwapchains = swapChains;
     
+    //*imageIndex = m_iCurrentFrame;
+
     presentInfo.pImageIndices = imageIndex;
     
     auto result = vkQueuePresentKHR(m_myDevice.presentQueue(), &presentInfo);
     
+    //vkWaitForFences(m_myDevice.device(), 1, &m_vVkPresentFence, VK_TRUE, UINT64_MAX);
+
     m_iCurrentFrame = (m_iCurrentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
-    
+
     return result;
 }
 
@@ -302,7 +314,7 @@ void MySwapChain::_createRenderPass()
     colorAttachmentResolveRef.attachment = 2; // index 2
     colorAttachmentResolveRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
     
-    if (m_myDevice.msaaSamples() != VK_SAMPLE_COUNT_1_BIT)
+    if (m_myDevice.msaaSamples() != VK_SAMPLE_COUNT_1_BIT) // MSAA
     {
         VkSubpassDescription subpass = {};
         subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
@@ -373,7 +385,7 @@ void MySwapChain::_createFramebuffers()
     
     for (size_t i = 0; i < imageCount(); i++) 
     {
-        if (m_myDevice.msaaSamples() != VK_SAMPLE_COUNT_1_BIT)
+        if (m_myDevice.msaaSamples() != VK_SAMPLE_COUNT_1_BIT) // MSAA
         {
             std::array<VkImageView, 3> attachments = { m_vVkColorImageViews[i], m_vVkDepthImageViews[i], m_vVkSwapChainImageViews[i] };
 
@@ -531,7 +543,7 @@ void MySwapChain::_createSyncObjects()
     m_vVkRenderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
     m_vVkInFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
     m_vVkImagesInFlight.resize(imageCount(), VK_NULL_HANDLE);
-    
+
     VkSemaphoreCreateInfo semaphoreInfo = {};
     semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
     
@@ -551,6 +563,11 @@ void MySwapChain::_createSyncObjects()
             throw std::runtime_error("failed to create synchronization objects for a frame!");
         }
     }
+
+    //if (vkCreateFence(m_myDevice.device(), &fenceInfo, nullptr, &m_vVkPresentFence) != VK_SUCCESS)
+    //{
+    //    throw std::runtime_error("failed to create synchronization objects for a frame!");
+    //}
 }
 
 VkSurfaceFormatKHR MySwapChain::_chooseSwapSurfaceFormat(

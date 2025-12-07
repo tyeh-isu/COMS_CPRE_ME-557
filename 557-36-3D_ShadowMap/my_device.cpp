@@ -251,7 +251,7 @@ void MyDevice::_createLogicalDevice()
     
     VkPhysicalDeviceFeatures deviceFeatures = {};
     deviceFeatures.samplerAnisotropy = VK_TRUE;
-    deviceFeatures.fragmentStoresAndAtomics = VK_TRUE;
+    deviceFeatures.fragmentStoresAndAtomics = VK_TRUE; // This flag is required for SSBO
 
     VkDeviceCreateInfo createInfo = {};
     createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;

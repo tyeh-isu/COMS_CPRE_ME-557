@@ -70,7 +70,7 @@ class MyDevice
         VkMemoryPropertyFlags properties,
         VkBuffer &buffer,
         VkDeviceMemory &bufferMemory);
-    
+
 	void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
     void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, uint32_t layerCount);
 
@@ -94,7 +94,6 @@ class MyDevice
     uint32_t _findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
     
     // helper functions
-    bool _isDeviceSuitable(VkPhysicalDevice device);
     std::vector<const char *> _getRequiredExtensions();
     bool _checkValidationLayerSupport();
     QueueFamilyIndices _findQueueFamilies(VkPhysicalDevice device);
@@ -104,7 +103,8 @@ class MyDevice
     SwapChainSupportDetails _querySwapChainSupport(VkPhysicalDevice device);
     VkSampleCountFlagBits   _getMaxUsableSampleCount();
     unsigned int            _getMaxPushContantSize();
-	
+    unsigned int            _rateDevice(VkPhysicalDevice device);
+
     VkInstance                 m_vkInstance;
     VkDebugUtilsMessengerEXT   m_vkDebugMessenger;
     VkPhysicalDevice           m_vkPhysicalDevice = VK_NULL_HANDLE;

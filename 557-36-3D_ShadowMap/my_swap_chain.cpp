@@ -148,7 +148,7 @@ VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint3
     {
         vkWaitForFences(m_myDevice.device(), 1, &m_vVkImagesInFlight[*imageIndex], VK_TRUE, UINT64_MAX);
     }
-    
+
     m_vVkImagesInFlight[*imageIndex] = m_vVkInFlightFences[m_iCurrentFrame];*/
     
     VkSubmitInfo submitInfo = {};
@@ -599,7 +599,7 @@ void MySwapChain::_createSyncObjects()
     m_vVkRenderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
     m_vVkInFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
     m_vVkImagesInFlight.resize(imageCount(), VK_NULL_HANDLE);
-    
+
     VkSemaphoreCreateInfo semaphoreInfo = {};
     semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
     
@@ -609,11 +609,12 @@ void MySwapChain::_createSyncObjects()
     
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
     {
-        if (vkCreateSemaphore(m_myDevice.device(), &semaphoreInfo, nullptr, &m_vVkImageAvailableSemaphores[i]) !=
-              VK_SUCCESS ||
-          vkCreateSemaphore(m_myDevice.device(), &semaphoreInfo, nullptr, &m_vVkRenderFinishedSemaphores[i]) !=
-              VK_SUCCESS ||
-          vkCreateFence(m_myDevice.device(), &fenceInfo, nullptr, &m_vVkInFlightFences[i]) != VK_SUCCESS) 
+            // Semaphore used to ensure that image presentation is complete before starting to submit again
+        if (vkCreateSemaphore(m_myDevice.device(), &semaphoreInfo, nullptr, &m_vVkImageAvailableSemaphores[i]) != VK_SUCCESS ||
+            // Semaphore used to ensure that all commands submitted have been finished before submitting the image to the queue
+            vkCreateSemaphore(m_myDevice.device(), &semaphoreInfo, nullptr, &m_vVkRenderFinishedSemaphores[i]) != VK_SUCCESS ||
+            // Fence used to ensure that command buffer has completed exection before using it again
+            vkCreateFence(m_myDevice.device(), &fenceInfo, nullptr, &m_vVkInFlightFences[i]) != VK_SUCCESS) 
         {
             throw std::runtime_error("failed to create synchronization objects for a frame!");
         }

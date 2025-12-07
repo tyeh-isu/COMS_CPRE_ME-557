@@ -75,12 +75,12 @@ void MyApplication::run()
 	VkDescriptorImageInfo textureDescriptorImageInfos[3];
 	textureDescriptorImageInfos[0] = myTexture1.descriptorInfo();
 	textureDescriptorImageInfos[1] = myTexture2.descriptorInfo();
-    textureDescriptorImageInfos[2] = m_myRenderer.shadowMapDescriptorInfo();
+	textureDescriptorImageInfos[2] = m_myRenderer.shadowMapDescriptorInfo();
 #else
-    VkDescriptorImageInfo textureDescriptorImageInfos[2];
-    textureDescriptorImageInfos[0] = myTexture1.descriptorInfo();
-    textureDescriptorImageInfos[1] = myTexture2.descriptorInfo();
-    //textureDescriptorImageInfos[2] = m_myRenderer.shadowMapDescriptorInfo();
+	VkDescriptorImageInfo textureDescriptorImageInfos[2];
+	textureDescriptorImageInfos[0] = myTexture1.descriptorInfo();
+	textureDescriptorImageInfos[1] = myTexture2.descriptorInfo();
+	//textureDescriptorImageInfos[2] = m_myRenderer.shadowMapDescriptorInfo();
 #endif
 
 	m_myGUIData.init();
@@ -115,7 +115,7 @@ void MyApplication::run()
     // Create descriptor set layout object for scene rendering
     auto globalSetLayout =
         MyDescriptorSetLayout::Builder(m_myDevice)
-        .addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_ALL_GRAPHICS) // can be accessed all shader stages
+        .addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_ALL_GRAPHICS) // Unfirom buffer can be accessed all shader stages
 		.addBinding(1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT) // can be accessed by fragment shader
 #if RENDER_SHADOW
 		.addBinding(2, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT, 3) // can be accessed by fragment shader for shadow map
@@ -400,7 +400,6 @@ void MyApplication::run()
                 offscreenRenderFactory.renderGameObjects(frameInfo);
                 m_myRenderer.endOffscreenRenderPass(commandBuffer);
 #endif
-
                 // render normal scene
                 m_myRenderer.beginSwapChainRenderPass(commandBuffer);
 
@@ -495,6 +494,7 @@ void MyApplication::_loadGameObjects()
     floor.transform.translation = { 0.f, 0.0f, 0.f };
     floor.transform.scale = { 5.f, 1.f, 5.f };
     floor.transform.rotation.x = glm::pi<float>(); // rotate 180
+
     m_mapGameObjects.emplace(floor.getID(), std::move(floor));
 
     // Load a third simple model

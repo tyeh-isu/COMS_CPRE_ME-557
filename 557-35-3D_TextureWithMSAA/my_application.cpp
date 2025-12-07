@@ -71,7 +71,7 @@ void MyApplication::run()
     // Create descriptor set layout object
     auto globalSetLayout =
         MyDescriptorSetLayout::Builder(m_myDevice)
-        .addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_ALL_GRAPHICS)  // Unfirom buffer can be accessed all shader stages
+        .addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_ALL_GRAPHICS) // Unfirom buffer can be accessed all shader stages
         .addBinding(1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT, 2) // Texture image can only be accessed by fragment shader stage
         .build();
 
