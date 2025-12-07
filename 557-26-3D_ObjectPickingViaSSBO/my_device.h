@@ -41,11 +41,11 @@ class MyDevice
     MyDevice(MyDevice &&) = delete;
     MyDevice &operator=(MyDevice &&) = delete;
 
-    VkCommandPool commandPool() { return m_vkCommandPool; }
-    VkDevice device()           { return m_vkDevice; }
-    VkSurfaceKHR surface()      { return m_vkSurface; }
-    VkQueue graphicsQueue()     { return m_vkGraphicsQueue; }
-    VkQueue presentQueue()      { return m_vkPresentQueue; }
+    VkCommandPool commandPool()       { return m_vkCommandPool; }
+    VkDevice device()                 { return m_vkDevice; }
+    VkSurfaceKHR surface()            { return m_vkSurface; }
+    VkQueue graphicsQueue()           { return m_vkGraphicsQueue; }
+    VkQueue presentQueue()            { return m_vkPresentQueue; }
 
     // For GUI
     VkInstance       instance()       { return m_vkInstance; }
@@ -56,16 +56,16 @@ class MyDevice
     QueueFamilyIndices findPhysicalQueueFamilies() { return _findQueueFamilies(m_vkPhysicalDevice); }
     VkFormat findSupportedFormat(
         const std::vector<VkFormat> &candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
-    
+
     VkCommandBuffer beginSingleTimeCommands();
     void endSingleTimeCommands(VkCommandBuffer commandBuffer);
-    
+
     void createImageWithInfo(
         const VkImageCreateInfo &imageInfo,
         VkMemoryPropertyFlags properties,
         VkImage &image,
         VkDeviceMemory &imageMemory);
-    
+
     // Buffer Helper Functions
     void createBuffer(
         VkDeviceSize size,
@@ -73,7 +73,7 @@ class MyDevice
         VkMemoryPropertyFlags properties,
         VkBuffer &buffer,
         VkDeviceMemory &bufferMemory);
-    
+
 	void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 
   private:
@@ -86,7 +86,7 @@ class MyDevice
     uint32_t _findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
     
     // helper functions
-    bool _isDeviceSuitable(VkPhysicalDevice device);
+    //bool _isDeviceSuitable(VkPhysicalDevice device);
     std::vector<const char *> _getRequiredExtensions();
     bool _checkValidationLayerSupport();
     QueueFamilyIndices _findQueueFamilies(VkPhysicalDevice device);
@@ -94,7 +94,8 @@ class MyDevice
     void _hasGflwRequiredInstanceExtensions();
     bool _checkDeviceExtensionSupport(VkPhysicalDevice device);
     SwapChainSupportDetails _querySwapChainSupport(VkPhysicalDevice device);
-	
+    unsigned int            _rateDevice(VkPhysicalDevice device);
+
     VkInstance                 m_vkInstance;
     VkDebugUtilsMessengerEXT   m_vkDebugMessenger;
     VkPhysicalDevice           m_vkPhysicalDevice = VK_NULL_HANDLE;
