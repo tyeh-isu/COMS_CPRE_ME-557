@@ -31,7 +31,7 @@ MyApplication::MyApplication() :
         MyDescriptorPool::Builder(m_myDevice)
         .setMaxSets(MySwapChain::MAX_FRAMES_IN_FLIGHT)
         .addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, MySwapChain::MAX_FRAMES_IN_FLIGHT)
-        .addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MySwapChain::MAX_FRAMES_IN_FLIGHT)
+        .addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1)
         .build();
 
     _loadGameObjects();
@@ -175,15 +175,15 @@ void MyApplication::run()
             // render
             m_myRenderer.beginSwapChainRenderPass(commandBuffer);
 
-            // render GUI
-            m_myGUI.draw(commandBuffer, m_myGUIData);
-
             // render light
             if (m_myGUIData.bShowLight)
                 pointLightFactory.render(frameInfo);
 
             // render game objects
             textureFactory.render(frameInfo);
+
+            // render GUI
+            m_myGUI.draw(commandBuffer, m_myGUIData);
 
             m_myRenderer.endSwapChainRenderPass(commandBuffer);
 
