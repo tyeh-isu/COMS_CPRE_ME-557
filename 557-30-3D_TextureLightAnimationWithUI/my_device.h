@@ -73,7 +73,7 @@ class MyDevice
         VkMemoryPropertyFlags properties,
         VkBuffer &buffer,
         VkDeviceMemory &bufferMemory);
-    
+
 	void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
     void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, uint32_t layerCount);
 
@@ -96,7 +96,7 @@ class MyDevice
     bool _checkDeviceExtensionSupport(VkPhysicalDevice device);
     SwapChainSupportDetails _querySwapChainSupport(VkPhysicalDevice device);
     VkSampleCountFlagBits   _getMaxUsableSampleCount();
-	
+
     VkInstance                 m_vkInstance;
     VkDebugUtilsMessengerEXT   m_vkDebugMessenger;
     VkPhysicalDevice           m_vkPhysicalDevice = VK_NULL_HANDLE;

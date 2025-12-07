@@ -200,7 +200,7 @@ VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint3
     auto result = vkQueuePresentKHR(m_myDevice.presentQueue(), &presentInfo);
     
     m_iCurrentFrame = (m_iCurrentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
-    
+
     return result;
 }
 

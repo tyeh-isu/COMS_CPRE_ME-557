@@ -150,25 +150,69 @@ void MyDevice::_pickPhysicalDevice()
         std::cout << "found physical device: " << props.deviceName << std::endl;
     }
     
+    // In case you have multiple graphics cards on your machine, e.g. a laptop
+    // with an integrated graphics card and a high-performance standalone graphics card,
+    // you would like to use the high-performance one.
+    VkPhysicalDevice bestDevice = VK_NULL_HANDLE;
+    unsigned int bestScore = 0;
+
     for (const auto &device : devices)
     {
-        if (_isDeviceSuitable(device)) 
+        int score = _rateDevice(device);
+        if (score > bestScore)
         {
-            m_vkPhysicalDevice = device;
-            m_vkMSAASamples = _getMaxUsableSampleCount();
-
-            break;
+            bestScore = score;
+            bestDevice = device;
         }
     }
-    
-    if (m_vkPhysicalDevice == VK_NULL_HANDLE)
+
+    if (bestDevice == VK_NULL_HANDLE)
     {
         throw std::runtime_error("failed to find a suitable GPU!");
     }
+
+    m_vkPhysicalDevice = bestDevice;
     
     VkPhysicalDeviceProperties properties;
     vkGetPhysicalDeviceProperties(m_vkPhysicalDevice, &properties);
     std::cout << "picked physical device: " << properties.deviceName << std::endl;
+}
+
+unsigned int MyDevice::_rateDevice(VkPhysicalDevice device) 
+{
+    VkPhysicalDeviceProperties props;
+    vkGetPhysicalDeviceProperties(device, &props);
+
+    VkPhysicalDeviceMemoryProperties mem;
+    vkGetPhysicalDeviceMemoryProperties(device, &mem);
+
+    // Require basic device support first
+    if (!_checkDeviceExtensionSupport(device))
+        return 0;
+
+     QueueFamilyIndices indices = _findQueueFamilies(device);
+     if (!indices.isComplete())
+        return 0;
+
+    // Start scoring
+    unsigned int score = 0;
+
+    // Discrete GPUs preferred
+    if (props.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
+        score += 1000;
+
+    // Add VRAM (sum of all device-local heaps)
+    VkDeviceSize vram = 0;
+    for (uint32_t ii = 0; ii < mem.memoryHeapCount; ii++) {
+        if (mem.memoryHeaps[ii].flags & VK_MEMORY_HEAP_DEVICE_LOCAL_BIT)
+            vram += mem.memoryHeaps[ii].size;
+    }
+    score += static_cast<int>(vram / (1024 * 1024 * 1024)); // +1 per GB
+
+    // Optional: Favor newer Vulkan versions
+    score += props.apiVersion / 100000;
+
+    return score;
 }
 
 void MyDevice::_createLogicalDevice() 
@@ -191,7 +235,7 @@ void MyDevice::_createLogicalDevice()
     
     VkPhysicalDeviceFeatures deviceFeatures = {};
     deviceFeatures.samplerAnisotropy = VK_TRUE;
-    
+
     VkDeviceCreateInfo createInfo = {};
     createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
     
@@ -247,7 +291,7 @@ void MyDevice::_createSurface()
     m_myWindow.createWindowSurface(m_vkInstance, &m_vkSurface);
 }
 
-bool MyDevice::_isDeviceSuitable(VkPhysicalDevice device) 
+/*bool MyDevice::_isDeviceSuitable(VkPhysicalDevice device) 
 {
     QueueFamilyIndices indices = _findQueueFamilies(device);
     
@@ -265,7 +309,7 @@ bool MyDevice::_isDeviceSuitable(VkPhysicalDevice device)
     
     return indices.isComplete() && extensionsSupported && swapChainAdequate &&
            supportedFeatures.samplerAnisotropy;
-}
+}*/
 
 void MyDevice::_populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT &createInfo)
 {

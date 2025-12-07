@@ -31,7 +31,7 @@ MyApplication::MyApplication() :
         MyDescriptorPool::Builder(m_myDevice)
         .setMaxSets(MySwapChain::MAX_FRAMES_IN_FLIGHT)
         .addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, MySwapChain::MAX_FRAMES_IN_FLIGHT)
-        .addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MySwapChain::MAX_FRAMES_IN_FLIGHT)
+        .addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, TEXTURE_ARRAY_SIZE)
         .build();
 
     _loadGameObjects();

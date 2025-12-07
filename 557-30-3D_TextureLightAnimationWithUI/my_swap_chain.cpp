@@ -45,7 +45,6 @@ MySwapChain::~MySwapChain()
     {
         vkDestroyImageView(m_myDevice.device(), imageView, nullptr);
     }
-    
     m_vVkSwapChainImageViews.clear();
     
     if (m_vkSwapChain != nullptr)
@@ -95,7 +94,7 @@ VkResult MySwapChain::acquireNextImage(uint32_t *imageIndex)
         1,
         &m_vVkInFlightFences[m_iCurrentFrame],
         VK_TRUE,
-        std::numeric_limits<uint64_t>::max()); // wait forever??
+        std::numeric_limits<uint64_t>::max());
     
     VkResult result = vkAcquireNextImageKHR(
         m_myDevice.device(),
@@ -104,7 +103,7 @@ VkResult MySwapChain::acquireNextImage(uint32_t *imageIndex)
         m_vVkImageAvailableSemaphores[m_iCurrentFrame],  // must be a not signaled semaphore
         VK_NULL_HANDLE,
         imageIndex);
-    
+
     return result;
 }
 
@@ -114,7 +113,7 @@ VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint3
     {
         vkWaitForFences(m_myDevice.device(), 1, &m_vVkImagesInFlight[*imageIndex], VK_TRUE, UINT64_MAX);
     }
-    
+
     m_vVkImagesInFlight[*imageIndex] = m_vVkInFlightFences[m_iCurrentFrame];
     
     VkSubmitInfo submitInfo = {};
@@ -154,7 +153,7 @@ VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint3
     auto result = vkQueuePresentKHR(m_myDevice.presentQueue(), &presentInfo);
     
     m_iCurrentFrame = (m_iCurrentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
-    
+
     return result;
 }
 
@@ -394,7 +393,7 @@ void MySwapChain::_createSyncObjects()
     m_vVkRenderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
     m_vVkInFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
     m_vVkImagesInFlight.resize(imageCount(), VK_NULL_HANDLE);
-    
+
     VkSemaphoreCreateInfo semaphoreInfo = {};
     semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
     
