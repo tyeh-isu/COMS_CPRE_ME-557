@@ -80,7 +80,7 @@ void MyApplication::run()
     {
         m_myDevice,
         m_myRenderer.swapChainRenderPass(),
-        globalSetLayout->descriptorSetLayout() 
+        globalSetLayout->descriptorSetLayout()
     };
 
     m_myWindow.bindMyApplication(this);
@@ -168,15 +168,15 @@ void MyApplication::run()
             // render
             m_myRenderer.beginSwapChainRenderPass(commandBuffer);
 
-            // render GUI
-            m_myGUI.draw(commandBuffer, m_myGUIData);
-
             // render game objects
             simpleRenderFactory.renderGameObjects(frameInfo);
 
             // render light
             if (m_myGUIData.bShowLight)
                 pointLightFactory.render(frameInfo);
+
+            // render GUI
+            m_myGUI.draw(commandBuffer, m_myGUIData);
 
             m_myRenderer.endSwapChainRenderPass(commandBuffer);
 
