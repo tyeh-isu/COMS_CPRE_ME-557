@@ -70,7 +70,7 @@ class MyDevice
     void _createLogicalDevice();
     void _createCommandPool();
     uint32_t _findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
-    
+
     // helper functions
     bool _isDeviceSuitable(VkPhysicalDevice device);
     std::vector<const char *> _getRequiredExtensions();
@@ -80,19 +80,19 @@ class MyDevice
     void _hasGflwRequiredInstanceExtensions();
     bool _checkDeviceExtensionSupport(VkPhysicalDevice device);
     SwapChainSupportDetails _querySwapChainSupport(VkPhysicalDevice device);
-	
+
     VkInstance                 m_vkInstance;
     VkDebugUtilsMessengerEXT   m_vkDebugMessenger;
     VkPhysicalDevice           m_vkPhysicalDevice = VK_NULL_HANDLE;
 
     MyWindow                  &m_myWindow;
     VkCommandPool              m_vkCommandPool;
-    
+
     VkDevice                   m_vkDevice;
     VkSurfaceKHR               m_vkSurface;
     VkQueue                    m_vkGraphicsQueue;
     VkQueue                    m_vkPresentQueue;
-    
+
     const std::vector<const char *> validationLayers = { "VK_LAYER_KHRONOS_validation" };
     const std::vector<const char *> deviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
 };

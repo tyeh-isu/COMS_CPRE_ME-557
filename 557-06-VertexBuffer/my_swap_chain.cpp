@@ -32,29 +32,28 @@ MySwapChain::~MySwapChain()
     {
         vkDestroyImageView(m_myDevice.device(), imageView, nullptr);
     }
-    
     m_vVkSwapChainImageViews.clear();
-    
+
     if (m_vkSwapChain != nullptr)
     {
         vkDestroySwapchainKHR(m_myDevice.device(), m_vkSwapChain, nullptr);
         m_vkSwapChain = nullptr;
     }
-    
+
     for (int i = 0; i < m_vVkDepthImages.size(); i++)
     {
         vkDestroyImageView(m_myDevice.device(), m_vVkDepthImageViews[i], nullptr);
         vkDestroyImage(m_myDevice.device(), m_vVkDepthImages[i], nullptr);
         vkFreeMemory(m_myDevice.device(), m_vVkDepthImageMemorys[i], nullptr);
     }
-    
+
     for (auto framebuffer : m_vVkSwapChainFramebuffers)
     {
         vkDestroyFramebuffer(m_myDevice.device(), framebuffer, nullptr);
     }
-    
+
     vkDestroyRenderPass(m_myDevice.device(), m_vkRenderPass, nullptr);
-    
+
     // cleanup synchronization objects
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
     {
@@ -73,7 +72,7 @@ VkResult MySwapChain::acquireNextImage(uint32_t *imageIndex)
         &m_vVkInFlightFences[m_iCurrentFrame],
         VK_TRUE,
         std::numeric_limits<uint64_t>::max());
-    
+
     VkResult result = vkAcquireNextImageKHR(
         m_myDevice.device(),
         m_vkSwapChain,
@@ -81,7 +80,7 @@ VkResult MySwapChain::acquireNextImage(uint32_t *imageIndex)
         m_vVkImageAvailableSemaphores[m_iCurrentFrame],  // must be a not signaled semaphore
         VK_NULL_HANDLE,
         imageIndex);
-    
+
     return result;
 }
 
@@ -91,79 +90,79 @@ VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint3
     {
         vkWaitForFences(m_myDevice.device(), 1, &m_vVkImagesInFlight[*imageIndex], VK_TRUE, UINT64_MAX);
     }
-    
+
     m_vVkImagesInFlight[*imageIndex] = m_vVkInFlightFences[m_iCurrentFrame];
-    
+
     VkSubmitInfo submitInfo = {};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    
+
     VkSemaphore waitSemaphores[] = {m_vVkImageAvailableSemaphores[m_iCurrentFrame]};
     VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
     submitInfo.waitSemaphoreCount = 1;
     submitInfo.pWaitSemaphores = waitSemaphores;
     submitInfo.pWaitDstStageMask = waitStages;
-    
+ 
     submitInfo.commandBufferCount = 1;
     submitInfo.pCommandBuffers = buffers;
-    
+
     VkSemaphore signalSemaphores[] = {m_vVkRenderFinishedSemaphores[m_iCurrentFrame]};
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores = signalSemaphores;
-    
+
     vkResetFences(m_myDevice.device(), 1, &m_vVkInFlightFences[m_iCurrentFrame]);
     if (vkQueueSubmit(m_myDevice.graphicsQueue(), 1, &submitInfo, m_vVkInFlightFences[m_iCurrentFrame]) != VK_SUCCESS) 
     {
         throw std::runtime_error("failed to submit draw command buffer!");
     }
-    
+
     VkPresentInfoKHR presentInfo = {};
     presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-    
+ 
     presentInfo.waitSemaphoreCount = 1;
     presentInfo.pWaitSemaphores = signalSemaphores;
-    
+ 
     VkSwapchainKHR swapChains[] = { m_vkSwapChain };
     presentInfo.swapchainCount = 1;
     presentInfo.pSwapchains = swapChains;
-    
+
     presentInfo.pImageIndices = imageIndex;
     
     auto result = vkQueuePresentKHR(m_myDevice.presentQueue(), &presentInfo);
-    
+
     m_iCurrentFrame = (m_iCurrentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
-    
+
     return result;
 }
 
 void MySwapChain::_createSwapChain() 
 {
     SwapChainSupportDetails swapChainSupport = m_myDevice.getSwapChainSupport();
-    
+
     VkSurfaceFormatKHR surfaceFormat = _chooseSwapSurfaceFormat(swapChainSupport.formats);
     VkPresentModeKHR presentMode = _chooseSwapPresentMode(swapChainSupport.presentModes);
     VkExtent2D extent = _chooseSwapExtent(swapChainSupport.capabilities);
-    
+ 
     uint32_t imageCount = swapChainSupport.capabilities.minImageCount + 1;
     if (swapChainSupport.capabilities.maxImageCount > 0 &&
         imageCount > swapChainSupport.capabilities.maxImageCount)
     {
         imageCount = swapChainSupport.capabilities.maxImageCount;
     }
-    
+
     VkSwapchainCreateInfoKHR createInfo = {};
     createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     createInfo.surface = m_myDevice.surface();
-    
+
     createInfo.minImageCount = imageCount;
     createInfo.imageFormat = surfaceFormat.format;
     createInfo.imageColorSpace = surfaceFormat.colorSpace;
     createInfo.imageExtent = extent;
     createInfo.imageArrayLayers = 1;
     createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-    
+
     QueueFamilyIndices indices = m_myDevice.findPhysicalQueueFamilies();
     uint32_t queueFamilyIndices[] = {indices.graphicsFamily, indices.presentFamily};
-    
+
     if (indices.graphicsFamily != indices.presentFamily)
     {
         createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
@@ -176,10 +175,10 @@ void MySwapChain::_createSwapChain()
         createInfo.queueFamilyIndexCount = 0;      // Optional
         createInfo.pQueueFamilyIndices = nullptr;  // Optional
     }
-    
+
     createInfo.preTransform = swapChainSupport.capabilities.currentTransform;
     createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-    
+
     createInfo.presentMode = presentMode;
     createInfo.clipped = VK_TRUE;
     
@@ -189,7 +188,7 @@ void MySwapChain::_createSwapChain()
     {
         throw std::runtime_error("failed to create swap chain!");
     }
-    
+
     // we only specified a minimum number of images in the swap chain, so the implementation is
     // allowed to create a swap chain with more. That's why we'll first query the final number of
     // images with vkGetSwapchainImagesKHR, then resize the container and finally call it again to
@@ -197,7 +196,7 @@ void MySwapChain::_createSwapChain()
     vkGetSwapchainImagesKHR(m_myDevice.device(), m_vkSwapChain, &imageCount, nullptr);
     m_vVkSwapChainImages.resize(imageCount);
     vkGetSwapchainImagesKHR(m_myDevice.device(), m_vkSwapChain, &imageCount, m_vVkSwapChainImages.data());
-    
+
     m_vkSwapChainImageFormat = surfaceFormat.format;
     m_vkSwapChainExtent = extent;
 }
@@ -291,7 +290,7 @@ void MySwapChain::_createRenderPass()
 void MySwapChain::_createFramebuffers() 
 {
     m_vVkSwapChainFramebuffers.resize(imageCount());
-    
+
     for (size_t i = 0; i < imageCount(); i++) 
     {
         std::array<VkImageView, 2> attachments = {m_vVkSwapChainImageViews[i], m_vVkDepthImageViews[i]};
@@ -320,7 +319,7 @@ void MySwapChain::_createDepthResources()
 {
     VkFormat depthFormat = findDepthFormat();
     VkExtent2D swapChainExtent = this->swapChainExtent();
-    
+
     m_vVkDepthImages.resize(imageCount());
     m_vVkDepthImageMemorys.resize(imageCount());
     m_vVkDepthImageViews.resize(imageCount());
@@ -373,14 +372,14 @@ void MySwapChain::_createSyncObjects()
     m_vVkRenderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
     m_vVkInFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
     m_vVkImagesInFlight.resize(imageCount(), VK_NULL_HANDLE);
-    
+
     VkSemaphoreCreateInfo semaphoreInfo = {};
     semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-    
+
     VkFenceCreateInfo fenceInfo = {};
     fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
     fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
-    
+
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
     {
             // Semaphore used to ensure that image presentation is complete before starting to submit again
