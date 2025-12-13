@@ -89,7 +89,7 @@ void MyApplication::_createCommandBuffers()
     }
 
     int numVertex = 1;
-	
+
     for (int i = 0; i < m_vVkCommandBuffers.size(); i++)
     {
         VkCommandBufferBeginInfo beginInfo{};

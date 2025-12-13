@@ -23,7 +23,7 @@ int main()
 
 	std::vector<VkExtensionProperties> extensions(extensionCount);
 	vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
-    
+
 	std::cout << "Check Vulkan:" << std::endl;
 	for (const auto &extension : extensions) 
 	{

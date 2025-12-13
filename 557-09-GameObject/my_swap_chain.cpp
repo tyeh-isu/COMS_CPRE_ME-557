@@ -128,10 +128,10 @@ VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint3
 
     VkPresentInfoKHR presentInfo = {};
     presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
- 
+
     presentInfo.waitSemaphoreCount = 1;
     presentInfo.pWaitSemaphores = signalSemaphores;
- 
+
     VkSwapchainKHR swapChains[] = { m_vkSwapChain };
     presentInfo.swapchainCount = 1;
     presentInfo.pSwapchains = swapChains;
