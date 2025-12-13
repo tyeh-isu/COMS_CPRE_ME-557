@@ -40,7 +40,7 @@ void MyApplication::run()
             // end offscreen shadow pass
 
             m_myRenderer.beginSwapChainRenderPass(commandBuffer);
-            simpleRenderFactory.renderGameObjects(commandBuffer, m_vMyGameObjects, camera);
+            simpleRenderFactory.renderGameObjects(commandBuffer, m_vMyGameObjects);
             m_myRenderer.endSwapChainRenderPass(commandBuffer);
 
             m_myRenderer.endFrame();
