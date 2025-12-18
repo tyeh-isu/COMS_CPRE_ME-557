@@ -163,7 +163,7 @@ void MyApplication::run()
     {
         m_myDevice,
         m_myRenderer.swapChainRenderPass(),
-        globalSetLayout->descriptorSetLayout() 
+        globalSetLayout->descriptorSetLayout()
     };
 
     MyPointLightRenderFactory pointLightFactory
