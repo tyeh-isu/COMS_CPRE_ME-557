@@ -150,7 +150,7 @@ void MyDevice::_pickPhysicalDevice()
         vkGetPhysicalDeviceProperties(device, &props);
         std::cout << "found physical device: " << props.deviceName << std::endl;
     }
-    
+
     // In case you have multiple graphics cards on your machine, e.g. a laptop
     // with an integrated graphics card and a high-performance standalone graphics card,
     // you would like to use the high-performance one.
