@@ -42,7 +42,7 @@ void MyApplication::run()
 {
     // Since texture image don't change every frame, only create one
     MyTexture myTexture(m_myDevice, TEXTURE_PATH);
-	
+
 	// Get the number of texture layers
     m_iNumTexureLayers = myTexture.numTextureLayers();
 
@@ -86,7 +86,7 @@ void MyApplication::run()
     {
         m_myDevice,
         m_myRenderer.swapChainRenderPass(),
-        globalSetLayout->descriptorSetLayout() 
+        globalSetLayout->descriptorSetLayout()
     };
 
     m_myWindow.bindMyApplication(this);
@@ -195,7 +195,6 @@ void MyApplication::_loadGameObjects()
     // Note: +X to the right, +Y down and +Z inside the screen
     auto floor = MyGameObject::createGameObject();
     floor.textureModel = mymodel;
-
     floor.transform.translation = { 0.f, 0.0f, 0.f };
     floor.transform.scale = { 2.f, 1.f, 2.f };
     floor.transform.rotation.x = glm::pi<float>() / 2.0f; // rotate 90

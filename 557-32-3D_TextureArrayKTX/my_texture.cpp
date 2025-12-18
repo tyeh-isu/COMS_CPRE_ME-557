@@ -4,7 +4,6 @@
 #include "stb_image.h"
 
 // std
-//#include <cassert>
 #include <cstring>
 #include <stdexcept>
 #include <cmath>
@@ -329,7 +328,7 @@ ktxResult MyTexture::_loadKTXFile(std::string filename, ktxTexture** target)
     }
 
     result = ktxTexture_CreateFromNamedFile(filename.c_str(), KTX_TEXTURE_CREATE_LOAD_IMAGE_DATA_BIT, target);
-	
+
     return result;
 }
 
