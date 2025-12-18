@@ -121,7 +121,6 @@ private:
     std::vector<VkSemaphore>     m_vVkImageAvailableSemaphores;
     std::vector<VkSemaphore>     m_vVkRenderFinishedSemaphores;
     std::vector<VkFence>         m_vVkInFlightFences;
-    std::vector<VkFence>         m_vVkImagesInFlight;
     size_t                       m_iCurrentFrame = 0;
 
     // Picking
