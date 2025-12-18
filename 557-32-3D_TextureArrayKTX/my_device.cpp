@@ -165,7 +165,7 @@ void MyDevice::_pickPhysicalDevice()
     {
         throw std::runtime_error("failed to find a suitable GPU!");
     }
-    
+
     VkPhysicalDeviceProperties properties;
     vkGetPhysicalDeviceProperties(m_vkPhysicalDevice, &properties);
     std::cout << "picked physical device: " << properties.deviceName << std::endl;
