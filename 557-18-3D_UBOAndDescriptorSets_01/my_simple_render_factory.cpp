@@ -66,6 +66,7 @@ void MySimpleRenderFactory::_createPipeline(VkRenderPass renderPass)
 
 void MySimpleRenderFactory::renderGameObjects(MyFrameInfo& frameInfo, std::vector<MyGameObject>& gameObjects)
 {
+    // Bind the descriptor set to the render pipeline
     m_pMyPipeline->bind(frameInfo.commandBuffer);
     auto projectionView = frameInfo.camera.projectionMatrix() * frameInfo.camera.viewMatrix();
 
