@@ -81,7 +81,7 @@ void MyApplication::run()
     {
         m_myDevice,
         m_myRenderer.swapChainRenderPass(),
-        globalSetLayout->descriptorSetLayout() 
+        globalSetLayout->descriptorSetLayout()
     };
 
     m_myWindow.bindMyApplication(this);
@@ -183,7 +183,6 @@ void MyApplication::_loadGameObjects()
     // Note: +X to the right, +Y down and +Z inside the screen
     auto viking_room = MyGameObject::createGameObject();
     viking_room.textureModel = mymodel;
-    
     viking_room.transform.translation = { 0.f, 0.0f, 0.f };
     viking_room.transform.scale = { 1.0f, 1.0f, 1.0f };
     viking_room.transform.rotation.x = -glm::pi<float>() / 2.0f; // rotate 90

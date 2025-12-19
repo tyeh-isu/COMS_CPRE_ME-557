@@ -31,7 +31,7 @@ MyApplication::MyApplication() :
         MyDescriptorPool::Builder(m_myDevice)
         .setMaxSets(MySwapChain::MAX_FRAMES_IN_FLIGHT)
         .addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, MySwapChain::MAX_FRAMES_IN_FLIGHT)
-        .addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1)
+        .addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MySwapChain::MAX_FRAMES_IN_FLIGHT)
         .build();
 
     _loadGameObjects();
@@ -84,14 +84,14 @@ void MyApplication::run()
     {
         m_myDevice,
         m_myRenderer.swapChainRenderPass(),
-        globalSetLayout->descriptorSetLayout() 
+        globalSetLayout->descriptorSetLayout()
     };
 
     MyTextureRenderFactory textureFactory
     {
         m_myDevice,
         m_myRenderer.swapChainRenderPass(),
-        globalSetLayout->descriptorSetLayout() 
+        globalSetLayout->descriptorSetLayout()
     };
 
     m_myWindow.bindMyApplication(this);
@@ -214,7 +214,6 @@ void MyApplication::_loadGameObjects()
     // Note: +X to the right, +Y down and +Z inside the screen
     auto viking_room = MyGameObject::createGameObject();
     viking_room.textureModel = mymodel;
-    
     viking_room.transform.translation = { 0.f, 0.0f, 0.f };
     viking_room.transform.scale = { 1.0f, 1.0f, 1.0f };
     viking_room.transform.rotation.x = -glm::pi<float>() / 2.0f; // rotate 90

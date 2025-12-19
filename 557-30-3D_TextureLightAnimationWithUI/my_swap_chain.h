@@ -83,9 +83,12 @@ private:
     std::vector<VkFramebuffer>   m_vVkSwapChainFramebuffers;
     VkRenderPass                 m_vkRenderPass;
 
+    // Depth
     std::vector<VkImage>         m_vVkDepthImages;
     std::vector<VkDeviceMemory>  m_vVkDepthImageMemorys;
     std::vector<VkImageView>     m_vVkDepthImageViews;
+
+    // Swapchain
     std::vector<VkImage>         m_vVkSwapChainImages;
     std::vector<VkImageView>     m_vVkSwapChainImageViews;
 
@@ -98,7 +101,6 @@ private:
     std::vector<VkSemaphore>     m_vVkImageAvailableSemaphores;
     std::vector<VkSemaphore>     m_vVkRenderFinishedSemaphores;
     std::vector<VkFence>         m_vVkInFlightFences;
-    std::vector<VkFence>         m_vVkImagesInFlight;
     size_t                       m_iCurrentFrame = 0;
 
     // Picking

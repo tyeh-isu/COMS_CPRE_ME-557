@@ -181,7 +181,7 @@ void MyDevice::_pickPhysicalDevice()
 
     m_vkPhysicalDevice = bestDevice;
     m_vkMSAASamples = _getMaxUsableSampleCount();
-    
+
     VkPhysicalDeviceProperties properties;
     vkGetPhysicalDeviceProperties(m_vkPhysicalDevice, &properties);
     std::cout << "picked physical device: " << properties.deviceName << std::endl;
