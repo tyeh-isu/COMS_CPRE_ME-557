@@ -54,7 +54,7 @@ std::unique_ptr<MyModel> MyModel::createModelFromFile(
 void MyModel::_createVertexBuffer(const std::vector<Vertex>& vertices, bool bUseIndexBuffer)
 {
     m_iVertexCount = static_cast<uint32_t>(vertices.size());
-    assert(m_iVertexCount >= 3 && "Vertext count must be at least 3");
+    assert(m_iVertexCount >= 3 && "Vertex count must be at least 3");
     
     // number of bytes need to store the vertex buffer
     // Note: we assume Color and Position are interleaved here
@@ -162,7 +162,7 @@ std::vector<VkVertexInputBindingDescription> MyModel::getBindingDescriptions()
     bindingDescriptions[0].binding = 0;
     bindingDescriptions[0].stride = sizeof(Vertex);
     bindingDescriptions[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-  
+
     return bindingDescriptions;
 }
 

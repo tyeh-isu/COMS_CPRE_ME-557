@@ -17,7 +17,7 @@ MyModel::~MyModel()
 void MyModel::_createVertexBuffer(const std::vector<Vertex>& vertices)
 {
     m_iVertexCount = static_cast<uint32_t>(vertices.size());
-    assert(m_iVertexCount >= 3 && "Vertext count must be at least 3");
+    assert(m_iVertexCount >= 3 && "Vertex count must be at least 3");
     
     // number of bytes need to store the vertex buffer
     // Note: we assume Color and Position are interleaved here
@@ -35,7 +35,7 @@ void MyModel::_createVertexBuffer(const std::vector<Vertex>& vertices)
     	VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
     	m_vkVertexBuffer,
     	m_vkVertexBufferMemory);
-    
+
     // Because of VK_MEMORY_PROPERTY_HOST_COHERENT_BIT is set
     // the memory of data on CPU side will copy to the memory to GPU automatically
     void* data;
@@ -62,7 +62,7 @@ std::vector<VkVertexInputBindingDescription> MyModel::getBindingDescriptions()
     bindingDescriptions[0].binding = 0;
     bindingDescriptions[0].stride = sizeof(Vertex);
     bindingDescriptions[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-  
+
     return bindingDescriptions;
 }
 

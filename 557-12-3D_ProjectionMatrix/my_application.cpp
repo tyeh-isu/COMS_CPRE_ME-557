@@ -46,8 +46,8 @@ void MyApplication::run()
             // because Y is down by default for Vulkan, when we set top to be minus value, we can flip the coordinate
             // such that Y is up. Because we move the part 2.5 units, the near and far value needs to cover the model
             // Also, near and far will automatically apply negative values
-            camera.setOrthographicProjection(-apsectRatio, apsectRatio, -1.0f, 1.0f, -3.0f, 3.0f); 
- 
+            camera.setOrthographicProjection(-apsectRatio, apsectRatio, -1.0f, 1.0f, -3.0f, 3.0f);
+
         // Please note that commandBuffer could be null pointer
         // if the swapChain needs to be recreated
         if (auto commandBuffer = m_myRenderer.beginFrame())

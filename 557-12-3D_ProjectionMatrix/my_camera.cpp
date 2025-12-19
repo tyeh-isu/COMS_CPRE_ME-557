@@ -23,7 +23,7 @@ void MyCamera::setOrthographicProjection(
 void MyCamera::setPerspectiveProjection(float fovy, float aspect, float near, float far)
 {
     assert(glm::abs(aspect - std::numeric_limits<float>::epsilon()) > 0.0f);
-    
+
     m_m4ProjectionMatrix = glm::perspective(fovy, aspect, near, far);
 
     // *-1 to make it right hand coordinatge
