@@ -84,9 +84,9 @@ class MyDevice
     void _createLogicalDevice();
     void _createCommandPool();
     uint32_t _findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
-    
+
     // helper functions
-    //bool _isDeviceSuitable(VkPhysicalDevice device);
+    // bool _isDeviceSuitable(VkPhysicalDevice device);
     std::vector<const char *> _getRequiredExtensions();
     bool _checkValidationLayerSupport();
     QueueFamilyIndices _findQueueFamilies(VkPhysicalDevice device);
@@ -102,7 +102,7 @@ class MyDevice
 
     MyWindow                  &m_myWindow;
     VkCommandPool              m_vkCommandPool;
-    
+
     VkDevice                   m_vkDevice;
     VkSurfaceKHR               m_vkSurface;
     VkQueue                    m_vkGraphicsQueue;
