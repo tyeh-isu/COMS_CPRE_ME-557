@@ -81,7 +81,7 @@ void MyApplication::run()
     {
         m_myDevice,
         m_myRenderer.swapChainRenderPass(),
-        globalSetLayout->descriptorSetLayout() 
+        globalSetLayout->descriptorSetLayout()
     };
 
     MyPointLightRenderFactory pointLightFactory
@@ -162,8 +162,13 @@ void MyApplication::run()
 
             // render
             m_myRenderer.beginSwapChainRenderPass(commandBuffer);
+
+            // render game objects
             simpleRenderFactory.renderGameObjects(frameInfo);
+
+            // render light
             pointLightFactory.render(frameInfo);
+
             m_myRenderer.endSwapChainRenderPass(commandBuffer);
 
             m_myRenderer.endFrame();
