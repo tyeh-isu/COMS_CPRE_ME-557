@@ -150,7 +150,7 @@ void MyApplication::_recreateSwpChain()
     else
     {
         m_pMySwapChain = std::make_unique<MySwapChain>(m_myDevice, extent, std::move(m_pMySwapChain));
-        
+
         if (m_pMySwapChain->imageCount() != m_vVkCommandBuffers.size())
         {
             _freeCommandBuffers();

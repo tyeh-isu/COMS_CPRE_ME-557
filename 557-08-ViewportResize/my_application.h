@@ -43,7 +43,7 @@ private:
 
 	std::unique_ptr<MySwapChain> m_pMySwapChain; // change to unique pointer so we can recreate one after window resize
 	std::unique_ptr<MyPipeline>  m_pMyPipeline;
-	
+
 	VkPipelineLayout             m_vkPipelineLayout;
 	std::vector<VkCommandBuffer> m_vVkCommandBuffers;
 	std::unique_ptr<MyModel>     m_pMyModel;

@@ -124,7 +124,7 @@ void MyDevice::_createInstance()
     {
         throw std::runtime_error("failed to create instance!");
     }
-    
+
     _hasGflwRequiredInstanceExtensions();
 }
 

@@ -103,7 +103,6 @@ void MyPipeline::_createGraphicsPipeline(
     pipelineInfo.pColorBlendState = &configInfo.colorBlendInfo;
     pipelineInfo.pDepthStencilState = &configInfo.depthStencilInfo;
     pipelineInfo.pDynamicState = nullptr;  // Optional
-    
 
     pipelineInfo.layout = configInfo.pipelineLayout;
     pipelineInfo.renderPass = configInfo.renderPass;
@@ -111,7 +110,7 @@ void MyPipeline::_createGraphicsPipeline(
 
     pipelineInfo.basePipelineIndex = -1;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
-    
+
     if (vkCreateGraphicsPipelines(
         m_myDevice.device(),
         VK_NULL_HANDLE,

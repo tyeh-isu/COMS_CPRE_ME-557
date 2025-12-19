@@ -14,10 +14,7 @@
 class MySwapChain 
 {
 public:
-  
-    // Don't worry about synchronizaiton yet, just remener at most
-    // 2 frames can be submitted for rendering at once
-    static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
+    static constexpr int MAX_FRAMES_IN_FLIGHT = 3;
 
     MySwapChain(MyDevice &deviceRef, VkExtent2D windowExtent);
     MySwapChain(MyDevice& deviceRef, VkExtent2D windowExtent, std::shared_ptr<MySwapChain> previous);
@@ -68,9 +65,12 @@ private:
     std::vector<VkFramebuffer>   m_vVkSwapChainFramebuffers;
     VkRenderPass                 m_vkRenderPass;
 
+    // Depth
     std::vector<VkImage>         m_vVkDepthImages;
     std::vector<VkDeviceMemory>  m_vVkDepthImageMemorys;
     std::vector<VkImageView>     m_vVkDepthImageViews;
+
+    // Swapchain
     std::vector<VkImage>         m_vVkSwapChainImages;
     std::vector<VkImageView>     m_vVkSwapChainImageViews;
 
@@ -83,7 +83,6 @@ private:
     std::vector<VkSemaphore>     m_vVkImageAvailableSemaphores;
     std::vector<VkSemaphore>     m_vVkRenderFinishedSemaphores;
     std::vector<VkFence>         m_vVkInFlightFences;
-    std::vector<VkFence>         m_vVkImagesInFlight;
     size_t                       m_iCurrentFrame = 0;
 };
 

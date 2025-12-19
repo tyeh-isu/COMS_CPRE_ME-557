@@ -11,7 +11,8 @@
 
 MySwapChain::MySwapChain(MyDevice &deviceRef, VkExtent2D extent)
     : m_myDevice{deviceRef}, 
-      m_vkWindowExtent{extent}
+      m_vkWindowExtent{extent},
+      m_iCurrentFrame(0)
 {
     _init();
 }
@@ -19,7 +20,8 @@ MySwapChain::MySwapChain(MyDevice &deviceRef, VkExtent2D extent)
 MySwapChain::MySwapChain(MyDevice& deviceRef, VkExtent2D extent, std::shared_ptr<MySwapChain> previous)
     : m_myDevice{ deviceRef }, 
       m_vkWindowExtent{ extent },
-      m_pMyOldSwapChain{ previous }
+      m_pMyOldSwapChain{ previous },
+      m_iCurrentFrame(0)
 {
     _init();
 
@@ -68,14 +70,17 @@ MySwapChain::~MySwapChain()
     // cleanup synchronization objects
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
     {
-        vkDestroySemaphore(m_myDevice.device(), m_vVkRenderFinishedSemaphores[i], nullptr);
         vkDestroySemaphore(m_myDevice.device(), m_vVkImageAvailableSemaphores[i], nullptr);
+        vkDestroySemaphore(m_myDevice.device(), m_vVkRenderFinishedSemaphores[i], nullptr);
         vkDestroyFence(m_myDevice.device(), m_vVkInFlightFences[i], nullptr);
     }
 }
 
 VkResult MySwapChain::acquireNextImage(uint32_t *imageIndex)
 {
+    // Follow this pattern
+    // https://docs.vulkan.org/guide/latest/swapchain_semaphore_reuse.html
+
     // Note: CPU will wait here at fences
     vkWaitForFences(
         m_myDevice.device(),
@@ -83,6 +88,9 @@ VkResult MySwapChain::acquireNextImage(uint32_t *imageIndex)
         &m_vVkInFlightFences[m_iCurrentFrame],
         VK_TRUE,
         std::numeric_limits<uint64_t>::max());
+
+    // When CPU is free, reset the fence
+    vkResetFences(m_myDevice.device(), 1, &m_vVkInFlightFences[m_iCurrentFrame]);
 
     VkResult result = vkAcquireNextImageKHR(
         m_myDevice.device(),
@@ -97,30 +105,26 @@ VkResult MySwapChain::acquireNextImage(uint32_t *imageIndex)
 
 VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint32_t *imageIndex)
 {
-    if (m_vVkImagesInFlight[*imageIndex] != VK_NULL_HANDLE)
-    {
-        vkWaitForFences(m_myDevice.device(), 1, &m_vVkImagesInFlight[*imageIndex], VK_TRUE, UINT64_MAX);
-    }
-
-    m_vVkImagesInFlight[*imageIndex] = m_vVkInFlightFences[m_iCurrentFrame];
-
+    // Follow this pattern
+    // https://docs.vulkan.org/guide/latest/swapchain_semaphore_reuse.html
     VkSubmitInfo submitInfo = {};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-    VkSemaphore waitSemaphores[] = {m_vVkImageAvailableSemaphores[m_iCurrentFrame]};
+    // Please note that m_iCurrentFrame may not be the same as *imageIndex that passed in from MyRenderer
+    // m_iCurrentFrame identifies the current in-flight frame (meaning the frame that has been submitted to GPU but hasn't yet finished)
+    // *imageIndex identifies the acquired frame from the swap chain to be submitted to GPU
+    VkSemaphore acquire_semaphore [] = {m_vVkImageAvailableSemaphores[m_iCurrentFrame]};
+    VkSemaphore submit_semaphore [] = {m_vVkRenderFinishedSemaphores[*imageIndex]};
+
     VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
     submitInfo.waitSemaphoreCount = 1;
-    submitInfo.pWaitSemaphores = waitSemaphores;
+    submitInfo.pWaitSemaphores = acquire_semaphore;
     submitInfo.pWaitDstStageMask = waitStages;
- 
+    submitInfo.signalSemaphoreCount = 1;
+    submitInfo.pSignalSemaphores = submit_semaphore;
     submitInfo.commandBufferCount = 1;
     submitInfo.pCommandBuffers = buffers;
 
-    VkSemaphore signalSemaphores[] = {m_vVkRenderFinishedSemaphores[m_iCurrentFrame]};
-    submitInfo.signalSemaphoreCount = 1;
-    submitInfo.pSignalSemaphores = signalSemaphores;
-
-    vkResetFences(m_myDevice.device(), 1, &m_vVkInFlightFences[m_iCurrentFrame]);
     if (vkQueueSubmit(m_myDevice.graphicsQueue(), 1, &submitInfo, m_vVkInFlightFences[m_iCurrentFrame]) != VK_SUCCESS) 
     {
         throw std::runtime_error("failed to submit draw command buffer!");
@@ -128,18 +132,17 @@ VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint3
 
     VkPresentInfoKHR presentInfo = {};
     presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-
     presentInfo.waitSemaphoreCount = 1;
-    presentInfo.pWaitSemaphores = signalSemaphores;
+    presentInfo.pWaitSemaphores = submit_semaphore;
 
     VkSwapchainKHR swapChains[] = { m_vkSwapChain };
     presentInfo.swapchainCount = 1;
     presentInfo.pSwapchains = swapChains;
-
     presentInfo.pImageIndices = imageIndex;
-    
+
     auto result = vkQueuePresentKHR(m_myDevice.presentQueue(), &presentInfo);
 
+    // Update frame index
     m_iCurrentFrame = (m_iCurrentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 
     return result;
@@ -189,10 +192,8 @@ void MySwapChain::_createSwapChain()
 
     createInfo.preTransform = swapChainSupport.capabilities.currentTransform;
     createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-
     createInfo.presentMode = presentMode;
     createInfo.clipped = VK_TRUE;
-
     createInfo.oldSwapchain = m_pMyOldSwapChain == nullptr ? VK_NULL_HANDLE : m_pMyOldSwapChain->m_vkSwapChain;
 
     if (vkCreateSwapchainKHR(m_myDevice.device(), &createInfo, nullptr, &m_vkSwapChain) != VK_SUCCESS)
@@ -305,7 +306,7 @@ void MySwapChain::_createFramebuffers()
     for (size_t i = 0; i < imageCount(); i++) 
     {
         std::array<VkImageView, 2> attachments = {m_vVkSwapChainImageViews[i], m_vVkDepthImageViews[i]};
-        
+
         VkFramebufferCreateInfo framebufferInfo = {};
         framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
         framebufferInfo.renderPass = m_vkRenderPass;
@@ -351,7 +352,7 @@ void MySwapChain::_createDepthResources()
         imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
         imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
         imageInfo.flags = 0;
-        
+
         m_myDevice.createImageWithInfo(
             imageInfo,
             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
@@ -368,7 +369,7 @@ void MySwapChain::_createDepthResources()
         viewInfo.subresourceRange.levelCount = 1;
         viewInfo.subresourceRange.baseArrayLayer = 0;
         viewInfo.subresourceRange.layerCount = 1;
-        
+
         if (vkCreateImageView(m_myDevice.device(), &viewInfo, nullptr, &m_vVkDepthImageViews[i]) != VK_SUCCESS)
         {
             throw std::runtime_error("failed to create texture image view!");
@@ -381,7 +382,6 @@ void MySwapChain::_createSyncObjects()
     m_vVkImageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
     m_vVkRenderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
     m_vVkInFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
-    m_vVkImagesInFlight.resize(imageCount(), VK_NULL_HANDLE);
 
     VkSemaphoreCreateInfo semaphoreInfo = {};
     semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
