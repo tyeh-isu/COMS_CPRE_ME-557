@@ -124,7 +124,7 @@ void MyDevice::_createInstance()
     {
         throw std::runtime_error("failed to create instance!");
     }
-    
+
     _hasGflwRequiredInstanceExtensions();
 }
 
@@ -248,19 +248,19 @@ void MyDevice::_createSurface()
 bool MyDevice::_isDeviceSuitable(VkPhysicalDevice device) 
 {
     QueueFamilyIndices indices = _findQueueFamilies(device);
-    
+
     bool extensionsSupported = _checkDeviceExtensionSupport(device);
-    
+
     bool swapChainAdequate = false;
     if (extensionsSupported) 
     {
         SwapChainSupportDetails swapChainSupport = _querySwapChainSupport(device);
         swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
     }
-    
+
     VkPhysicalDeviceFeatures supportedFeatures;
     vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
-    
+
     return indices.isComplete() && extensionsSupported && swapChainAdequate &&
            supportedFeatures.samplerAnisotropy;
 }
@@ -588,20 +588,20 @@ void MyDevice::createImageWithInfo(
    {
        throw std::runtime_error("failed to create image!");
    }
-   
+
    VkMemoryRequirements memRequirements;
    vkGetImageMemoryRequirements(m_vkDevice, image, &memRequirements);
-   
+
    VkMemoryAllocateInfo allocInfo{};
    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
    allocInfo.allocationSize = memRequirements.size;
    allocInfo.memoryTypeIndex = _findMemoryType(memRequirements.memoryTypeBits, properties);
-   
+
    if (vkAllocateMemory(m_vkDevice, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS)
    {
        throw std::runtime_error("failed to allocate image memory!");
    }
-   
+
    if (vkBindImageMemory(m_vkDevice, image, imageMemory, 0) != VK_SUCCESS)
    {
        throw std::runtime_error("failed to bind image memory!");
