@@ -64,7 +64,7 @@ void MyWindow::s_keyboardCallback(GLFWwindow* window, int key, int scancode, int
 {
     // Handle keyboard events
 	auto mywindow = reinterpret_cast<MyWindow*>(glfwGetWindowUserPointer(window));
-	
+
 	if ((key == GLFW_KEY_C || key == GLFW_KEY_M || key == GLFW_KEY_ESCAPE) &&
 		 action == GLFW_PRESS)
 	{
