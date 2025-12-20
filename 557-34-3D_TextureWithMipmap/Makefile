@@ -71,7 +71,7 @@ ifneq ($(PLATFORM), Windows)
 endif
 	$(RUNSCRIP)
 
-run:
+run: $(APP_NAME)
 	./$(APP_NAME)
 
 clean:
