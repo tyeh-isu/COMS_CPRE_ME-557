@@ -31,7 +31,7 @@ MyApplication::MyApplication() :
         MyDescriptorPool::Builder(m_myDevice)
         .setMaxSets(MySwapChain::MAX_FRAMES_IN_FLIGHT)
         .addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, MySwapChain::MAX_FRAMES_IN_FLIGHT)
-        .addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, TEXTURE_ARRAY_SIZE)
+        .addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, TEXTURE_ARRAY_SIZE * MySwapChain::MAX_FRAMES_IN_FLIGHT)
         .build();
 
     _loadGameObjects();
@@ -47,7 +47,11 @@ void MyApplication::run()
     for (uint32_t ii = 0; ii < TEXTURE_ARRAY_SIZE; ++ii)
     {
         char filename[32];
+#ifdef __WINDOWS__
         sprintf_s(filename, 32, "./textures/%i.png", ii);
+#else
+        snprintf(filename, 32, "./textures/%i.png", ii);  
+#endif
         myTexture[ii].Build(&m_myDevice, filename);
 
         textureDescriptorImageInfos[ii] = myTexture[ii].descriptorInfo();
