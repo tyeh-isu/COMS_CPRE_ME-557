@@ -1,4 +1,7 @@
 #include "my_device.h"
+#ifdef __DARWIN__
+#include <vulkan/vulkan_beta.h>
+#endif
 
 // std headers
 #include <cstring>
@@ -53,7 +56,7 @@ void DestroyDebugUtilsMessengerEXT(
 
 // class member functions
 MyDevice::MyDevice(MyWindow &window) :
-    m_myWindow{ window } 
+    m_myWindow{ window }
 {
     _createInstance();      // Create a Vulkan instance and connect our application window with Vulkan instance
     _setupDebugMessenger(); // Set up validation layer to check for error during debug, and uncheck for release build
@@ -213,6 +216,18 @@ void MyDevice::_createLogicalDevice()
        createInfo.enabledLayerCount = 0;
     }
 
+#ifdef __DARWIN__
+    // Add required instance extensions to support VK_KHR_portability_subset
+    // https://vulkan.lunarg.com/doc/view/1.4.313.0/mac/antora/spec/latest/chapters/devsandqueues.html#VUID-VkDeviceCreateInfo-pProperties-04451
+    const std::vector<const char*> instanceExtensions = {
+        VK_KHR_SWAPCHAIN_EXTENSION_NAME,
+        VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME // Need to include <vulkan/vulkan_beta.h>
+    };
+
+    createInfo.enabledExtensionCount = static_cast<uint32_t>(instanceExtensions.size());
+    createInfo.ppEnabledExtensionNames = instanceExtensions.data();
+#endif
+
     if (vkCreateDevice(m_vkPhysicalDevice, &createInfo, nullptr, &m_vkDevice) != VK_SUCCESS)
     {
        throw std::runtime_error("failed to create logical device!");
@@ -311,7 +326,7 @@ bool MyDevice::_checkValidationLayerSupport()
                 break;
             }
         }
-    
+
         if (!layerFound)
         {
             return false;
