@@ -48,7 +48,7 @@ else ifeq ($(PLATFORM), Linux)
 	DEFINES = __LINUX__
 endif
 
-CFLAGS = $(DEBUG) -I. -I./ktx/include -I$(VULKAN_SDK)/include -I$(GLM_PATH) -I$(GLFW_PATH)
+CFLAGS = $(DEBUG) -I. -I./ktx/include -I./ktx/other_include -I$(VULKAN_SDK)/include -I$(GLM_PATH) -I$(GLFW_PATH)
 include LOCAL_SRCS
 
 # Object files
