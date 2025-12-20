@@ -6,7 +6,7 @@ $VULKAN_SDK/bin/glslc ./shaders/pick_shader.vert -o ./shaders/pick_shader.vert.s
 $VULKAN_SDK/bin/glslc ./shaders/pick_shader.frag -o ./shaders/pick_shader.frag.spv;
 $VULKAN_SDK/bin/glslc ./shaders/texture_shader.vert -o ./shaders/texture_shader.vert.spv;
 $VULKAN_SDK/bin/glslc ./shaders/texture_shader.frag -o ./shaders/texture_shader.frag.spv;
-%VULKAN_SDK%/bin/glslc.exe ./shaders/offscreen_shader.vert -o ./shaders/offscreen_shader.vert.spv
-%VULKAN_SDK%/bin/glslc.exe ./shaders/offscreen_shader.frag -o ./shaders/offscreen_shader.frag.spv
-%VULKAN_SDK%/bin/glslc.exe ./shaders/debug_shader.vert -o ./shaders/debug_shader.vert.spv
-%VULKAN_SDK%/bin/glslc.exe ./shaders/debug_shader.frag -o ./shaders/debug_shader.frag.spv
+$VULKAN_SDK/bin/glslc ./shaders/offscreen_shader.vert -o ./shaders/offscreen_shader.vert.spv;
+$VULKAN_SDK/bin/glslc ./shaders/offscreen_shader.frag -o ./shaders/offscreen_shader.frag.spv;
+$VULKAN_SDK/bin/glslc ./shaders/debug_shader.vert -o ./shaders/debug_shader.vert.spv;
+$VULKAN_SDK/bin/glslc ./shaders/debug_shader.frag -o ./shaders/debug_shader.frag.spv;
