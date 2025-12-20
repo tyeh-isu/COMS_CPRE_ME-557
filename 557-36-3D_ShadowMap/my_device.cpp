@@ -369,7 +369,7 @@ bool MyDevice::_checkValidationLayerSupport()
                 break;
             }
         }
-    
+
         if (!layerFound)
         {
             return false;
