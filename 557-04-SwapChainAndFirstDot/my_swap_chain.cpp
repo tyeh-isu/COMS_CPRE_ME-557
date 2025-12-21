@@ -90,7 +90,7 @@ VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint3
     {
         vkWaitForFences(m_myDevice.device(), 1, &m_vVkImagesInFlight[*imageIndex], VK_TRUE, UINT64_MAX);
     }
-    
+
     m_vVkImagesInFlight[*imageIndex] = m_vVkInFlightFences[m_iCurrentFrame];*/
 
     VkSubmitInfo submitInfo = {};

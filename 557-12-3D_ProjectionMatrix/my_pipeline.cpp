@@ -107,7 +107,7 @@ void MyPipeline::_createGraphicsPipeline(
 
     pipelineInfo.basePipelineIndex = -1;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
-    
+
     if (vkCreateGraphicsPipelines(
         m_myDevice.device(),
         VK_NULL_HANDLE,

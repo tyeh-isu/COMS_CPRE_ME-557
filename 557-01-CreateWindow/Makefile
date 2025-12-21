@@ -30,7 +30,7 @@ else ifeq ($(PLATFORM), Darwin)
 	GLM_PATH = $(VULKAN_SDK)/include
 	GLFW_PATH = $(VULKAN_SDK)/glfw-3.4.bin.MACOS/include
 	GLFW_LIB_PATH = $(VULKAN_SDK)/glfw-3.4.bin.MACOS/lib-arm64
-	LDFLAGS = -L$(VULKAN_SDK)/lib -L$(GLFW_LIB_PATH) -lvulkan -lglfw3 -framework Cocoa -framework IOKit
+	LDFLAGS = -L$(VULKAN_SDK)/lib -L$(GLFW_LIB_PATH) -rpath $(VULKAN_SDK)/lib -lvulkan -lglfw3 -framework Cocoa -framework IOKit
 
 # Linux definitions
 else ifeq ($(PLATFORM), Linux)
@@ -59,7 +59,7 @@ $(APPNAME): $(OBJECTS)
 %.o: %.cpp
 	$(CXX) -D$(DEFINES) $(CFLAGS) -c $< -o $@
 
-run:
+run: $(APP_NAME)
 	./$(APP_NAME)
 
 clean:
