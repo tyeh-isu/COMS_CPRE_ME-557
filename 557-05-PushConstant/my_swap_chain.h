@@ -16,6 +16,7 @@ public:
   
     // Don't worry about synchronizaiton yet, just remener at most
     // 2 frames can be submitted for rendering at once
+	// Please ignore the validation layer error messages for now
     static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
 
     MySwapChain(MyDevice &deviceRef, VkExtent2D windowExtent);

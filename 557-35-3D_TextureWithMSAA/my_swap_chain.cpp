@@ -9,6 +9,7 @@
 #include <set>
 #include <stdexcept>
 
+// Initialize MAX_FRAMES_IN_FLIGHT to 3 for now that works for most modern graphics cards
 int MySwapChain::MAX_FRAMES_IN_FLIGHT = 3;
 
 MySwapChain::MySwapChain(MyDevice &deviceRef, VkExtent2D extent)

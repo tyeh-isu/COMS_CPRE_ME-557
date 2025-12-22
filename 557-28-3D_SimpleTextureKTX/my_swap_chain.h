@@ -14,7 +14,8 @@
 class MySwapChain 
 {
 public:
-    static constexpr int MAX_FRAMES_IN_FLIGHT = 3;
+    // Please note that the value of MAX_FRAMES_IN_FLIGHT depends on the capability of the graphics card
+    static int MAX_FRAMES_IN_FLIGHT;
 
     MySwapChain(MyDevice &deviceRef, VkExtent2D windowExtent);
     MySwapChain(MyDevice& deviceRef, VkExtent2D windowExtent, std::shared_ptr<MySwapChain> previous);
