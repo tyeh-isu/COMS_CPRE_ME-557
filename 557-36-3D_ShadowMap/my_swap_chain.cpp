@@ -9,6 +9,8 @@
 #include <set>
 #include <stdexcept>
 
+int MySwapChain::MAX_FRAMES_IN_FLIGHT = 3;
+
 MySwapChain::MySwapChain(MyDevice &deviceRef, VkExtent2D extent)
     : m_myDevice{deviceRef}, 
       m_vkWindowExtent{extent},
@@ -211,6 +213,14 @@ void MySwapChain::_createSwapChainResources()
         imageCount > swapChainSupport.capabilities.maxImageCount)
     {
         imageCount = swapChainSupport.capabilities.maxImageCount;
+    }
+
+    // Please note that MAX_FRAMES_IN_FLIGHT should be greater than or equal to imageCount
+    if (MAX_FRAMES_IN_FLIGHT < imageCount)
+    {
+        std::cerr << "Note: MAX_FRAMES_IN_FLIGHT in MySwapChain is smaller than " << imageCount << std::endl;
+        std::cerr << "      Set MAX_FRAMES_IN_FLIGHT to " << imageCount << " for this program." << std::endl;
+        MySwapChain::MAX_FRAMES_IN_FLIGHT = imageCount;
     }
 
     VkSwapchainCreateInfoKHR createInfo = {};
