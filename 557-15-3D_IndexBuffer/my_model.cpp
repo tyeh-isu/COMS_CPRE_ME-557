@@ -1,5 +1,6 @@
 #include "my_model.h"
 #include <cassert>
+#include <cstring>
 
 MyModel::MyModel(MyDevice& device, const std::vector<Vertex>& vertices) :
 	m_myDevice{ device },
