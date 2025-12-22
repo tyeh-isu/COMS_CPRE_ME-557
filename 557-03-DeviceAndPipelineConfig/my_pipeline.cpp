@@ -43,8 +43,8 @@ std::vector<char> MyPipeline::_readFile(const std::string& filename)
 void MyPipeline::_createGraphicsPipeline(
     const std::string& vertFilepath, const std::string& fragFilepath, const PipelineConfigInfo& configInfo)
 {
-    // NOTE: When running this program, it will fail to create pipeline
-    // Take out these two lines to see how the evauluation layer works
+    // NOTE: When running this program, it will fail to create pipeline and exit the program
+    // Take out these two lines to see how the validation layer works
     assert(configInfo.pipelineLayout != VK_NULL_HANDLE && "Pipeline cannot be created with null pipeline layout");
     assert(configInfo.renderPass != VK_NULL_HANDLE && "RenderPass cannot be created with null pipeline layout");
 
