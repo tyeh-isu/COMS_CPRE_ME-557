@@ -14,7 +14,7 @@ class MySwapChain
 {
 public:
   
-    // Don't worry about synchronizaiton yet, just remener at most
+    // Don't worry about synchronization yet, just remember at most
     // 2 frames can be submitted for rendering at once
 	// Please ignore the validation layer error messages for now
     static constexpr int MAX_FRAMES_IN_FLIGHT = 2;

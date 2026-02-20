@@ -117,18 +117,17 @@ VkResult MySwapChain::submitCommandBuffers(const VkCommandBuffer *buffers, uint3
 
     VkPresentInfoKHR presentInfo = {};
     presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
- 
     presentInfo.waitSemaphoreCount = 1;
     presentInfo.pWaitSemaphores = signalSemaphores;
- 
+
     VkSwapchainKHR swapChains[] = { m_vkSwapChain };
     presentInfo.swapchainCount = 1;
     presentInfo.pSwapchains = swapChains;
-
     presentInfo.pImageIndices = imageIndex;
-    
+
     auto result = vkQueuePresentKHR(m_myDevice.presentQueue(), &presentInfo);
 
+    // Update frame index
     m_iCurrentFrame = (m_iCurrentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 
     return result;
@@ -178,7 +177,6 @@ void MySwapChain::_createSwapChain()
 
     createInfo.preTransform = swapChainSupport.capabilities.currentTransform;
     createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-
     createInfo.presentMode = presentMode;
     createInfo.clipped = VK_TRUE;
 
@@ -294,7 +292,7 @@ void MySwapChain::_createFramebuffers()
     for (size_t i = 0; i < imageCount(); i++) 
     {
         std::array<VkImageView, 2> attachments = {m_vVkSwapChainImageViews[i], m_vVkDepthImageViews[i]};
-        
+
         VkFramebufferCreateInfo framebufferInfo = {};
         framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
         framebufferInfo.renderPass = m_vkRenderPass;
@@ -341,7 +339,7 @@ void MySwapChain::_createDepthResources()
         imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
         imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
         imageInfo.flags = 0;
-        
+
         m_myDevice.createImageWithInfo(
             imageInfo,
             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
@@ -358,7 +356,7 @@ void MySwapChain::_createDepthResources()
         viewInfo.subresourceRange.levelCount = 1;
         viewInfo.subresourceRange.baseArrayLayer = 0;
         viewInfo.subresourceRange.layerCount = 1;
-        
+
         if (vkCreateImageView(m_myDevice.device(), &viewInfo, nullptr, &m_vVkDepthImageViews[i]) != VK_SUCCESS)
         {
             throw std::runtime_error("failed to create texture image view!");
