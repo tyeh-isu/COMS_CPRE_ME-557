@@ -148,7 +148,7 @@ void MyApplication::run()
         float frameTime = std::chrono::duration<float, std::chrono::seconds::period>(newTime - currentTime).count();
         currentTime = newTime;
 
-        cameraController.moveInPlaneXZ(m_myWindow.glfwWindow(), frameTime, viewerObject);
+        cameraController.moveInPlaneXZ(m_myWindow, frameTime, viewerObject);
         camera.setViewYXZ(viewerObject.transform.translation, viewerObject.transform.rotation);
 
         float apsectRatio = m_myRenderer.aspectRatio();
