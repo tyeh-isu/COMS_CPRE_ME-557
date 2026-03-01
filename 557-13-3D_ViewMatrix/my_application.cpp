@@ -13,11 +13,16 @@
 // Std
 #include <stdexcept>
 #include <array>
+#include <iostream>
+#include <iomanip>
 
 MyApplication::MyApplication() :
     m_bPerspectiveProjection(true)
 {
     _loadGameObjects();
+    m_cameraviewXYZ[0] = 0.0f;
+    m_cameraviewXYZ[1] = 0.0f;
+    m_cameraviewXYZ[2] = 0.0f;
 }
 
 void MyApplication::run() 
@@ -28,11 +33,12 @@ void MyApplication::run()
     MySimpleRenderFactory simpleRenderFactory{ m_myDevice, m_myRenderer.swapChainRenderPass() };
     MyCamera camera{};
 
-	// Change camera position
-	camera.setViewTarget(glm::vec3(0.5f, 0.4, 2.5f), glm::vec3(0.0f, 0.0f, 0.0f));
-
-    while (!m_myWindow.shouldClose()) 
+    while (!m_myWindow.shouldClose())
     {
+        // Change camera position based on the keyboard input
+        // Add 1.0f in Z direction to make sure we have a valid view direction initially
+        camera.setViewTarget(glm::vec3(0.0f + m_cameraviewXYZ[0], 0.0f + m_cameraviewXYZ[1], 1.0f + m_cameraviewXYZ[2]), glm::vec3(0.0f, 0.0f, 0.0f));
+
         // Note: depending on the platform (Windows, Linux or Mac), this function
         // will cause the event proecssing to block during a Window move, resize or
         // menu operation. Users can use the "window refresh callback" to redraw the
@@ -76,6 +82,19 @@ void MyApplication::switchProjectionMatrix()
 {
     // Switch between perspective and orthographic projection matrix
     m_bPerspectiveProjection = !m_bPerspectiveProjection;
+}
+
+void MyApplication::handleMovement(MyAppKeyMap key)
+{
+    std::cout << std::fixed << std::setprecision(1);
+    if (key == KEY_LEFT)          { m_cameraviewXYZ[0] += 0.1f; std::cout << "Shift view coordinate system Left "; }
+    else if (key == KEY_RIGHT)    { m_cameraviewXYZ[0] -= 0.1f; std::cout << "Shift view coordinate system Right "; }
+    else if (key == KEY_UP)       { m_cameraviewXYZ[1] += 0.1f; std::cout << "Shift view coordinate system Up "; }
+    else if (key == KEY_DOWN)     { m_cameraviewXYZ[1] -= 0.1f; std::cout << "Shift view coordinate system Down "; }
+	else if (key == KEY_FORWARD)  { m_cameraviewXYZ[2] -= 0.1f; std::cout << "Shift view coordinate system Forward "; }  // Note: -z is forward
+    else if (key == KEY_BACKWARD) { m_cameraviewXYZ[2] += 0.1f; std::cout << "Shift view coordinate system Backward "; } // Note: +z is backward
+
+    std::cout << " (" << m_cameraviewXYZ[0] << ", " << m_cameraviewXYZ[1] << ", " << m_cameraviewXYZ[2] + 1.0f << ")" << std::endl;
 }
 
 std::unique_ptr<MyModel> createCubeModel(MyDevice& device, glm::vec3 offset)

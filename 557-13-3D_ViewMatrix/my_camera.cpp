@@ -75,6 +75,10 @@ void MyCamera::setPerspectiveProjection(float fovy, float aspect, float near, fl
 
 void MyCamera::setViewDirection(glm::vec3 position, glm::vec3 direction, glm::vec3 up)
 {
+    // Note: 'position' in this function can be considered as the world coordinate system stays the same and 
+    // the view coordinate system moves, but from the viewer's perspective, the world coordinate system is moved
+    // to that 'position'.
+
     //
     // glm matrix layout
     // 
@@ -82,22 +86,25 @@ void MyCamera::setViewDirection(glm::vec3 position, glm::vec3 direction, glm::ve
     // [0,1] [1,1] [2,1] [3,1]
     // [0,2] [1,2] [2,2] [3,2]
     // [0,3] [1,3] [2,3] [3,3]
-    // 
-    // If using Y-down coordinate system
+    //
     const glm::vec3 w{ glm::normalize(direction)}; // Z is out of the screen
     const glm::vec3 u{ glm::normalize(glm::cross(up, w)) };
     const glm::vec3 v{ glm::cross(w, u) };
 
     // View to world
+    // [u.x] [v.x] [w.x] [p.x]
+    // [u.y] [v.y] [w.y] [p.y]
+    // [u.z] [v.z] [w.z] [p.z]
+    // [0.0] [0.0] [0.0] [1.0]
     m_m4ViewMatrix = glm::mat4{ 1.f };
     m_m4ViewMatrix[0][0] = u.x;
-    m_m4ViewMatrix[1][0] = u.y;
-    m_m4ViewMatrix[2][0] = u.z;
-    m_m4ViewMatrix[0][1] = v.x;
+    m_m4ViewMatrix[0][1] = u.y;
+    m_m4ViewMatrix[0][2] = u.z;
+    m_m4ViewMatrix[1][0] = v.x;
     m_m4ViewMatrix[1][1] = v.y;
-    m_m4ViewMatrix[2][1] = v.z;
-    m_m4ViewMatrix[0][2] = w.x;
-    m_m4ViewMatrix[1][2] = w.y;
+    m_m4ViewMatrix[1][2] = v.z;
+    m_m4ViewMatrix[2][0] = w.x;
+    m_m4ViewMatrix[2][1] = w.y;
     m_m4ViewMatrix[2][2] = w.z;
     m_m4ViewMatrix[3][0] = position.x;
     m_m4ViewMatrix[3][1] = position.y;

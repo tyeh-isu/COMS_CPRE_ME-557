@@ -65,7 +65,8 @@ void MyWindow::s_keyboardCallback(GLFWwindow* window, int key, int scancode, int
     // Handle keyboard events
 	auto mywindow = reinterpret_cast<MyWindow*>(glfwGetWindowUserPointer(window));
 
-	if ((key == GLFW_KEY_C || key == GLFW_KEY_ESCAPE) &&
+	if ((key == GLFW_KEY_C  || key == GLFW_KEY_ESCAPE || key == GLFW_KEY_LEFT || key == GLFW_KEY_RIGHT ||
+	     key == GLFW_KEY_UP || key == GLFW_KEY_DOWN   || key == GLFW_KEY_W    || key == GLFW_KEY_S) &&
 		 action == GLFW_PRESS)
 	{
 		mywindow->keyboardEvent(key);
@@ -96,13 +97,13 @@ void MyWindow::keyboardEvent(int key)
 {
 	if (m_pMyApplication == nullptr) return;
 
-	if (key == GLFW_KEY_C)
-	{
-		m_pMyApplication->switchProjectionMatrix();
-	}
-	else if (key == GLFW_KEY_ESCAPE)
-	{
-		glfwSetWindowShouldClose(m_pWindow, 1);
-	}
+	if (key == GLFW_KEY_C)           m_pMyApplication->switchProjectionMatrix();
+	else if (key == GLFW_KEY_LEFT)   m_pMyApplication->handleMovement(MyApplication::KEY_LEFT);
+	else if (key == GLFW_KEY_RIGHT)  m_pMyApplication->handleMovement(MyApplication::KEY_RIGHT);
+	else if (key == GLFW_KEY_UP)     m_pMyApplication->handleMovement(MyApplication::KEY_UP);
+	else if (key == GLFW_KEY_DOWN)   m_pMyApplication->handleMovement(MyApplication::KEY_DOWN);
+	else if (key == GLFW_KEY_W)      m_pMyApplication->handleMovement(MyApplication::KEY_FORWARD);
+	else if (key == GLFW_KEY_S)      m_pMyApplication->handleMovement(MyApplication::KEY_BACKWARD);
+	else if (key == GLFW_KEY_ESCAPE) glfwSetWindowShouldClose(m_pWindow, 1);
 }
 

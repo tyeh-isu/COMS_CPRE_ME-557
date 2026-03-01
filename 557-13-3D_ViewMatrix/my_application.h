@@ -15,10 +15,22 @@ public:
 	static constexpr int WIDTH = 800;
 	static constexpr int HEIGHT = 600;
 
+	enum MyAppKeyMap
+	{
+		KEY_NONE = 0,
+		KEY_LEFT,
+		KEY_RIGHT,
+		KEY_UP,
+		KEY_DOWN,
+		KEY_FORWARD,
+		KEY_BACKWARD
+	};
+
 	MyApplication();
 
 	void run();
 	void switchProjectionMatrix();
+	void handleMovement(MyAppKeyMap key);
 
 private:
 	void _loadGameObjects();
@@ -29,6 +41,7 @@ private:
 
 	std::vector<MyGameObject> m_vMyGameObjects;
 	bool                      m_bPerspectiveProjection;
+	float                     m_cameraviewXYZ[3];
 };
 
 #endif
