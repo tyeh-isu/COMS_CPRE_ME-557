@@ -263,6 +263,12 @@ void MyDevice::_createLogicalDevice()
        createInfo.enabledLayerCount = 0;
     }
 
+    // Enable this feature so the pick shader code can use atomicMin or atomicMax
+    VkPhysicalDeviceShaderAtomicFloat2FeaturesEXT floatFeatures{};
+    floatFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_FLOAT_2_FEATURES_EXT;
+    floatFeatures.shaderBufferFloat32AtomicMinMax = VK_TRUE;
+    createInfo.pNext = &floatFeatures; // Link the features here
+
 #ifdef __DARWIN__
     // Add required instance extensions to support VK_KHR_portability_subset
     // https://vulkan.lunarg.com/doc/view/1.4.313.0/mac/antora/spec/latest/chapters/devsandqueues.html#VUID-VkDeviceCreateInfo-pProperties-04451

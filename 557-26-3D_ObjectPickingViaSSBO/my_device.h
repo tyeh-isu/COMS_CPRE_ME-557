@@ -110,8 +110,8 @@ class MyDevice
     VkQueue                    m_vkPresentQueue;
 
     const std::vector<const char *> validationLayers = { "VK_LAYER_KHRONOS_validation" };
-	// Add "VK_EXT_shader_atomic_float2" in device extenstions in order to use atomicMin in the shader code
-    const std::vector<const char *> deviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME, "VK_EXT_shader_atomic_float2" };
+	// Add VK_EXT_SHADER_ATOMIC_FLOAT_2_EXTENSION_NAME ("VK_EXT_shader_atomic_float2") in device extenstions in order to use atomicMin in the shader code
+    const std::vector<const char *> deviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME, VK_EXT_SHADER_ATOMIC_FLOAT_2_EXTENSION_NAME };
 };
 
 #endif
