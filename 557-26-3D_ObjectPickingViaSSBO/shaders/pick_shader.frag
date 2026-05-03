@@ -1,4 +1,5 @@
 #version 450
+#extension GL_EXT_shader_atomic_float2 : enable // enable this extenstion in order to use atomicMin
 
 /* only location and type (vec3) matter, the name doesn't need to match */
 
@@ -31,13 +32,24 @@ layout(push_constant) uniform Pushdata
 layout(set = 0, binding = 1) buffer ShaderStorageBufferObject
 {
     float Selected_ID;
+    float depth;
 } ssbo;
 
 
 void main()
 {
     // return pick ID back to CPU through SSBO
-    ssbo.Selected_ID = inID;
+
+    // use atomicMin to find the fragment closet to the viewpoint, similar to depth test
+    float currentDepth = gl_FragCoord.z;
+    atomicMin(ssbo.depth, currentDepth);
+
+    // Set the ID to SSBO for the fragment closet to the viewpoint
+    if (currentDepth == ssbo.depth)
+    {
+       ssbo.Selected_ID = inID;
+    }
+
     outColor = inID; // for debugging purpose
 }
 
