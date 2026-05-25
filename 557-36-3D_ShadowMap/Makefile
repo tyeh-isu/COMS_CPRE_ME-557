@@ -6,6 +6,7 @@ APPNAME = Vulkan36
 DEBUG = -g
 VERBOSE = -v
 CXX = g++
+BUILD_DIR = build
 
 # For defining platform specific flags
 PLATFORM = $(shell uname -s)
@@ -51,7 +52,7 @@ CFLAGS = -std=c++17 $(DEBUG) -I. -I$(VULKAN_SDK)/include -I$(GLM_PATH) -I$(GLFW_
 include LOCAL_SRCS
 
 # Object files
-OBJECTS = $(CPPSRCS:.cpp=.o)
+OBJECTS = $(addprefix $(BUILD_DIR)/,$(CPPSRCS:.cpp=.o))
 
 # Default target
 all: $(APPNAME)
@@ -62,7 +63,9 @@ $(APPNAME): $(OBJECTS)
 	@echo Done!
 
 # Compile C++ files
-%.o: %.cpp
+$(BUILD_DIR)/%.o: %.cpp
+	@mkdir -p $(BUILD_DIR)
+	@mkdir -p $(BUILD_DIR)/imgui
 	$(CXX) -D$(DEFINES) $(CFLAGS) -c $< -o $@
 
 shader:
@@ -75,7 +78,7 @@ run: $(APP_NAME)
 	./$(APP_NAME)
 
 clean:
-	rm -f $(OBJECTS) $(APP_NAME)
+	rm -rf $(BUILD_DIR) $(APP_NAME) shaders/*.spv
 
 test:
 	@echo $(PLATFORM)
