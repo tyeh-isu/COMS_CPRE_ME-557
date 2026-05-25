@@ -84,6 +84,7 @@ class MyDevice
 
 	void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
     void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, uint32_t layerCount);
+	void waitIdle();
 	bool formatIsFilterable(VkFormat format, VkImageTiling tiling);
     bool resetCommandPool();
 
@@ -134,7 +135,10 @@ class MyDevice
     VkPhysicalDeviceProperties m_vkProperties;
 
     const std::vector<const char *> validationLayers = { "VK_LAYER_KHRONOS_validation" };
-    const std::vector<const char *> deviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
+	// Add VK_EXT_SHADER_ATOMIC_FLOAT_2_EXTENSION_NAME ("VK_EXT_shader_atomic_float2") in device extenstions in order to use atomicMin in the shader code
+    const std::vector<const char *> deviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME, VK_EXT_SHADER_ATOMIC_FLOAT_2_EXTENSION_NAME };
+
+    //const std::vector<const char *> deviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
 
     // enable/disable MSAA
     bool                       m_bSupportMSAA;

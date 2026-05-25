@@ -45,18 +45,18 @@ MyApplication::MyApplication() :
     // Pool for normal rendering
     m_pMyGlobalPool = // TODO: need to adjust the pool size to fix the crash when resizing window
         MyDescriptorPool::Builder(m_myDevice)
-        .setMaxSets(MySwapChain::MAX_FRAMES_IN_FLIGHT+6) // for descriptor set
+        .setMaxSets(MySwapChain::MAX_FRAMES_IN_FLIGHT + 2) // for descriptor set
         .setPoolFlags(VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT) // allow recreate
         .addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, MySwapChain::MAX_FRAMES_IN_FLIGHT) // for normal rendering
-		.addPoolSize(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1) // for picking
-        .addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MySwapChain::MAX_FRAMES_IN_FLIGHT+1) // for texure and shadow map
+		.addPoolSize(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, MySwapChain::MAX_FRAMES_IN_FLIGHT) // for picking
+        .addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MySwapChain::MAX_FRAMES_IN_FLIGHT * 3) // for texure and shadow map
 		.build();
 
     // Pool for offscreen rendering
     m_pMyOffscreenPool =
         MyDescriptorPool::Builder(m_myDevice)
         .setMaxSets(MySwapChain::MAX_FRAMES_IN_FLIGHT) // for descriptor set
-        .addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, MySwapChain::MAX_FRAMES_IN_FLIGHT) // for shadow map rendering
+        .addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, MySwapChain::MAX_FRAMES_IN_FLIGHT * 3) // for shadow map rendering
         .build();
 
     _loadGameObjects();
@@ -101,16 +101,19 @@ void MyApplication::run()
         uboBuffers[i]->map();
     }
 
-    // Create SSBO for picking
-    std::unique_ptr<MyBuffer> ssboBuffer;
-    ssboBuffer = std::make_unique<MyBuffer>(
-        m_myDevice,
-        sizeof(MySSBO),
-        1,
-        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, // no host coherience bit but we could do it here, so we don't need to use flush. We need to revisit here and see if we can remove the last aurgment
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+    // Create SSBO for picking. One for each swapchain image
+    std::vector<std::unique_ptr<MyBuffer>> ssboBuffer(MySwapChain::MAX_FRAMES_IN_FLIGHT);
+    for (int i = 0; i < MySwapChain::MAX_FRAMES_IN_FLIGHT; i++) 
+    {
+        ssboBuffer[i] = std::make_unique<MyBuffer>(
+            m_myDevice,
+            sizeof(MySSBO),
+            1,
+            VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, // no host coherience bit but we could do it here, so we don't need to use flush. We need to revisit here and see if we can remove the last aurgment
+            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-    ssboBuffer->map();
+        ssboBuffer[i]->map();
+    }
 
     // Create descriptor set layout object for scene rendering
     auto globalSetLayout =
@@ -135,7 +138,7 @@ void MyApplication::run()
     for (int i = 0; i < globalDescriptorSets.size(); i++)
 	{
         auto bufferInfo = uboBuffers[i]->descriptorInfo();
-        auto ssbobufferInfo = ssboBuffer->descriptorInfo();
+        auto ssbobufferInfo = ssboBuffer[i]->descriptorInfo();
 
         MyDescriptorWriter(*globalSetLayout, *m_pMyGlobalPool)
             .writeBuffer(0, &bufferInfo)      // ubo bind to 0
@@ -204,8 +207,12 @@ void MyApplication::run()
     // Initial the picking SSBO buffer
     MySSBO ssbo{};
     ssbo.id = 0.0f;
-    ssboBuffer->writeToBuffer(&ssbo);
-    ssboBuffer->unmap();
+    ssbo.depth = 1.0f;
+    for (int i = 0; i < MySwapChain::MAX_FRAMES_IN_FLIGHT; i++)
+	{
+        ssboBuffer[i]->writeToBuffer(&ssbo);
+        ssboBuffer[i]->unmap();
+    }
 
     m_myWindow.bindMyApplication(this);
     MyCamera camera{};
@@ -258,7 +265,7 @@ void MyApplication::run()
             for (int i = 0; i < globalDescriptorSets.size(); i++)
             {
                 auto bufferInfo = uboBuffers[i]->descriptorInfo();
-                auto ssbobufferInfo = ssboBuffer->descriptorInfo();
+                auto ssbobufferInfo = ssboBuffer[i]->descriptorInfo();
 
                 MyDescriptorWriter(*globalSetLayout, *m_pMyGlobalPool)
                     .writeBuffer(0, &bufferInfo)      // ubo bind to 0
@@ -383,9 +390,13 @@ void MyApplication::run()
 			{
 			    MySSBO ssbo{};
                 ssbo.id = 0.0f;
-                ssboBuffer->map();
-                ssboBuffer->writeToBuffer(&ssbo);
-                ssboBuffer->unmap();
+                ssbo.depth = 1.0f;
+                for (int i = 0; i < MySwapChain::MAX_FRAMES_IN_FLIGHT; i++)
+                {
+                    ssboBuffer[i]->map();
+                    ssboBuffer[i]->writeToBuffer(&ssbo);
+                    ssboBuffer[i]->unmap();
+                }
 
                 m_myRenderer.beginPickRenderPass(commandBuffer, (int)m_fMousePos[0], (int)m_fMousePos[1], false);
 
@@ -427,15 +438,33 @@ void MyApplication::run()
             resize = m_myRenderer.endFrame();
 
             // After the rendering, get the result from SSBO
-            if (m_myGUIData.bPickMode)
+            if (m_myGUIData.bPickMode && m_fMousePos[0] >= 0.0f && m_fMousePos[1] >= 0.0f)
             {
+                m_myDevice.waitIdle();
+
                 MySSBO ssbo{};
                 ssbo.id = 0.0f;
-                ssboBuffer->map();
-                ssboBuffer->readFromBuffer(&ssbo);
-                ssboBuffer->unmap();
-                //std::cout << "pick id = " << ssbo.id << std::endl;
-                m_fPickID = ssbo.id;
+
+				// If any of the SSBO id is greater than 0, we have picked an object
+                bool bSelected = false;
+                for (int ii = 0; ii < MySwapChain::MAX_FRAMES_IN_FLIGHT; ii++)
+                {
+                    ssboBuffer[ii]->map();
+                    ssboBuffer[ii]->readFromBuffer(&ssbo);
+                    ssboBuffer[ii]->unmap();
+    
+                    if (ssbo.id > 0.0f) 
+                    {
+                        // std::cout << "pick id = " << ssbo.id << std::endl;
+                        m_fPickID = ssbo.id;
+                        bSelected = true;
+                        break;
+                    }
+                }
+
+                // No pick. Reset the highlight
+                if (!bSelected)
+                    m_fPickID = 0;
 
                 if (m_fPickID == 0)
                     m_myGUIData.sPickObject = "None";

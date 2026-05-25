@@ -38,5 +38,5 @@ layout(push_constant) uniform Pushdata
 void main()
 {
     vec4 positionWorld = pushdata.modelMatrix * vec4(position, 1.0);
-	gl_Position =  ubo.pointLight.lightMVP * positionWorld;
+    gl_Position =  ubo.pointLight.lightMVP * positionWorld;
 }

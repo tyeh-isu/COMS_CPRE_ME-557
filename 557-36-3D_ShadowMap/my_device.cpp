@@ -101,7 +101,7 @@ void MyDevice::_createInstance()
     appInfo.applicationVersion = VK_MAKE_VERSION(1, 1, 0);
     appInfo.pEngineName = "My Engine";
     appInfo.engineVersion = VK_MAKE_VERSION(1, 1, 0);
-    appInfo.apiVersion = VK_API_VERSION_1_1;
+    appInfo.apiVersion = VK_API_VERSION_1_3; // use Vulkan version 1.3
 
     VkInstanceCreateInfo createInfo = {};
     createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
@@ -278,6 +278,12 @@ void MyDevice::_createLogicalDevice()
     {
        createInfo.enabledLayerCount = 0;
     }
+
+    // Enable this feature so the pick shader code can use atomicMin or atomicMax
+    VkPhysicalDeviceShaderAtomicFloat2FeaturesEXT floatFeatures{};
+    floatFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_FLOAT_2_FEATURES_EXT;
+    floatFeatures.shaderBufferFloat32AtomicMinMax = VK_TRUE;
+    createInfo.pNext = &floatFeatures; // Link the features here
 
 #ifdef __DARWIN__
     // Add required instance extensions to support VK_KHR_portability_subset
@@ -759,5 +765,10 @@ void MyDevice::createSampler(
     {
         throw std::runtime_error("failed to create sampler!");
     }
+}
+
+void MyDevice::waitIdle()
+{
+    vkDeviceWaitIdle(m_vkDevice);
 }
 

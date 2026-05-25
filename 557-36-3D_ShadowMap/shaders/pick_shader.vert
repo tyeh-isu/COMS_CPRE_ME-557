@@ -13,7 +13,7 @@ struct PointLight
 {
     mat4 lightMVP; // matrix for light
     vec4 position; // ignore w
-    vec4 color;    // w is intensity 
+    vec4 color;    // w is intensity
 };
 
 layout(set = 0, binding = 0) uniform GlobalUBO

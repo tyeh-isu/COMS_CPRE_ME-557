@@ -36,8 +36,8 @@ private:
 
 	// Note: the order matters, because the destructor is called in the reversed order
 	// globalPool needs to delete before m_myDevice
-	std::unique_ptr<MyDescriptorPool> m_pMyGlobalPool{};
-	std::unique_ptr<MyDescriptorPool> m_pMyOffscreenPool{};
+	std::unique_ptr<MyDescriptorPool> m_pMyGlobalPool{};    // for rendering normal scene, texture and picking
+	std::unique_ptr<MyDescriptorPool> m_pMyOffscreenPool{}; // for offscreen rendering for shadow map
 
 	MyGameObject::Map                 m_mapGameObjects;
 	bool                              m_bPerspectiveProjection;

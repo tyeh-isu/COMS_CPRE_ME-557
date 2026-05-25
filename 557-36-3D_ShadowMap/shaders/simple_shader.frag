@@ -35,6 +35,7 @@ layout(push_constant) uniform Pushdata
 // layout(set = 0, binding = 1) buffer ShaderStorageBufferObject
 //{
 //    float Selected_ID;
+//    float depth;
 //} ssbo;
 
 

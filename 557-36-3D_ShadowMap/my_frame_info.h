@@ -27,6 +27,7 @@ struct MyGlobalUBO
 struct MySSBO
 {
 	float id;
+	float depth; // keep the depth value in SSBO
 };
 
 struct MySimplePushConstantData

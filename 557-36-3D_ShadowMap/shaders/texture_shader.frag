@@ -45,6 +45,7 @@ layout(push_constant) uniform Pushdata
 // layout(set = 0, binding = 1) buffer ShaderStorageBufferObject
 //{
 //    float Selected_ID;
+//    float depth;
 //} ssbo;
 
 #define ambient 0.1
@@ -62,16 +63,16 @@ float textureProj(vec4 shadowCoord, vec2 off)
     if ( v_texCoord.x > 0.9999 || v_texCoord.x < 0.0001 || v_texCoord.y > 0.9999 || v_texCoord.y < 0.0001 )
         return shadow;
 
-	if ( shadowCoord.z > -1.0 && shadowCoord.z < 1.0 ) 
-	{
-		float dist = texture( texSampler[2], v_texCoord + off ).r;
-		if ( shadowCoord.w > 0.0 && dist < shadowCoord.z ) 
-		{
-			shadow = ambient;
-		}
-	}
+    if ( shadowCoord.z > -1.0 && shadowCoord.z < 1.0 ) 
+    {
+        float dist = texture( texSampler[2], v_texCoord + off ).r;
+        if ( shadowCoord.w > 0.0 && dist < shadowCoord.z ) 
+        {
+            shadow = ambient;
+        }
+    }
 
-	return shadow;
+    return shadow;
 }
 
 float filterPCF(vec4 sc)
@@ -102,7 +103,8 @@ float filterPCF(vec4 sc)
 void main()
 {
 #if RENDER_SHADOW
-    float shadow = textureProj(inShadowCoord / inShadowCoord.w, vec2(0,0));
+    //float shadow = textureProj(inShadowCoord / inShadowCoord.w, vec2(0,0));
+    float shadow = filterPCF(inShadowCoord / inShadowCoord.w);
 #else
     float shadow = 1.0f;
 #endif

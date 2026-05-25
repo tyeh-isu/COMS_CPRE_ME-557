@@ -76,7 +76,8 @@ void main()
 
     fragTexCoord = uv;
 
-    // Shadow normalized coordinates
+    // Shadow normalized coordinates by reprojecting the world coordinate point
+    // to the light coordinate system
     outShadowCoord =  biasMat * ubo.pointLight.lightMVP * positionWorld;
 }
 
